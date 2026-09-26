@@ -1,4 +1,5 @@
 <script lang="ts">
+    import {slide} from "svelte/transition";
     import {createEventDispatcher} from "svelte";
     import type {BooleanSetting as TBooleanSetting, ModuleSetting, TogglableSetting,} from "../../../integration/types";
     import ExpandArrow from "./common/ExpandArrow.svelte";
@@ -65,7 +66,7 @@
     </div>
 
     {#if expanded}
-        <div class="nested-settings">
+        <div class="nested-settings" transition:slide={{duration: 200, axis: "y"}}>
             {#each nestedSettings as setting (setting.name)}
                 <GenericSetting path={thisPath} bind:setting on:change={handleChange}/>
             {/each}

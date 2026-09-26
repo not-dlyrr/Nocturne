@@ -74,7 +74,7 @@
     {#each notifications as {id, title, message, severity, category, animationKey} (animationKey)}
         <div
                 animate:flip={{ duration: 350 }}
-                in:fly={{ x: 352, duration: 450, easing: backOut }}
+                in:fly={{ x: 452, duration: 450, easing: backOut }}
                 out:fly={{ x: 40, duration: 300 }}
         >
             <Notification {id} {title} {severity} {category} duration={DURATION}
@@ -87,5 +87,7 @@
   .notifications {
     display: flex;
     flex-direction: column-reverse;
+    /* cards are content-width; keep them flush with the stack's right (anchored) edge */
+    align-items: flex-end;
   }
 </style>

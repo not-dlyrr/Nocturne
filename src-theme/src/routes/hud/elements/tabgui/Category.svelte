@@ -24,46 +24,42 @@
 </div>
 
 <style lang="scss">
-
-    .name {
-        font-weight: 500;
-        color: var(--tabgui-text-color);
-        font-size: 14px;
-        width: 100%;
-        padding: 7px 12px 7px 12px;
-
-        background: linear-gradient(
-            to left,
-            var(--tabgui-category-background-color) 50%,
-            var(--tabgui-category-active-background-color) 50%
-        );
-        background-size: 200% 100%;
-        background-position: right bottom;
-        will-change: background-position;
-        transition: background-position 0.2s ease-out;
-        overflow: hidden;
-    }
-
     .category {
         display: flex;
+        align-items: center;
+        gap: 10px;
+        height: 32px;
+        padding: 0 12px 0 10px;
+        border-radius: var(--radius-sm);
+        color: var(--label);
+        transition: background-color 0.2s ease, color 0.2s ease;
 
-        &.selected .icon {
-            color: var(--accent-color);
-        }
-
-        &.selected .name {
-            background-position: left bottom;
+        &.selected {
+            background: var(--glass-selection);
+            color: var(--accent-text);
         }
     }
 
     .icon {
-        background-color: var(--tabgui-icon-background-color);
-        color: var(--tabgui-text-color);
-        width: 62px;
+        flex: none;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: color 0.2s ease-out;
+        width: 16px;
+        height: 16px;
+        color: var(--label-secondary);
+        transition: color 0.2s ease;
+
+        .selected & {
+            color: var(--accent-text);
+        }
+    }
+
+    .name {
+        flex: 1;
+        font-size: 13px;
+        font-weight: 500;
+        white-space: nowrap;
     }
 
     .category-icon {
@@ -76,6 +72,8 @@
 
     .category-icon-size {
         display: block;
+        width: 16px;
+        height: 16px;
         visibility: hidden;
     }
 </style>

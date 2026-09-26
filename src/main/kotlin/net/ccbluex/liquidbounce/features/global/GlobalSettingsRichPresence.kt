@@ -107,13 +107,27 @@ object GlobalSettingsRichPresence : ToggleableValueGroup(
         DiscordActivity.Button("LiquidProxy", "https://liquidproxy.net"),
     )
 
+    /**
+     * Discord rate-limits SET_ACTIVITY (about 5 per 20 seconds) and drops the pipe when a client keeps
+     * going over it, so only send when the activity changed, and never more often than this.
+     */
+    private const val MIN_SEND_INTERVAL_MS = 5_000L
+
+    /** After Discord drops the pipe or isn't running, try again after this long instead of giving up. */
+    private const val RECONNECT_INTERVAL_MS = 15_000L
+
     // IPC Client
     private var ipcClient: DiscordIpcClient? = null
 
     @Volatile
     private var timestamp = Instant.now()
 
-    private var doNotTryToConnect = false
+    private var lastActivity: DiscordActivity? = null
+    private var lastSentAt = 0L
+    private var nextConnectAttemptAt = 0L
+
+    /** Tell the user about a failure once per outage, not on every retry. */
+    private var failureNotified = false
 
     init {
         doNotIncludeAlways()
@@ -121,11 +135,13 @@ object GlobalSettingsRichPresence : ToggleableValueGroup(
 
     override fun onEnabled() {
         timestamp = Instant.now()
-        doNotTryToConnect = false
+        nextConnectAttemptAt = 0L
+        failureNotified = false
     }
 
     private fun connectIpc() {
-        if (doNotTryToConnect || ipcClient?.state == DiscordIpcClient.State.CONNECTED) {
+        if (ipcClient?.state == DiscordIpcClient.State.CONNECTED ||
+            System.currentTimeMillis() < nextConnectAttemptAt) {
             return
         }
 
@@ -137,13 +153,21 @@ object GlobalSettingsRichPresence : ToggleableValueGroup(
                 Executors.newVirtualThreadPerTaskExecutor(),
             ).also { it.connect() }
         }.onFailure {
+            nextConnectAttemptAt = System.currentTimeMillis() + RECONNECT_INTERVAL_MS
+
+            if (failureNotified) {
+                logger.debug("Discord RPC still unavailable, retrying later.", it)
+                return@onFailure
+            }
+            failureNotified = true
+
             if (it is NoDiscordClientException) {
                 notification(
                     title = "Discord RPC",
                     message = "Please make sure you have Discord running.",
                     severity = NotificationEvent.Severity.ERROR
                 )
-                logger.warn("No Discord client for RichPresence.")
+                logger.warn("No Discord client for RichPresence, retrying every ${RECONNECT_INTERVAL_MS / 1000}s.")
             } else {
                 notification(
                     title = "Discord RPC",
@@ -152,9 +176,9 @@ object GlobalSettingsRichPresence : ToggleableValueGroup(
                 )
                 logger.error("Failed to connect to Discord RPC.", it)
             }
-
-            doNotTryToConnect = true
         }.onSuccess {
+            failureNotified = false
+            lastActivity = null
             logger.info("Successfully connected to Discord RPC.")
         }
     }
@@ -162,6 +186,7 @@ object GlobalSettingsRichPresence : ToggleableValueGroup(
     private fun shutdownIpc() {
         val ipcClient = ipcClient ?: return
         this.ipcClient = null
+        lastActivity = null
 
         runCatching {
             ipcClient.close()
@@ -203,10 +228,21 @@ object GlobalSettingsRichPresence : ToggleableValueGroup(
             buttons = buttons,
         )
 
+        val now = System.currentTimeMillis()
+        if (activity == lastActivity || now - lastSentAt < MIN_SEND_INTERVAL_MS) {
+            return@tickHandler
+        }
+
         runCatching {
             ipcClient.sendActivity(activity)
+        }.onSuccess {
+            lastActivity = activity
+            lastSentAt = now
         }.onFailure {
-            logger.warn("Failed to update Discord Rich Presence.", it)
+            // The pipe is gone (Discord restarted or dropped us); drop the client and reconnect later.
+            logger.warn("Failed to update Discord Rich Presence, reconnecting.", it)
+            shutdownIpc()
+            nextConnectAttemptAt = now + RECONNECT_INTERVAL_MS
         }
     }
 

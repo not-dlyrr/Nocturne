@@ -68,7 +68,7 @@
 <div class="arraylist" class:left={cSettings.itemAlignment === "Left"}>
     {#each enabledModules as {name, tag} (name)}
         <div
-                class="module sg-glass sg-glass-strong"
+                class="module nc-glass"
                 animate:flip={{ duration: 450, easing: springSlide }}
                 transition:fly={{ x: cSettings.itemAlignment === "Left" ? -40 : 40, duration: 300 }}
         >
@@ -99,7 +99,7 @@
     }
   }
 
-  /* santi.glass strong glass pill; no drop shadow so the native blur mask hugs the pill */
+  /* Liquid Glass pill (nc-glass); the native blur frosts the game behind it */
   .module {
     height: 26px;
     display: flex;
@@ -109,7 +109,6 @@
     border-radius: var(--radius-pill);
     white-space: nowrap;
     font-size: 13px;
-    box-shadow: var(--shadow-glass-edge);
   }
 
   .name {

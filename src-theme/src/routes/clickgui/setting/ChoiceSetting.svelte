@@ -1,4 +1,5 @@
 <script lang="ts">
+    import {slide} from "svelte/transition";
     import {createEventDispatcher} from "svelte";
     import type {ChoiceSetting, ModuleSetting,} from "../../../integration/types";
     import ExpandArrow from "./common/ExpandArrow.svelte";
@@ -58,7 +59,7 @@
     {/if}
 
     {#if expanded && nestedSettings.length > 0}
-        <div class="nested-settings">
+        <div class="nested-settings" transition:slide={{duration: 200, axis: "y"}}>
             {#each nestedSettings as setting (`${cSetting.active}.${setting.name}`)}
                 <GenericSetting path={thisPath} bind:setting={setting} on:change={handleChange} />
             {/each}

@@ -17,29 +17,29 @@
     });
 </script>
 
-<div class="key" style="grid-area: {gridArea};" class:active>
+<div class="key nc-surface nc-hud" style="grid-area: {gridArea};" class:active>
     {key?.key.localized ?? "???"}
 </div>
 
 <style lang="scss">
-
   .key {
     height: 50px;
-    background-color: var(--keystrokes-background-color);
-    color: var(--keystrokes-text-color);
+    color: var(--label);
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 5px;
-    font-size: 14px;
-    font-weight: 500;
-    transition: ease box-shadow .2s;
-    position: relative;
-    box-shadow: inset 0 0 0 0 var(--keystrokes-active-color);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-text);
+    font-size: 15px;
+    font-weight: 600;
     text-align: center;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
 
     &.active {
-      box-shadow: inset 0 0 0 25px var(--keystrokes-active-color);
+      background: var(--keystrokes-active-color);
+      color: var(--on-accent);
+      transform: scale(0.93);
+      transition: background-color 0.08s ease, color 0.08s ease, transform 0.08s ease;
     }
   }
 </style>

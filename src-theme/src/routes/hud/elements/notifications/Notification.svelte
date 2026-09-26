@@ -42,7 +42,9 @@
   .notification {
     position: relative;
     overflow: hidden;
-    width: 320px;
+    width: max-content;
+    min-width: 320px;
+    max-width: 420px;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -75,20 +77,27 @@
     font-size: 15px;
     font-weight: 600;
     color: var(--label);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .message {
     font-size: 13px;
+    line-height: 18px;
     color: var(--label-secondary);
-    white-space: nowrap;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
     overflow: hidden;
-    text-overflow: ellipsis;
+    overflow-wrap: anywhere;
   }
 
   .time {
     font-size: 12px;
     color: var(--label-secondary);
     align-self: flex-start;
+    flex: none;
   }
 
   .progress {

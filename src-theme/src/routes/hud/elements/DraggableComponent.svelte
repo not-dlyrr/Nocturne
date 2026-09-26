@@ -546,8 +546,10 @@
 
     .editor-mode {
         outline: solid 1px var(--clickgui-hud-editor-draggable-element-outline-color);
+        outline-offset: 2px;
+        border-radius: var(--radius-xs);
         background-color: var(--clickgui-hud-editor-draggable-element-background-color);
-        transition: background-color 100ms ease;
+        transition: background-color 0.2s ease;
     }
 
     .magnetically-referenced {
@@ -556,19 +558,25 @@
 
     .position {
         position: absolute;
-        top: calc(100% + 5px);
+        top: calc(100% + 6px);
         left: 0;
         width: max-content;
-        height: 14px;
-        color: var(--clickgui-text-dimmed-color);
+        height: 20px;
+        display: flex;
+        align-items: center;
+        padding: 0 8px;
+        border-radius: var(--radius-pill);
+        background: var(--surface);
+        border: 0.5px solid var(--glass-stroke);
+        color: var(--label-secondary);
+        font-family: var(--font-text);
         font-size: 12px;
+        font-variant-numeric: tabular-nums;
         text-wrap: nowrap;
-        outline: solid 1px var(--clickgui-hud-editor-draggable-element-position-outline-color);
-        background-color: var(--clickgui-hud-editor-draggable-element-position-background-color);
     }
 
     .position.top {
         top: auto;
-        bottom: calc(100% + 5px);
+        bottom: calc(100% + 6px);
     }
 </style>

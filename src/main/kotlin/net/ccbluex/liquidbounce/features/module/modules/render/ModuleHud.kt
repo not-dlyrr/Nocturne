@@ -98,12 +98,13 @@ object ModuleHud : ClientModule("HUD", ModuleCategories.RENDER, state = true, hi
         /**
          * Gaussian sigma controlling blur strength. Higher values produce stronger blur.
          */
-        val sigma by float("Sigma", 5.0F, 1.0F..15.0F)
+        val sigma by float("Sigma", 8.0F, 1.0F..15.0F)
 
         /**
          * The range in which the blending from not-blurred to blurred occurs.
          */
-        val alphaBlendRange by floatRange("AlphaBlendRange", 0.0F..0.75F, 0.0F..1.0F)
+        // Nocturne's HUD glass is a ~30% tint; reach full blur by then so the frost isn't washed out.
+        val alphaBlendRange by floatRange("AlphaBlendRange", 0.0F..0.3F, 0.0F..1.0F)
     }
 
     @Suppress("unused")

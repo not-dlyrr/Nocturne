@@ -94,14 +94,14 @@
 </script>
 
 <div class="tabgui">
-    <div class="categories" bind:this={categoriesElement}>
+    <div class="categories nc-surface nc-hud" bind:this={categoriesElement}>
         {#each categories as name, index}
             <Category {name} selected={index === selectedCategoryIndex} />
         {/each}
     </div>
 
     {#if renderedModules.length > 0}
-        <div class="modules" transition:fly={{ x: -10, duration: 200 }} style="height: {categoriesElement.offsetHeight}px">
+        <div class="modules nc-surface nc-hud" transition:fly={{ x: -10, duration: 200 }} style="height: {categoriesElement.offsetHeight}px">
             {#each renderedModules as { name, enabled }, index}
                 <Module {name} {enabled} selected={selectedModuleIndex === index} />
             {/each}
@@ -110,27 +110,28 @@
 </div>
 
 <style lang="scss">
-
     .tabgui {
         display: flex;
+        align-items: flex-start;
+        font-family: var(--font-text);
     }
 
     .categories {
-        background-clip: content-box;
         display: flex;
         flex-direction: column;
-        border-radius: 5px;
-        overflow: hidden;
+        gap: 2px;
+        padding: 4px;
+        border-radius: var(--radius-md);
     }
 
     .modules {
-      background-clip: content-box;
-      background-color: var(--tabgui-modules-background-color);
-      margin-left: 6px;
-      border-radius: 5px;
-      min-width: 100px;
+      margin-left: 8px;
+      padding: 4px;
+      border-radius: var(--radius-md);
+      min-width: 140px;
       display: flex;
       flex-direction: column;
+      gap: 2px;
       overflow: auto;
 
       &::-webkit-scrollbar {

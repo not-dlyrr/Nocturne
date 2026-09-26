@@ -49,6 +49,7 @@
     let dragging = $state(false);
 
     let windowElement: HTMLElement;
+    let paneElement: HTMLElement | undefined = $state();
     let searchInput: HTMLInputElement;
     let sidebarItems: Record<string, HTMLElement> = $state({});
 
@@ -105,14 +106,19 @@
         persist();
     }
 
+    let selectRequest = 0;
+
+    // Load first, then swap name + settings in one go, so the pane never shows a half-built state.
+    // Only the latest click wins if several requests overlap.
     async function selectModule(n: string | null) {
+        const request = ++selectRequest;
+        const loaded = n ? await getModuleSettings(n) : null;
+        if (request !== selectRequest) return;
+
         selected = n;
+        configurable = loaded;
+        if (paneElement) paneElement.scrollTop = 0;
         persist();
-        configurable = null;
-        if (n) {
-            const loaded = await getModuleSettings(n);
-            if (selected === n) configurable = loaded;
-        }
     }
 
     async function updateSettings() {
@@ -269,11 +275,11 @@
             </section>
             <div class="vline"></div>
 
-            <section class="pane">
+            <section class="pane" bind:this={paneElement}>
                 {#if selectedModule}
                     {@const style = categoryStyle(selectedModule.category)}
                     {#key selectedModule.name}
-                        <div class="pane-inner" in:fly={{y: 8, duration: 250}}>
+                        <div class="pane-inner" in:fly={{y: 6, duration: 220}}>
                             <div class="pane-head">
                                 <span class="icon-square" style="background: {style.tone};"><Icon name={style.icon} size={18} weight={2}/></span>
                                 <div class="pane-title">

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import {slide} from "svelte/transition";
     import {createEventDispatcher} from "svelte";
     import type {ConfigurableSetting, ModuleSetting,} from "../../../integration/types";
     import GenericSetting from "./common/GenericSetting.svelte";
@@ -42,7 +43,7 @@
     </div>
 
     {#if expanded}
-        <div class="nested-settings">
+        <div class="nested-settings" transition:slide={{duration: 200, axis: "y"}}>
             {#each cSetting.value as setting (setting.name)}
                 <GenericSetting path={thisPath} bind:setting on:change={handleChange}/>
             {/each}

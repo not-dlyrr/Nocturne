@@ -32,7 +32,7 @@
 </script>
 
 {#if effects.length > 0}
-    <div class="effects">
+    <div class="effects nc-surface nc-hud">
         {#each effects as e}
             <div class="effect">
                 <img class="effect-icon" src={effectTextureUrl(e.effect)} alt={e.localizedName}/>
@@ -45,44 +45,48 @@
 {/if}
 
 <style lang="scss">
-
   .effects {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    background-color: var(--effects-background-color);
-    border-radius: 5px;
-    padding: 4px 6px;
+    gap: 2px;
+    padding: 6px;
+    border-radius: var(--radius-md);
+    font-family: var(--font-text);
   }
 
   .effect {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-weight: 500;
-    font-size: 14px;
+    height: 28px;
+    padding: 0 6px 0 4px;
+    font-size: 13px;
 
     .effect-icon {
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
       image-rendering: pixelated;
       image-rendering: -moz-crisp-edges;
       image-rendering: crisp-edges;
     }
 
     .name {
-      color: var(--effects-name-color);
+      color: var(--label);
+      font-weight: 500;
     }
 
     .amplifier {
-      color: var(--effects-amplifier-color);
+      margin-left: 2px;
+      color: var(--label-secondary);
+      font-weight: 600;
     }
 
     .duration {
       margin-left: auto;
-      font-family: monospace;
-      color: var(--effects-duration-color);
+      padding-left: 12px;
+      color: var(--label-secondary);
       font-size: 12px;
+      font-variant-numeric: tabular-nums;
     }
   }
 </style>

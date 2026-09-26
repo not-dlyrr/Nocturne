@@ -39,7 +39,7 @@
 </script>
 
 {#if processedScoreboard}
-    <div class="scoreboard">
+    <div class="scoreboard nc-surface nc-hud">
         {#if processedScoreboard.header && cSettings.show.includes('Header')}
             <div class="header">
                 <TextComponent fontSize={14} allowPreformatting={true} textComponent={processedScoreboard.header}/>
@@ -61,28 +61,31 @@
 {/if}
 
 <style lang="scss">
-
   .scoreboard {
     width: max-content;
-    border-radius: 5px;
+    border-radius: var(--radius-md);
     overflow: hidden;
+    font-family: var(--font-text);
     font-size: 14px;
-  }
-
-  .entries {
-    background-color: var(--scoreboard-body-background-color);
-    padding: 10px;
-  }
-
-  .row {
-    display: flex;
-    column-gap: 15px;
-    justify-content: space-between;
   }
 
   .header {
     text-align: center;
-    background-color: var(--scoreboard-header-background-color);
-    padding: 7px 10px;
+    padding: 10px 14px 8px;
+    border-bottom: 0.5px solid var(--separator);
+  }
+
+  .entries {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 14px 10px;
+  }
+
+  .row {
+    display: flex;
+    column-gap: 16px;
+    justify-content: space-between;
+    font-variant-numeric: tabular-nums;
   }
 </style>

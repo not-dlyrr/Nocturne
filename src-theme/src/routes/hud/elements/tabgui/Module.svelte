@@ -29,31 +29,48 @@
 
 <div class="module" class:enabled class:selected bind:this={moduleElement}>
     <div class="name">{$spaceSeperatedNames ? convertToSpacedString(name) : name}</div>
+    <span class="dot"></span>
 </div>
 
 <style lang="scss">
-
     .module {
+        flex: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        height: 32px;
+        padding: 0 12px;
+        border-radius: var(--radius-sm);
+        color: var(--label-secondary);
+        font-size: 13px;
         font-weight: 500;
-        color: var(--tabgui-text-dimmed-color);
-        font-size: 12px;
-        padding: 6px 15px 6px 10px;
-        transition: ease color 0.2s;
+        transition: background-color 0.2s ease, color 0.2s ease;
 
         .name {
-            transition: ease transform 0.2s;
-        }
-
-        &.selected {
-            background-color: var(--tabgui-module-selected-background-color);
-
-            .name {
-                transform: translateX(5px);
-            }
+            flex: 1;
+            white-space: nowrap;
         }
 
         &.enabled {
-            color: var(--tabgui-text-color);
+            color: var(--label);
+
+            .dot {
+                background: var(--switch-on);
+            }
         }
+
+        &.selected {
+            background: var(--glass-selection);
+            color: var(--accent-text);
+        }
+    }
+
+    .dot {
+        flex: none;
+        width: 6px;
+        height: 6px;
+        border-radius: var(--radius-pill);
+        background: var(--fill-secondary);
+        transition: background-color 0.2s ease;
     }
 </style>

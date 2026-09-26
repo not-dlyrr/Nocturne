@@ -6,6 +6,7 @@
     import type {Module} from "../../../integration/types";
     import {UNKNOWN_KEY} from "../../../util/utils";
     import BindDisplay from "../../clickgui/setting/bind/BindDisplay.svelte";
+    import Icon from "../../../components/sg/Icon.svelte";
 
     let modules: Module[] = $state([]);
 
@@ -25,17 +26,18 @@
     });
 </script>
 
-<div class="keybinds">
+<div class="keybinds nc-surface nc-hud">
     <div class="header">
-        <span class="title">Binds</span>
-        <img class="icon" src="img/hud/keybinds/icon-keybinds.svg" alt="keybinds">
+        <Icon name="sliders" size={14} weight={2}/>
+        <span class="title">Keybinds</span>
     </div>
     <div class="entries">
         {#each modules as m (m.name)}
             <div class="row" class:enabled={m.enabled}>
+                <span class="dot"></span>
                 <span class="module-name">{$spaceSeperatedNames ? convertToSpacedString(m.name) : m.name}</span>
-                <span class="key-bind" class:muted={!m.enabled}>
-                    [<BindDisplay boundKey={m.keyBind.boundKey} modifiers={m.keyBind.modifiers}/>]
+                <span class="key-bind">
+                    <BindDisplay boundKey={m.keyBind.boundKey} modifiers={m.keyBind.modifiers}/>
                 </span>
             </div>
         {:else}
@@ -45,88 +47,88 @@
 </div>
 
 <style lang="scss">
-
   .keybinds {
     width: max-content;
-    border-radius: 5px;
-    overflow: hidden;
-    font-size: 14px;
-    min-width: 150px;
-    max-width: 200px;
+    min-width: 170px;
+    max-width: 240px;
+    padding: 8px;
+    border-radius: var(--radius-md);
+    font-family: var(--font-text);
   }
 
   .header {
-    background-color: var(--keybinds-background-color);
-    padding: 7px 10px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 6px;
+    padding: 2px 6px 6px;
+    color: var(--label-secondary);
 
     .title {
-      color: var(--keybinds-text-color);
+      font-size: 13px;
       font-weight: 600;
-    }
-
-    .icon {
-      width: 16px;
-      height: 16px;
     }
   }
 
   .entries {
-    background-color: var(--keybinds-header-background-color);
-    padding: 6px 10px;
-    color: var(--keybinds-text-color);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
 
-    .no-binds {
-      font-style: italic;
-      margin-bottom: 5px;
-    }
+  .no-binds {
+    padding: 4px 6px;
+    font-size: 13px;
+    color: var(--label-secondary);
   }
 
   .row {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 5px;
-    gap: 12px;
+    gap: 8px;
     min-width: 0;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
+    height: 26px;
+    padding: 0 4px 0 6px;
+    color: var(--label-secondary);
+    transition: color 0.2s ease;
 
     &.enabled {
-      .module-name {
-        color: var(--keybinds-enabled-color);
-        font-weight: 500;
+      color: var(--label);
+
+      .dot {
+        background: var(--switch-on);
       }
     }
+  }
 
-    .module-name {
-      color: var(--keybinds-text-color);
-      font-size: 14px;
-      flex: 1;
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+  .dot {
+    flex: none;
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-pill);
+    background: var(--fill-secondary);
+    transition: background-color 0.2s ease;
+  }
 
-    .key-bind {
-      display: inline-flex;
-      align-items: center;
-      font-family: monospace;
-      font-size: 11px;
-      color: var(--keybinds-accent-color);
-      font-weight: 600;
-      flex-shrink: 0;
-      min-width: max-content;
+  .module-name {
+    flex: 1;
+    min-width: 0;
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
-      &.muted {
-        color: var(--keybinds-text-muted-color);
-        font-weight: 500;
-      }
-    }
+  .key-bind {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    height: 20px;
+    padding: 0 7px;
+    border-radius: var(--radius-pill);
+    background: var(--fill-tertiary);
+    color: var(--label-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
   }
 </style>

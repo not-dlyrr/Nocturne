@@ -50,8 +50,9 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    padding: 2px 6px;
-    border-radius: 2px;
+    padding: 3px 8px;
+    border-radius: var(--radius-xs);
+    font-family: var(--font-text);
     font-weight: 500;
     font-size: 14px;
   }

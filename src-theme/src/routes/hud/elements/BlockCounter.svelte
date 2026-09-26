@@ -28,7 +28,7 @@
 </script>
 
 {#if count !== undefined}
-    <div class="counter" style="color: {mapToColor(count)}; flex-direction: {FLEX_DIRECTION[cSettings.iconPosition]}" in:fly={{ y: -5, duration: 200 }}
+    <div class="counter nc-surface nc-hud" style="color: {mapToColor(count)}; flex-direction: {FLEX_DIRECTION[cSettings.iconPosition]}" in:fly={{ y: -5, duration: 200 }}
          out:fly={{ y: -5, duration: 200 }}>
         {#if nextBlock && cSettings.iconPosition !== "None"}
             <img class="icon" src={itemTextureUrl(nextBlock)} alt={nextBlock}/>
@@ -38,24 +38,25 @@
 {/if}
 
 <style lang="scss">
-
   .counter {
-    background-color: var(--blockcounter-background-color);
-    border-radius: 5px;
+    border-radius: var(--radius-md);
     white-space: nowrap;
-    padding: 5px 8px;
-    font-weight: 500;
+    padding: 6px 14px;
+    font-family: var(--font-text);
+    font-size: 15px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
     text-align: center;
     width: fit-content;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
     transform: translate(-100%);
   }
 
   .icon {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
   }
 </style>

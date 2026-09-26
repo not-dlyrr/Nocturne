@@ -8,62 +8,63 @@
 </script>
 
 <div class="progress" class:align-right={alignRight}>
-    {#if label}
-        <div class="label">{label}</div>
-    {/if}
     {#if icon}
         <img class="icon" src="img/hud/hotbar/icon-{icon}.svg" alt={icon}>
     {/if}
-    <div
-            class:align-right={alignRight}
-            class="progress-bar"
-            style="width: {Math.floor(
-            (value / max) * 100,
-        )}%; background-color: {color};"
-    ></div>
+    <div class="track">
+        <div
+                class:align-right={alignRight}
+                class="progress-bar"
+                style="width: {Math.floor(
+                (value / max) * 100,
+            )}%; background-color: {color};"
+        ></div>
+    </div>
+    {#if label}
+        <div class="label">{label}</div>
+    {/if}
 </div>
 
 <style lang="scss">
-
-  .label {
-    color: var(--hotbar-text-color);
-    position: absolute;
-    font-size: 14px;
-    right: 5px;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  .icon {
-    position: absolute;
-    left: 5px;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
   .progress {
-    position: relative;
-    border-radius: 5px;
-    background-color: var(--hotbar-status-background-color);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 12px;
 
     &.align-right {
-      .label {
-        left: 5px;
-        right: unset;
-      }
-
-      .icon {
-        right: 5px;
-        left: unset;
-      }
+      flex-direction: row-reverse;
     }
   }
 
+  .icon {
+    flex: none;
+    width: 10px;
+    height: 10px;
+  }
+
+  .label {
+    flex: none;
+    color: var(--label);
+    font-family: var(--font-text);
+    font-size: 12px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .track {
+    flex: 1;
+    height: 5px;
+    border-radius: var(--radius-pill);
+    background: var(--fill-secondary);
+    overflow: hidden;
+  }
+
   .progress-bar {
-    border-radius: 5px;
-    height: 20px;
+    height: 100%;
+    border-radius: var(--radius-pill);
     will-change: width;
-    transition: ease width 0.2s;
+    transition: width 0.2s ease;
 
     &.align-right {
       margin-left: auto;

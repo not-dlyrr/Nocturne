@@ -72,7 +72,7 @@
             </div>
         {/if}
         {#if showItemStackName && itemStackName !== null}
-            <div class="item-name" out:fade={{duration: 200}}>
+            <div class="item-name nc-surface nc-hud" out:fade={{duration: 200}}>
                 <TextComponent fontSize={14} textComponent={itemStackName}/>
             </div>
         {/if}
@@ -144,7 +144,7 @@
 
         </div>
 
-        <div class="hotbar-elements">
+        <div class="hotbar-elements nc-surface nc-hud">
             <div class="slider" style="left: {currentSlot * 45}px"></div>
             <div class="slots" bind:this={slotsElement}>
                 <div class="slot"></div>
@@ -160,39 +160,41 @@
         </div>
 
         {#if playerData?.offHandStack.identifier !== "minecraft:air"}
-            <div class="offhand-slot"></div>
+            <div class="offhand-slot nc-surface nc-hud"></div>
         {/if}
     </div>
 {/if}
 
 <style lang="scss">
-
   .pair {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: 25px;
+    column-gap: 24px;
   }
 
   .status {
     display: flex;
     flex-direction: column;
-    margin-bottom: 5px;
-    row-gap: 5px;
+    margin-bottom: 8px;
+    padding: 0 4px;
+    row-gap: 6px;
     column-gap: 20px;
   }
 
+  // Slot geometry (45px cells, 405px strip) must match where MixinHud draws the item stacks.
   .hotbar-elements {
-    background-color: var(--hotbar-slot-background-color);
     position: relative;
-    border-radius: 5px;
+    border-radius: var(--radius-md);
     overflow: hidden;
 
     .slider {
-      border: solid 2px var(--hotbar-slot-border-color);
-      height: 45px;
-      width: 45px;
       position: absolute;
-      border-radius: 5px;
+      top: 2px;
+      height: 41px;
+      width: 41px;
+      margin-left: 2px;
+      border-radius: var(--radius-sm);
+      box-shadow: inset 0 0 0 2px var(--accent-text);
       /* transition: linear left 0.05s; TODO: Animation is possible but annoying */
     }
 
@@ -209,28 +211,28 @@
   .offhand-slot {
     height: 45px;
     width: 45px;
-    border-radius: 5px;
-    background-color: var(--hotbar-slot-background-color);
+    border-radius: var(--radius-md);
     position: absolute;
     bottom: 0;
     left: -65px;
   }
 
   .item-name {
-    color: var(--hotbar-text-color);
-    font-size: 14px;
-    margin: 0 auto 15px;
-    font-weight: 500;
-    background-color: var(--hotbar-item-name-background-color);
-    padding: 5px 8px;
-    border-radius: 5px;
+    color: var(--label);
+    font-family: var(--font-text);
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0 auto 12px;
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
     width: max-content;
   }
 
   .overlay-message {
     text-align: center;
-    color: var(--hotbar-text-color);
-    margin-bottom: 15px;
+    color: var(--label);
+    font-family: var(--font-text);
+    margin-bottom: 12px;
     overflow: hidden;
   }
 </style>

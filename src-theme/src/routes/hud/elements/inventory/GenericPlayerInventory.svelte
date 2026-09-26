@@ -23,10 +23,12 @@
     });
 
     $: stacks = inventory ? getRenderedStacks(inventory) : [];
+    // A backed inventory becomes a solid HUD card; transparent ones (armor, statistics) stay bare.
+    $: surfaced = backgroundColor !== "transparent";
 </script>
 
-<div class="inventory" style="
-    background-color: {backgroundColor};
+<div class="inventory" class:nc-surface={surfaced} class:nc-hud={surfaced} style="
+    {surfaced ? "" : `background-color: ${backgroundColor};`}
     gap: {gap};
     --row-length: {rowLength};
 ">
@@ -38,8 +40,12 @@
 <style lang="scss">
   .inventory {
     padding: 4px;
-    border-radius: 5px;
+    border-radius: var(--radius-md);
     display: grid;
     grid-template-columns: repeat(var(--row-length), 1fr);
+
+    &.nc-surface {
+      padding: 8px;
+    }
   }
 </style>
