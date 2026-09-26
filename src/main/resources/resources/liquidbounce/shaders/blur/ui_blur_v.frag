@@ -27,6 +27,7 @@ const float LENS_STRENGTH = 40.0;   // px, displacement at full bend
 const float MAGNIFY = 0.22;         // pull towards the centre across the body (~11% magnification)
 const vec3 DISPERSION = vec3(1.0, 1.12, 1.26); // red bends least, blue most
 const float SATURATION = 1.4;
+const float CHROMA = 4.0;           // px, extra red/blue split along the rim normal (chromatic aberration)
 
 vec2 overlayTexel;
 
@@ -136,10 +137,13 @@ void main() {
     float strength = min(LENS_STRENGTH, bevel * 2.4);
     vec2 displacement = clamp(-normal * bend - rel * MAGNIFY, -1.0, 1.0) * strength * overlayTexel;
 
+    // Chromatic aberration: on top of the per-channel dispersion, split red outward and blue inward along the
+    // rim normal, strongest where the glass bends hardest, so edges get the thin rainbow fringe real glass has.
+    vec2 fringe = normal * bend * CHROMA * overlayTexel;
     vec3 refracted = vec3(
-        verticalBlur(texCoord + displacement * DISPERSION.r).r,
+        verticalBlur(texCoord + displacement * DISPERSION.r + fringe).r,
         verticalBlur(texCoord + displacement * DISPERSION.g).g,
-        verticalBlur(texCoord + displacement * DISPERSION.b).b
+        verticalBlur(texCoord + displacement * DISPERSION.b - fringe).b
     );
 
     float luma = dot(refracted, vec3(0.2126, 0.7152, 0.0722));
