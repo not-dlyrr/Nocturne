@@ -2,6 +2,7 @@
     import type {BindAction} from "../../../../integration/types";
     import {fly} from "svelte/transition";
     import {cubicOut} from 'svelte/easing';
+    import Icon from "../../../../components/sg/Icon.svelte";
 
     export let choices: BindAction[];
     export let chosen: typeof choices[number];
@@ -30,8 +31,7 @@
     }
 </script>
 
-<!-- svelte-ignore a11y_consider_explicit_label -->
-<button on:click|stopPropagation={switchAction}>
+<button type="button" title="Switch between Toggle, Hold and Smart" on:click|stopPropagation={switchAction}>
     <span class="chosen-holder">
         {#key chosen}
             <span
@@ -43,33 +43,29 @@
     </span>
 
     {#key jiggle}
-        <span class="arrow arrow-right"></span>
+        <span class="arrow"><Icon name="chevron" size={10} weight={2.6}/></span>
     {/key}
 </button>
 
 <style lang="scss">
-  @use "../../icon-settings-expand" as *;
-
   @keyframes jiggle {
     0% {
       transform: translateX(0);
     }
+
     50% {
       transform: translateX(2px);
     }
+
     100% {
       transform: translateX(0);
     }
   }
 
   .arrow {
-    width: 10px;
+    display: flex;
+    color: var(--label-secondary);
     animation: jiggle 200ms ease;
-
-    &.arrow-right::after {
-      @include icon-settings-expand($size: 10px, $right: auto);
-      color: var(--clickgui-text-dimmed-color);
-    }
   }
 
   .chosen-holder {
@@ -78,7 +74,7 @@
     .chosen {
       font-weight: 500;
       color: var(--label-secondary);
-      font-size: 13px;
+      font-size: 12px;
       text-overflow: ellipsis;
       white-space: nowrap;
       grid-column: 1/1;
@@ -88,13 +84,18 @@
 
   button {
     all: unset;
-    background: none;
-    padding: 0;
+    height: 24px;
+    padding: 0 6px 0 8px;
+    border-radius: var(--radius-pill);
     cursor: pointer;
     display: flex;
-    gap: 3px;
+    gap: 4px;
     align-items: center;
     position: relative;
-    border: none;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: var(--fill-secondary);
+    }
   }
 </style>

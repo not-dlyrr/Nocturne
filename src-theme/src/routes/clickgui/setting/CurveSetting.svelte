@@ -317,7 +317,9 @@
 
 <div class="setting">
     <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div class="head" class:expanded on:contextmenu|preventDefault={() => expanded = !expanded}>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div class="head" class:expanded on:click={() => expanded = !expanded}
+         on:contextmenu|preventDefault={() => expanded = !expanded}>
         <div class="title">{$spaceSeperatedNames ? convertToSpacedString(cSetting.name) : cSetting.name}</div>
         <ExpandArrow bind:expanded/>
     </div>
@@ -329,10 +331,27 @@
 </div>
 
 <style lang="scss">
-
   .setting {
-    padding: 8px 0;
+    padding: 0;
     position: relative;
+  }
+
+  .head {
+    min-height: 36px;
+    padding: 7px 0;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    .title {
+      flex: 1;
+      min-width: 0;
+      color: var(--label);
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   .canvas-wrapper {
@@ -344,24 +363,8 @@
 
     &.visible {
       height: 180px;
+      margin-bottom: 8px;
       opacity: 1;
     }
   }
-
-  .title {
-    color: var(--clickgui-text-color);
-    font-size: 13px;
-    font-weight: 600;
-  }
-
-  .head {
-    display: flex;
-    justify-content: space-between;
-    transition: ease margin-bottom .2s;
-
-    &.expanded {
-      margin-bottom: 10px;
-    }
-  }
-
 </style>

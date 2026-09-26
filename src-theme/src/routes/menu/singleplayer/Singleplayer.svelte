@@ -67,7 +67,7 @@
 </script>
 
 <OptionBar>
-    <Search on:search={handleSearch}/>
+    <Search placeholder="Search Worlds" on:search={handleSearch}/>
     <MultiSelect title="Game Mode" options={["Survival", "Creative", "Adventure", "Spectator"]}
                  bind:values={gameModes}/>
     <MultiSelect title="Difficulty" options={["Peaceful", "Easy", "Normal", "Hard"]} bind:values={difficulties}/>
@@ -117,5 +117,7 @@
 <style lang="scss">
   .world-name {
     font-weight: 500;
+    color: var(--label);
+    margin-right: 4px;
   }
 </style>

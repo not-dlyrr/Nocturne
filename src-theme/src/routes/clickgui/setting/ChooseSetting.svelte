@@ -41,7 +41,7 @@
 
 <style lang="scss">
     .setting {
-        padding: 8px 0;
+        padding: 7px 0;
     }
 
     .segmented-row {
@@ -59,8 +59,12 @@
             text-overflow: ellipsis;
         }
 
+        /* compact segmented control for a dense settings row */
         :global(.sg-seg-item) {
-            min-width: 64px;
+            min-width: 44px;
+            height: 24px;
+            padding: 0 8px;
+            font-size: 12px;
         }
     }
 </style>

@@ -1,5 +1,8 @@
 <script lang="ts">
     import {createEventDispatcher} from "svelte";
+    import Icon from "../../../components/sg/Icon.svelte";
+
+    export let placeholder = "Search";
 
     let value = "";
 
@@ -8,23 +11,24 @@
     }>();
 </script>
 
-<input class="search" type="text" placeholder="Search..." bind:value={value}
-       on:input={() => dispatch("search", {query: value})} spellcheck="false">
+<label class="search sg-search nc-field">
+    <Icon name="search" size={15} weight={2}/>
+    <input type="text" {placeholder} bind:value={value}
+           on:input={() => dispatch("search", {query: value})} spellcheck="false">
+</label>
 
 <style lang="scss">
-
   .search {
-    background-color: var(--menu-search-background-color);
-    border: none;
-    color: var(--menu-text-color);
-    font-family: var(--font-text);
-    font-size: 20px;
-    border-radius: 5px;
-    border-bottom: solid 4px var(--menu-search-border-color);
-    background-image: url("/img/menu/icon-search.svg");
-    background-repeat: no-repeat;
-    background-position: 20px center;
-    padding: 20px 20px 20px 60px;
     flex: 1;
+    min-width: 180px;
+    min-height: 32px;
+    padding: 0 12px;
+    gap: 6px;
+
+    input {
+      font-size: 13px;
+      line-height: 18px;
+      letter-spacing: -0.08px;
+    }
   }
 </style>

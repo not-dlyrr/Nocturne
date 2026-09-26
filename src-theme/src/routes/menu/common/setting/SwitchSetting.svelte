@@ -7,73 +7,41 @@
     const dispatch = createEventDispatcher();
 </script>
 
-<label class="switch-setting">
-    <span class="switch">
-        <input type="checkbox" bind:checked={value} on:change={() => dispatch("change")}/>
-        <span class="slider"></span>
-    </span>
-
+<!-- santi.glass switch at the compact desktop size -->
+<label class="switch-setting sg-switch">
+    <input type="checkbox" role="switch" bind:checked={value} on:change={() => dispatch("change")}/>
+    <span class="sg-switch-track"><span class="sg-switch-knob"></span></span>
     <span class="title">{title}</span>
 </label>
 
 <style lang="scss">
-
   .switch-setting {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
+    gap: 8px;
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: -0.08px;
+    white-space: nowrap;
+    user-select: none;
   }
 
   .title {
-    color: var(--menu-text-color);
-    font-size: 20px;
-    margin-left: 10px;
+    color: var(--label);
     font-weight: 500;
   }
 
-  .slider {
-    position: absolute;
-    top: 2px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--menu-switch-track-color);
-    transition: ease 0.4s;
-    height: 14px;
-    border-radius: 10px;
-
-    &::before {
-      position: absolute;
-      content: "";
-      height: 21px;
-      width: 21px;
-      top: -4px;
-      left: -10px;
-      background-color: var(--menu-switch-thumb-color);
-      transition: ease 0.4s;
-      border-radius: 50%;
-    }
+  .sg-switch-track {
+    width: 36px;
+    height: 22px;
   }
 
-  .switch {
-    position: relative;
-    display: flex;
-    width: 28px;
+  .sg-switch-knob {
+    top: 2px;
+    left: 2px;
+    width: 18px;
     height: 18px;
-    align-items: center;
-    margin: 0 10px;
+  }
 
-    input {
-      display: none;
-    }
-
-    input:checked + .slider {
-      background-color: var(--menu-switch-track-active-color);
-    }
-
-    input:checked + .slider:before {
-      transform: translateX(27px);
-      background-color: var(--menu-switch-thumb-active-color);
-    }
+  input:checked + .sg-switch-track .sg-switch-knob {
+    transform: translateX(14px);
   }
 </style>

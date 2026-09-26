@@ -9,7 +9,7 @@
 <div class="avatar-wrapper">
     {#if !previewImageLoaded}
         <div class="loader">
-            <RippleLoader />
+            <RippleLoader size={28}/>
         </div>
     {/if}
 
@@ -19,8 +19,8 @@
 <style lang="scss">
   .avatar-wrapper {
     grid-area: a;
-    height: 50px;
-    width: 50px;
+    height: 28px;
+    width: 28px;
     position: relative;
   }
 

@@ -91,13 +91,15 @@
         {#if configurable !== undefined}
             <TogglableSetting path="hud.components.{name}.{id}" bind:setting={configurable} on:change={handleSettingChange}>
                 <div class="remove-component" slot="control" let:disable let:label>
+                    <span>{label}</span>
                     <button
-                            title="Remove component"
+                            type="button"
+                            title="Remove Component"
+                            aria-label="Remove component"
                             on:click={disable}
                     >
                         <img src="img/clickgui/icon-cross.svg" alt="">
                     </button>
-                    <span>{label}</span>
                 </div>
             </TogglableSetting>
         {/if}
@@ -110,16 +112,18 @@
     top: 0;
     left: 50%;
     transition: ease transform .2s;
-    transform: translateY(calc(-100% - 15px - var(--overlay-offset))) translateX(-50%);
+    transform: translateY(calc(-100% - 10px - var(--overlay-offset))) translateX(-50%);
 
     .settings {
-      background-color: var(--clickgui-hud-editor-component-settings-background-color);
-      padding: 5px 10px;
-      border-radius: 5px;
-      width: 200px;
-      box-shadow: 0 0 10px var(--clickgui-hud-editor-component-settings-shadow-color);
+      width: 240px;
       max-height: 350px;
       overflow: auto;
+      padding: 0 12px 2px;
+      border-radius: var(--radius-md);
+      background-color: var(--surface);
+      border: 0.5px solid var(--glass-stroke);
+      box-shadow: var(--shadow-glass-edge), var(--shadow-solid);
+      font-family: var(--font-text);
 
       &::-webkit-scrollbar {
         width: 2px;
@@ -132,75 +136,49 @@
 
       .remove-component {
         display: flex;
-
-        button {
-          all: unset;
-          align-items: center;
-          min-width: 0;
-          cursor: pointer;
-
-          img {
-            display: block;
-            width: 10px;
-            height: 10px;
-            flex: 0 0 10px;
-          }
-
-        }
+        align-items: center;
+        gap: 8px;
 
         span {
-          margin-left: 7px;
+          flex: 1;
+          min-width: 0;
           overflow: hidden;
-          color: var(--clickgui-text-color);
-          font-size: 12px;
-          font-weight: 500;
-          line-height: 12px;
+          color: var(--label);
+          font-size: 13px;
+          font-weight: 600;
           text-overflow: ellipsis;
           white-space: nowrap;
         }
+
+        button {
+          width: 22px;
+          height: 22px;
+          flex: none;
+          padding: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: none;
+          border-radius: 50%;
+          background-color: var(--fill-tertiary);
+          cursor: pointer;
+          transition: background-color 0.2s ease;
+
+          img {
+            display: block;
+            width: 8px;
+            height: 8px;
+          }
+
+          &:hover {
+            background-color: color-mix(in srgb, var(--danger) 30%, transparent);
+          }
+        }
       }
-    }
-
-    &::before,
-    &::after {
-      content: "";
-      display: block;
-      position: absolute;
-      width: 0;
-      height: 0;
-      border-top: 8px solid transparent;
-      border-bottom: 8px solid transparent;
-      border-right: 8px solid var(--clickgui-hud-editor-component-settings-background-color);
-      left: 50%;
-      opacity: 0;
-      transition: opacity .1s ease, transform .2s ease;
-      z-index: -1;
-    }
-
-    &::before {
-      top: -12px;
-      transform: translateX(-50%) rotate(90deg) scale(.8);
-    }
-
-    &::after {
-      bottom: -12px;
-      opacity: 1;
-      transform: translateX(-50%) rotate(-90deg);
     }
 
     &.bottom {
-      transform: translateY(calc(var(--component-height) + 15px + var(--overlay-offset))) translateX(-50%);
-
-      &::before {
-        opacity: 1;
-        transform: translateX(-50%) rotate(90deg);
-      }
-
-      &::after {
-        opacity: 0;
-        transform: translateX(-50%) rotate(-90deg) scale(.8);
-      }
+      transform: translateY(calc(var(--component-height) + 10px + var(--overlay-offset))) translateX(-50%);
     }
-
   }
 </style>

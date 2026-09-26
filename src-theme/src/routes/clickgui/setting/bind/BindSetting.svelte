@@ -184,8 +184,8 @@
 
 <style lang="scss">
   .setting {
-    padding: 8px 0;
-    min-height: 48px;
+    padding: 7px 0;
+    min-height: 40px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -202,8 +202,12 @@
   }
 
   .change-bind {
-    min-width: 64px;
-    font-size: 13px;
+    min-width: 56px;
+    min-height: 26px;
+    height: 26px;
+    padding: 0 12px;
+    font-size: 12px;
+    line-height: 16px;
     font-family: var(--font-text);
   }
 </style>

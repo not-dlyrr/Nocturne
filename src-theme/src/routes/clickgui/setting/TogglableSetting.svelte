@@ -75,30 +75,29 @@
 </div>
 
 <style lang="scss">
-
   .setting {
-    padding: 8px 0;
+    padding: 0;
   }
 
-    .head {
-      min-height: 14px;
-      transition: ease margin-bottom .2s;
-
-      &.expand {
-        display: grid;
-        grid-template-columns: 1fr max-content;
-        align-items: center;
-      }
-
-    &.expanded {
-      margin-bottom: 10px;
-    }
+  .head {
+    min-height: 36px;
+    padding: 7px 0;
+    display: flex;
+    align-items: center;
   }
 
+  .head > :global(*:first-child) {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* nested rows: indented under the group head, separated by hairlines that start at the indent */
   .nested-settings {
-    margin: 0 -4px 4px 0;
-    padding: 0 0 0 12px;
-    border-left: 2px solid var(--fill-secondary);
-    border-radius: 1px;
+    margin-left: 2px;
+    padding: 0 0 4px 14px;
+
+    > :global(div) {
+      box-shadow: inset 0 0.5px 0 var(--separator);
+    }
   }
 </style>

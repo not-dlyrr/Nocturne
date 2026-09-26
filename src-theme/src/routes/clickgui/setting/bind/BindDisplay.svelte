@@ -63,7 +63,6 @@
 </span>
 
 <style lang="scss">
-
   .wrapper {
     column-gap: 2px;
     display: flex;
@@ -76,10 +75,8 @@
 
   .modifier:after {
     content: "+";
-    color: var(--clickgui-text-dimmed-color);
-    opacity: 0.8;
+    opacity: 0.6;
     line-height: 1;
-    font-family: monospace;
     margin-left: 2px;
   }
 

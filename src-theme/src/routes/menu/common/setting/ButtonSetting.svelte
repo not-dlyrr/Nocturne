@@ -22,7 +22,8 @@
 </script>
 
 <svelte:window on:keydown={handleKeyDown}/>
-<button class="button-setting" class:inset type="button" on:click={() => dispatch("click")} {disabled} class:secondary>
+<button class="button-setting sg-btn sg-btn-small" class:sg-btn-filled={!secondary} class:sg-btn-tinted={secondary}
+        class:inset type="button" on:click={() => dispatch("click")} {disabled}>
     {#if loading}
         <CircleLoader/>
     {/if}
@@ -30,37 +31,17 @@
 </button>
 
 <style lang="scss">
-
   .button-setting {
-    position: relative;
-    border: none;
-    background-color: var(--menu-button-background-color);
-    color: var(--menu-text-color);
-    font-family: var(--font-text);
-    padding: 20px;
-    border-radius: 5px;
-    font-size: 20px;
-    transition: ease background-color .2s, ease opacity .2s;
-
-    &.inset {
-      margin: 0 30px;
-    }
-
-    &.secondary {
-      background-color: var(--menu-button-secondary-background-color);
-    }
+    height: 32px;
+    min-height: 32px;
+    padding: 0 14px;
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: -0.08px;
+    white-space: nowrap;
 
     &:not([disabled]):hover {
-      background-color: var(--menu-button-hover-background-color);
-      cursor: pointer;
-
-      &.secondary {
-        background-color: var(--menu-button-secondary-hover-background-color);
-      }
-    }
-
-    &[disabled] {
-      opacity: .6;
+      filter: brightness(1.08);
     }
   }
 </style>

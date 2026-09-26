@@ -7,15 +7,15 @@
 </div>
 
 <style lang="scss">
-
   .tag {
-    background-color: var(--menu-list-tag-background-color);
-    color: var(--menu-text-color);
-    font-size: 12px;
-    padding: 3px 10px;
-    border-radius: 20px;
-    margin-left: 10px;
-    transition: ease color .2s, ease background-color .2s;
-    transform: translateY(-3px);
+    flex: none;
+    background-color: var(--fill-tertiary);
+    color: var(--label-secondary);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 16px;
+    padding: 0 7px;
+    border-radius: var(--radius-pill);
+    white-space: nowrap;
   }
 </style>

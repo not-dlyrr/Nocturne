@@ -12,6 +12,7 @@
     import {listen} from "../../integration/ws";
     import type {BrowserUrlChangeEvent} from "../../integration/events";
     import {delay} from "../../integration/util";
+    import Icon from "../../components/sg/Icon.svelte";
 
     let browser: Browser;
 
@@ -55,65 +56,93 @@
     });
 </script>
 
-<style>
+{#if browser}
+    <div class="browser-controls nc-surface">
+        <button class="round back" type="button" aria-label="Back" title="Back" on:click={handleBack}>
+            <Icon name="chevron" size={14} weight={2.2}/>
+        </button>
+        <button class="round" type="button" aria-label="Forward" title="Forward" on:click={handleForward}>
+            <Icon name="chevron" size={14} weight={2.2}/>
+        </button>
+        <button class="round" type="button" aria-label="Reload" title="Reload" on:click={handleReload}>
+            <img src="img/menu/icon-refresh.svg" alt="">
+        </button>
+        <label class="address-bar sg-search nc-field">
+            <Icon name="search" size={15} weight={2}/>
+            <input id="url" bind:value={browser.url} on:keypress={onKeyPress} placeholder="Enter URL" spellcheck="false"/>
+        </label>
+        <button class="sg-btn sg-btn-filled sg-btn-small action" type="button" on:click={handleGo}>Go</button>
+        <button class="sg-btn sg-btn-tinted sg-btn-small action" type="button" on:click={handleForceReload}>Force Reload</button>
+    </div>
+{/if}
+
+<style lang="scss">
     .browser-controls {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
         position: fixed;
-        bottom: 10px;
-        left: 10px;
-        right: 10px;
-        background-color: #f8f9fa;
-        padding: 10px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        bottom: 12px;
+        left: 12px;
+        right: 12px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 6px;
+        border-radius: var(--radius-pill);
+        font-family: var(--font-text);
+    }
+
+    .round {
+        width: 32px;
+        height: 32px;
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border: none;
+        border-radius: 50%;
+        background: transparent;
+        color: var(--label);
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+
+        img {
+            width: 15px;
+            height: 15px;
+        }
+
+        &:hover {
+            background-color: var(--fill-tertiary);
+        }
+
+        &:active {
+            transform: scale(0.96);
+        }
+
+        &.back :global(.sg-icon) {
+            transform: rotate(180deg);
+        }
     }
 
     .address-bar {
-        flex-grow: 1;
-        margin: 0 10px;
+        flex: 1;
+        min-width: 0;
+        min-height: 32px;
+        margin: 0 4px;
+        padding: 0 12px;
+        gap: 6px;
+
+        input {
+            font-size: 13px;
+            line-height: 18px;
+            letter-spacing: -0.08px;
+        }
     }
 
-    input {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ced4da;
-        border-radius: 5px;
-        outline: none;
-        font-size: 14px;
-    }
-
-    button {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        margin-left: 5px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-    }
-
-    button:disabled {
-        background-color: #6c757d;
-        cursor: not-allowed;
-    }
-
-    button:focus {
-        outline: none;
+    .action {
+        height: 32px;
+        font-size: 13px;
+        line-height: 18px;
+        letter-spacing: -0.08px;
+        white-space: nowrap;
     }
 </style>
-
-{#if browser}
-    <div class="browser-controls">
-        <button on:click={handleBack}>&larr;</button>
-        <button on:click={handleForward}>&rarr;</button>
-        <button on:click={handleReload}>&#x21bb;</button>
-        <div class="address-bar">
-            <input id="url" bind:value={browser.url} on:keypress={onKeyPress} placeholder="Enter URL" />
-        </div>
-        <button on:click={handleGo}>Go</button>
-        <button on:click={handleForceReload}>Force Reload</button>
-    </div>
-{/if}

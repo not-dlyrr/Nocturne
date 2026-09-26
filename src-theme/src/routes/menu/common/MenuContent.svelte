@@ -1,7 +1,8 @@
 <script lang="ts">
     import {onMount} from "svelte";
 
-    const TRANSITION_DURATION = 700;
+    // Screens no longer play long outros, so only a short beat is needed before the next one comes in.
+    const TRANSITION_DURATION = 150;
 
     let ready = false;
 

@@ -9,9 +9,9 @@
   Taken from https://loading.io/css/
  */
 
- 
+
   .lds-ripple {
-    color: var(--accent-color);
+    color: var(--accent-text);
   }
 
   .lds-ripple,
@@ -28,7 +28,7 @@
 
   .lds-ripple div {
     position: absolute;
-    border: 4px solid currentColor;
+    border: max(2px, calc(var(--size) / 24)) solid currentColor;
     opacity: 1;
     border-radius: 50%;
     animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;

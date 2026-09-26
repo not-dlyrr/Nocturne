@@ -62,15 +62,18 @@
   .header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 60px;
+    margin-bottom: 20px;
     align-items: center;
+    gap: 16px;
+    position: relative;
+    z-index: 3;
   }
 
   .wordmark {
     font-family: var(--font-display);
-    font-size: 44px;
+    font-size: 28px;
     font-weight: 700;
-    letter-spacing: -0.8px;
+    letter-spacing: -0.6px;
     color: var(--label);
   }
 </style>

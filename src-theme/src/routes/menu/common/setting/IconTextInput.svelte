@@ -7,10 +7,8 @@
     export let pattern: string | null = null;
 </script>
 
-<div class="icon-text-input">
-    <div class="icon">
-        <img src="img/menu/icon-{icon}.svg" alt={icon}>
-    </div>
+<div class="icon-text-input nc-field">
+    <img class="icon" src="img/menu/icon-{icon}.svg" alt={icon}>
     {#if type === "text"}
         <input {pattern} maxlength={maxLength} class="input" spellcheck="false" type="text" placeholder={title} bind:value={value} autocomplete="off">
     {:else if type === "password"}
@@ -22,40 +20,64 @@
 </div>
 
 <style lang="scss">
-
   .icon-text-input {
-    display: grid;
-    grid-template-columns: max-content 1fr max-content;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 36px;
+    padding: 0 4px 0 12px;
+    border-radius: var(--radius-sm);
+    cursor: text;
+    transition: border-color 0.2s ease;
+
+    &:focus-within {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 1px;
+    }
+
+    &:has(.input:invalid) {
+      border-color: var(--danger-text);
+    }
   }
 
   .icon {
-    height: 64px;
-    width: 64px;
-    background-color: var(--menu-input-icon-background-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 5px 0 0 5px;
+    width: 14px;
+    height: 14px;
+    flex: none;
+    opacity: 0.6;
   }
 
   .input {
-    color: var(--menu-text-color);
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    color: var(--label);
     font-family: var(--font-text);
-    font-size: 20px;
-    background-color: var(--menu-input-background-color);
+    font-size: 13px;
+    letter-spacing: -0.08px;
+    background: transparent;
     border: none;
-    padding: 0 20px 0 18px;
-    border-radius: 0 5px 5px 0;
-    border-left: solid 2px var(--menu-input-divider-color);
-    width: 100%;
+    outline: none;
+    padding: 0;
 
-    &:invalid {
-      border: solid 2px var(--menu-input-error-border-color);
+    &::placeholder {
+      color: var(--label-secondary);
     }
   }
 
   .button-container {
     display: flex;
     align-items: center;
+
+    /* e.g. the Random button: a small round icon button inside the field */
+    :global(.icon) {
+      width: 28px;
+      height: 28px;
+    }
+
+    :global(.icon img) {
+      width: 15px;
+      height: 15px;
+    }
   }
 </style>

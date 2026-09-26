@@ -45,6 +45,7 @@
     let query = $state("");
     let onlyEnabled = $state(false);
     let clickGuiKey = UNKNOWN_KEY;
+    let modulesLoaded = $state(false);
 
     let configurable = $state<ConfigurableSetting | null>(null);
 
@@ -201,6 +202,7 @@
         modules = loadedModules;
         categories = loadedCategories.map(c => c.name).filter(c => loadedModules.some(m => m.category === c));
         version = clientInfo.clientVersion;
+        modulesLoaded = true;
 
         if (!categories.includes(category)) category = categories[0] ?? category;
         if (!selected || !modules.some(m => m.name === selected)) {
@@ -226,107 +228,140 @@
 
 <svelte:window onkeydown={handleWindowKeyDown}/>
 
+{#snippet hideButton()}
+    <button class="hide" type="button" aria-label="Hide" title="Hide" onclick={() => deleteScreen()}>
+        <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+            <path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+    </button>
+{/snippet}
+
 <div class="window nc-surface" bind:this={windowElement} class:dragging style="left: {x}px; top: {y}px;">
-    <!-- svelte-ignore a11y_no_static_element_interactions -->
-    <header onmousedown={startDrag}>
-        <div class="brand">
+    <aside class="sidebar">
+        <!-- svelte-ignore a11y_no_static_element_interactions -->
+        <div class="brand bar" onmousedown={startDrag}>
             <span class="wordmark">nocturne</span>
             <span class="version">{version}</span>
         </div>
         <label class="sg-search nc-field search">
-            <Icon name="search" size={15} weight={2}/>
+            <Icon name="search" size={13} weight={2.2}/>
             <input type="search" placeholder="Search Modules" spellcheck="false" bind:value={query} bind:this={searchInput}
                    onfocusin={() => setTyping(true)} onfocusout={() => setTyping(false)}
                    onkeydown={e => { if (e.key === "Escape") { query = ""; searchInput.blur(); } }}/>
         </label>
-        <div class="spacer"></div>
-        <button class="sg-btn sg-btn-plain sg-btn-small" type="button" onclick={() => deleteScreen()}>Hide</button>
-    </header>
-    <div class="hairline"></div>
 
-    <div class="body">
-        <nav class="sidebar" class:dimmed={!!trimmedQuery}>
+        <nav class="categories" class:dimmed={!!trimmedQuery}>
             <div class="pill" style="transform: translateY({pillY}px); opacity: {trimmedQuery ? 0 : 1};"></div>
             {#each categories as c (c)}
                 {@const style = categoryStyle(c)}
                 {@const inCategory = modules.filter(m => m.category === c)}
                 <button type="button" class="side-row" class:active={c === category && !showSettings && !trimmedQuery}
                         bind:this={sidebarItems[c]} onclick={() => selectCategory(c)}>
-                    <span class="icon-square" style="background: {style.tone};"><Icon name={style.icon} size={14} weight={2.2}/></span>
+                    <span class="icon-square" style="background: {style.tone};"><Icon name={style.icon} size={13} weight={2.2}/></span>
                     <span class="side-label">{c}</span>
-                    <span class="count">{enabledCount(inCategory)}/{inCategory.length}</span>
+                    {#if enabledCount(inCategory) > 0}
+                        <span class="count">{enabledCount(inCategory)}</span>
+                    {/if}
                 </button>
             {/each}
+            <div class="nav-rule"></div>
             <button type="button" class="side-row" class:active={showSettings && !trimmedQuery}
                     bind:this={sidebarItems.__settings} onclick={openSettings}>
-                <span class="icon-square settings-square"><Icon name="sliders" size={14} weight={2.2}/></span>
+                <span class="icon-square settings-square"><Icon name="sliders" size={13} weight={2.2}/></span>
                 <span class="side-label">Settings</span>
             </button>
         </nav>
-        <div class="vline"></div>
+    </aside>
+    <div class="vline"></div>
 
-        {#if showSettings}
-            <div class="client-settings" in:fly={{y: 8, duration: 250}}>
+    {#if showSettings}
+        <section class="pane">
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <header class="bar pane-bar" onmousedown={startDrag}>
+                <span class="icon-square settings-square"><Icon name="sliders" size={13} weight={2.2}/></span>
+                <span class="bar-title">Client Settings</span>
+                <span class="spacer"></span>
+                {@render hideButton()}
+            </header>
+            <div class="hairline"></div>
+            <div class="pane-scroll" in:fly={{y: 6, duration: 220}}>
                 <ClientSettings {onHudEditor}/>
             </div>
-        {:else}
-            <section class="list">
-                <div class="list-head">
-                    <div class="list-heading">
-                        <span class="list-title">{trimmedQuery ? "Results" : category}</span>
-                        <span class="meta">
-                            {trimmedQuery ? `${listed.length} found` : `${enabledCount(categoryModules)} of ${categoryModules.length} on`}
-                        </span>
-                    </div>
-                    <div class="filter">
-                        <SegmentedControl options={["All", "On"]} value={onlyEnabled ? "On" : "All"} label="Show"
-                                          onchange={v => (onlyEnabled = v === "On")}/>
-                    </div>
+        </section>
+    {:else}
+        <section class="list">
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <header class="bar list-bar" onmousedown={startDrag}>
+                <div class="list-heading">
+                    <span class="bar-title">{trimmedQuery ? "Results" : category}</span>
+                    <span class="meta">
+                        {trimmedQuery ? `${listed.length} found` : `${enabledCount(categoryModules)} of ${categoryModules.length} on`}
+                    </span>
                 </div>
-                {#key `${trimmedQuery ? "results" : category}:${onlyEnabled}`}
-                    <div class="rows" in:fly={{y: 8, duration: 250}}>
-                        {#each sections as [heading, sectionModules] (heading)}
-                        <div class="section-head">{heading}</div>
-                        {#each sectionModules as module (module.name)}
-                            <!-- svelte-ignore a11y_click_events_have_key_events -->
-                            <!-- svelte-ignore a11y_no_static_element_interactions -->
-                            <div class="row" class:selected={module.name === selected}
-                                 onclick={e => !(e.target as HTMLElement).closest("label") && module.name !== selected && selectModule(module.name)}>
-                                <div class="row-text">
-                                    <span class="row-name" class:on={module.enabled}>{name(module.name)}</span>
-                                    <span class="row-desc">
-                                        {trimmedQuery ? `${module.category} · ${module.description}` : module.description}
-                                    </span>
-                                </div>
-                                <Switch checked={module.enabled} label={module.name} onchange={v => toggle(module, v)}/>
-                            </div>
+                <div class="filter">
+                    <SegmentedControl options={["All", "On"]} value={onlyEnabled ? "On" : "All"} label="Show"
+                                      onchange={v => (onlyEnabled = v === "On")}/>
+                </div>
+            </header>
+            <div class="hairline"></div>
+            {#key `${trimmedQuery ? "results" : category}:${onlyEnabled}`}
+                <div class="rows" in:fly={{y: 6, duration: 220}}>
+                    {#if !modulesLoaded}
+                        {#each [64, 48, 72, 56, 40, 68, 52, 60] as width, i (i)}
+                            <div class="row skeleton"><span class="bar-shape" style="width: {width}%;"></span></div>
                         {/each}
+                    {:else}
+                        {#each sections as [heading, sectionModules] (heading)}
+                            <div class="section-head">{heading}</div>
+                            {#each sectionModules as module (module.name)}
+                                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                                <!-- svelte-ignore a11y_no_static_element_interactions -->
+                                <div class="row" class:selected={module.name === selected}
+                                     onclick={e => !(e.target as HTMLElement).closest("label") && module.name !== selected && selectModule(module.name)}>
+                                    <span class="row-name" class:on={module.enabled}>{name(module.name)}</span>
+                                    <Switch checked={module.enabled} label={module.name} onchange={v => toggle(module, v)}/>
+                                </div>
+                            {/each}
                         {/each}
                         {#if shown.length === 0}
                             <div class="empty">
-                                {trimmedQuery ? `No modules match “${query.trim()}”.` : `No ${category} modules are on.`}
+                                <span class="empty-icon"><Icon name="search" size={16} weight={2}/></span>
+                                <span class="empty-title">{trimmedQuery ? "No Results" : `No ${category} Modules On`}</span>
+                                <span class="empty-desc">
+                                    {trimmedQuery ? `Nothing matches “${query.trim()}”.` : "Switch to All to see every module."}
+                                </span>
                             </div>
                         {/if}
-                    </div>
-                {/key}
-            </section>
-            <div class="vline"></div>
+                    {/if}
+                </div>
+            {/key}
+        </section>
+        <div class="vline"></div>
 
-            <section class="pane" bind:this={paneElement}>
+        <section class="pane">
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <header class="bar pane-bar" onmousedown={startDrag}>
                 {#if selectedModule}
                     {@const style = categoryStyle(selectedModule.category)}
+                    <span class="icon-square" style="background: {style.tone};"><Icon name={style.icon} size={13} weight={2.2}/></span>
+                    <span class="bar-title">{name(selectedModule.name)}</span>
+                    <span class="spacer"></span>
+                    <Switch checked={selectedModule.enabled} label={selectedModule.name}
+                            onchange={v => selectedModule && toggle(selectedModule, v)}/>
+                    <span class="bar-rule"></span>
+                {:else}
+                    <span class="spacer"></span>
+                {/if}
+                {@render hideButton()}
+            </header>
+            <div class="hairline"></div>
+            <div class="pane-scroll" bind:this={paneElement}>
+                {#if selectedModule}
                     {#key selectedModule.name}
                         <div class="pane-inner" in:fly={{y: 6, duration: 220}}>
-                            <div class="pane-head">
-                                <span class="icon-square" style="background: {style.tone};"><Icon name={style.icon} size={14} weight={2.2}/></span>
-                                <div class="pane-title">
-                                    <div class="title-line">
-                                        <span class="pane-name">{name(selectedModule.name)}</span>
-                                        <span class="status" class:on={selectedModule.enabled}>{selectedModule.enabled ? "On" : "Off"}</span>
-                                    </div>
-                                    <span class="pane-desc">{selectedModule.description}</span>
-                                </div>
-                            </div>
+                            {#if selectedModule.description}
+                                <p class="pane-desc">{selectedModule.description}</p>
+                            {/if}
 
                             {#if configurable}
                                 {#if settingsWithoutBind.length > 0}
@@ -340,7 +375,7 @@
                                         {/each}
                                     </div>
                                     {#if hasGroups}
-                                        <span class="footer">Right-click a group to show its settings.</span>
+                                        <span class="footer">Open a group with its chevron, or right-click it.</span>
                                     {/if}
                                 {/if}
                                 {#if bindIndex >= 0}
@@ -358,10 +393,15 @@
                             {/if}
                         </div>
                     {/key}
+                {:else if modulesLoaded}
+                    <div class="empty pane-empty">
+                        <span class="empty-title">No Module Selected</span>
+                        <span class="empty-desc">Pick a module from the list to see its settings.</span>
+                    </div>
                 {/if}
-            </section>
-        {/if}
-    </div>
+            </div>
+        </section>
+    {/if}
 </div>
 
 <div class="hint nc-surface">
@@ -372,14 +412,15 @@
 <style lang="scss">
   .window {
     position: absolute;
-    width: min(860px, calc(100% - 32px));
-    height: min(560px, calc(100% - 32px));
+    width: min(900px, calc(100% - 32px));
+    height: min(580px, calc(100% - 32px));
     display: flex;
-    flex-direction: column;
     overflow: hidden;
     border-radius: var(--radius-md);
     animation: nc-window-in 0.4s cubic-bezier(0.3, 1.4, 0.5, 1) both;
     transform-origin: 24px 24px;
+    font-size: 13px;
+    letter-spacing: -0.08px;
   }
 
   @keyframes nc-window-in {
@@ -389,57 +430,28 @@
     }
   }
 
-  header {
-    height: 52px;
+  /* Every column's top bar is a drag handle; side by side they read as one title bar. */
+  .bar {
+    height: 44px;
     flex: none;
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 0 10px 0 18px;
+    gap: 10px;
     cursor: grab;
   }
 
-  .dragging header {
+  .dragging .bar {
     cursor: grabbing;
   }
 
-  .brand {
-    width: 150px;
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-  }
-
-  .wordmark {
+  .bar-title {
     font-family: var(--font-display);
-    font-size: 17px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
-  }
-
-  .version {
-    font-size: 11px;
-    color: var(--label-secondary);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.23px;
     white-space: nowrap;
-  }
-
-  .search {
-    width: 300px;
-    min-height: 32px;
-    min-width: 0;
-    cursor: text;
-
-    padding: 0 12px;
-    gap: 6px;
-
-    input {
-      font-size: 13px;
-      letter-spacing: -0.08px;
-    }
-
-    input::-webkit-search-cancel-button {
-      display: none;
-    }
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .spacer {
@@ -458,17 +470,61 @@
     background: var(--separator);
   }
 
-  .body {
-    flex: 1;
-    min-height: 0;
-    display: flex;
-  }
+  /* sidebar */
 
   .sidebar {
-    position: relative;
-    width: 176px;
+    width: 184px;
     flex: none;
-    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    background: color-mix(in srgb, var(--surface), black 14%);
+  }
+
+  .brand {
+    align-items: baseline;
+    gap: 6px;
+    padding: 16px 14px 0;
+  }
+
+  .wordmark {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+
+  .version {
+    font-size: 11px;
+    color: var(--label-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .search {
+    min-width: 0;
+    min-height: 28px;
+    margin: 0 8px 8px;
+    padding: 0 10px;
+    gap: 6px;
+    cursor: text;
+
+    input {
+      font-size: 13px;
+      line-height: 18px;
+      letter-spacing: -0.08px;
+    }
+
+    input::-webkit-search-cancel-button {
+      display: none;
+    }
+  }
+
+  .categories {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    padding: 0 8px 8px;
     display: flex;
     flex-direction: column;
     gap: 1px;
@@ -480,12 +536,18 @@
     }
   }
 
+  /* pushes Settings to the bottom of the sidebar */
+  .nav-rule {
+    flex: 1;
+    min-height: 8px;
+  }
+
   .pill {
     position: absolute;
-    left: 12px;
-    right: 12px;
+    left: 8px;
+    right: 8px;
     top: 0;
-    height: 34px;
+    height: 32px;
     border-radius: var(--radius-sm);
     background: var(--glass-selection);
     transition: transform 0.45s cubic-bezier(0.3, 1.3, 0.5, 1), opacity 0.2s ease;
@@ -495,21 +557,26 @@
   .side-row {
     all: unset;
     position: relative;
-    height: 34px;
+    height: 32px;
     flex: none;
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 0 10px 0 6px;
+    gap: 9px;
+    padding: 0 10px 0 5px;
     border-radius: var(--radius-sm);
     cursor: pointer;
+    transition: background-color 0.2s ease;
 
-    &:focus {
-      outline: none;
+    &:hover:not(.active) {
+      background: var(--fill-tertiary);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: -2px;
     }
 
     &.active .side-label {
-      color: var(--accent-text);
       font-weight: 600;
     }
   }
@@ -518,7 +585,6 @@
     flex: 1;
     font-size: 13px;
     color: var(--label);
-    transition: color 0.2s ease;
   }
 
   .count {
@@ -538,36 +604,56 @@
     color: #fff;
   }
 
+  .settings-square {
+    background: var(--fill-secondary);
+  }
+
+  /* module list */
+
   .list {
-    width: 290px;
+    width: 248px;
     flex: none;
     display: flex;
     flex-direction: column;
     min-height: 0;
   }
 
-  .list-head {
-    height: 52px;
-    flex: none;
-    display: flex;
-    align-items: center;
+  .list-bar {
     justify-content: space-between;
-    gap: 12px;
-    padding: 0 10px 0 16px;
+    padding: 0 8px 0 14px;
   }
 
   .list-heading {
     display: flex;
     flex-direction: column;
-    gap: 2px;
     min-width: 0;
+
+    .bar-title {
+      line-height: 18px;
+    }
+  }
+
+  .meta {
+    font-size: 11px;
+    line-height: 13px;
+    color: var(--label-secondary);
   }
 
   .filter :global(.sg-seg-item) {
-    min-width: 40px;
-    height: 24px;
+    min-width: 36px;
+    height: 22px;
     padding: 0 8px;
     font-size: 11px;
+  }
+
+  .rows {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 0 6px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
   }
 
   .section-head {
@@ -575,47 +661,20 @@
     top: 0;
     z-index: 1;
     flex: none;
-    padding: 8px 10px 3px;
+    padding: 10px 8px 4px;
     background: var(--surface);
     font-size: 11px;
     font-weight: 600;
     color: var(--label-secondary);
-    letter-spacing: 0.2px;
-  }
-
-  .settings-square {
-    background: var(--fill-secondary);
-  }
-
-  .list-title {
-    font-family: var(--font-display);
-    font-size: 17px;
-    font-weight: 600;
-    letter-spacing: -0.2px;
-  }
-
-  .meta {
-    font-size: 11px;
-    color: var(--label-secondary);
-  }
-
-  .rows {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    padding: 0 6px 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
   }
 
   .row {
-    min-height: 42px;
+    height: 32px;
     flex: none;
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 5px 10px;
+    padding: 0 6px 0 8px;
     border-radius: var(--radius-sm);
     cursor: pointer;
     transition: background-color 0.2s ease;
@@ -627,100 +686,143 @@
     &.selected {
       background: var(--glass-selection);
     }
-  }
 
-  .row-text {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-  }
+    &.skeleton {
+      cursor: default;
 
-  .row-name {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--label-secondary);
-    transition: color 0.2s ease;
+      &:hover {
+        background: none;
+      }
 
-    &.on {
-      color: var(--label);
+      &:first-child {
+        margin-top: 8px;
+      }
     }
   }
 
-  .row-desc {
-    font-size: 11px;
+  .bar-shape {
+    height: 8px;
+    border-radius: var(--radius-pill);
+    background: var(--fill-tertiary);
+  }
+
+  .row-name {
+    flex: 1;
+    min-width: 0;
+    font-size: 13px;
     color: var(--label-secondary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    transition: color 0.2s ease;
+
+    &.on {
+      color: var(--label);
+      font-weight: 500;
+    }
   }
 
   .empty {
-    padding: 24px 12px;
-    font-size: 13px;
-    color: var(--label-secondary);
+    padding: 32px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
     text-align: center;
   }
+
+  .empty-icon {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--fill-tertiary);
+    color: var(--label-secondary);
+  }
+
+  .empty-title {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .empty-desc {
+    font-size: 12px;
+    color: var(--label-secondary);
+    overflow-wrap: anywhere;
+  }
+
+  /* settings pane */
 
   .pane {
     flex: 1;
     min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pane-bar {
+    padding: 0 10px 0 12px;
+  }
+
+  .bar-rule {
+    width: 0.5px;
+    height: 18px;
+    background: var(--separator);
+  }
+
+  .hide {
+    width: 24px;
+    height: 24px;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: var(--fill-tertiary);
+    color: var(--label-secondary);
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+
+    &:hover {
+      background: var(--fill-secondary);
+      color: var(--label);
+    }
+
+    &:active {
+      transform: scale(0.96);
+    }
+  }
+
+  .pane-scroll {
+    flex: 1;
+    min-height: 0;
     overflow-y: auto;
   }
 
   .pane-inner {
-    padding: 14px 16px 14px;
+    padding: 12px 14px 16px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
-  }
-
-  .pane-head {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-
-    .icon-square {
-      margin-top: 2px;
-    }
-  }
-
-  .pane-title {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .title-line {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-  }
-
-  .pane-name {
-    font-family: var(--font-display);
-    font-size: 17px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
-  }
-
-  .status {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--label-secondary);
-    transition: color 0.2s ease;
-
-    &.on {
-      color: var(--success-text);
-    }
+    gap: 12px;
   }
 
   .pane-desc {
+    margin: 0;
+    padding: 0 2px;
     font-size: 12px;
+    line-height: 16px;
     color: var(--label-secondary);
     text-wrap: pretty;
+  }
+
+  .pane-empty {
+    height: 100%;
+    justify-content: center;
   }
 
   /* grouped list: settings are rows on fill-tertiary with inset hairlines */
@@ -743,18 +845,10 @@
     font-size: 11px;
     color: var(--label-secondary);
     padding: 0 12px;
-    margin-top: -12px;
+    margin-top: -6px;
   }
 
-  /* Compact segmented controls inside setting rows (the list filter has its own, smaller size). */
-  .pane :global(.sg-seg-item) {
-    min-width: 48px;
-    height: 24px;
-    padding: 0 8px;
-    font-size: 11px;
-  }
-
-  /* Compact santi.glass switches: the DS size (51x31) is built for touch, not a dense desktop panel. */
+  /* The list and pane-bar switches are the DS component; size it for a dense desktop panel (51x31 is touch). */
   .window :global(.sg-switch-track) {
     width: 36px;
     height: 22px;
@@ -771,29 +865,23 @@
     transform: translateX(14px);
   }
 
-  .client-settings {
-    flex: 1;
-    min-width: 0;
-    overflow-y: auto;
-  }
-
   .hint {
     position: absolute;
-    left: 20px;
-    bottom: 20px;
+    left: 16px;
+    bottom: 16px;
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 6px 14px 6px 6px;
+    padding: 4px 12px 4px 4px;
     border-radius: var(--radius-pill);
-    font-size: 13px;
+    font-size: 12px;
     color: var(--label-secondary);
 
     .key {
-      padding: 3px 10px;
+      padding: 2px 8px;
       border-radius: var(--radius-pill);
       background: var(--fill-secondary);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       color: var(--label);
     }

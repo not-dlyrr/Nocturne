@@ -32,4 +32,20 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  .sg-switch-track {
+    width: 36px;
+    height: 22px;
+  }
+
+  .sg-switch-knob {
+    top: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+  }
+
+  input:checked + .sg-switch-track .sg-switch-knob {
+    transform: translateX(14px);
+  }
 </style>

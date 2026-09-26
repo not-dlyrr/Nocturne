@@ -21,9 +21,9 @@
     .icon-text-button {
       display: flex;
       align-items: center;
-      gap: 10px;
-      height: 48px;
-      padding: 0 20px 0 6px;
+      gap: 8px;
+      height: 36px;
+      padding: 0 14px 0 4px;
       border: none;
       border-radius: var(--radius-pill);
       background: transparent;
@@ -45,24 +45,25 @@
     }
 
     .icon {
-      height: 36px;
-      width: 36px;
+      height: 28px;
+      width: 28px;
       border-radius: 50%;
-      background-color: var(--accent);
+      background-color: var(--fill-secondary);
       display: flex;
       align-items: center;
       justify-content: center;
 
       img {
-        width: 18px;
-        height: 18px;
+        width: 14px;
+        height: 14px;
       }
     }
 
     .title {
-      font-size: 17px;
+      font-size: 13px;
       font-weight: 600;
-      letter-spacing: -0.43px;
+      letter-spacing: -0.08px;
       color: var(--label);
+      white-space: nowrap;
     }
 </style>

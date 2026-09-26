@@ -32,7 +32,7 @@
 
 <div class="notifications">
     {#each notifications as n (n.id)}
-        <div class="notification" transition:fly|global={{duration: 500, y: -100}}>
+        <div class="notification nc-surface" transition:fly={{duration: 250, y: -8}}>
             <div class="icon" class:error={n.notification.error}>
                 <img src="img/hud/notification/icon-info.svg" alt="info">
             </div>
@@ -43,52 +43,61 @@
 </div>
 
 <style lang="scss">
-
   .notifications {
     display: grid;
     grid-template-columns: 1fr;
+    min-width: 0;
   }
 
   .notification {
     grid-row-start: 1;
     grid-column-start: 1;
-    background-color: var(--menu-header-notification-background-color);
-    border-radius: 5px;
     display: grid;
     grid-template-areas:
         "a b"
         "a c";
-    grid-template-columns: max-content 1fr;
-    overflow: hidden;
-    padding-right: 10px;
-    min-width: 350px;
+    grid-template-columns: max-content minmax(0, 1fr);
+    align-items: center;
+    column-gap: 10px;
+    min-width: 260px;
+    max-width: 380px;
+    padding: 8px 14px 8px 8px;
+    border-radius: var(--radius-md);
 
     .title {
-      color: var(--menu-text-color);
-      font-weight: 600;
-      font-size: 18px;
       grid-area: b;
-      align-self: flex-end;
+      align-self: end;
+      color: var(--label);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: -0.08px;
     }
 
     .message {
-      color: var(--menu-text-dimmed-color);
-      font-weight: 500;
       grid-area: c;
+      align-self: start;
+      color: var(--label-secondary);
+      font-size: 12px;
+      overflow-wrap: anywhere;
     }
 
     .icon {
       grid-area: a;
-      height: 65px;
-      width: 65px;
-      background-color: var(--menu-header-notification-icon-background-color);
+      height: 28px;
+      width: 28px;
+      border-radius: var(--radius-xs);
+      background-color: var(--accent);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-right: 10px;
+
+      img {
+        width: 14px;
+        height: 14px;
+      }
 
       &.error {
-        background-color: var(--menu-header-notification-icon-error-background-color);
+        background-color: var(--danger);
       }
     }
   }

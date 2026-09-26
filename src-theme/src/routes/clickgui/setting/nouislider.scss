@@ -1,6 +1,6 @@
-/* noUiSlider dressed as the santi.glass Slider: 6px pill track, accent fill, white knob. */
+/* noUiSlider dressed as the santi.glass Slider at desktop density: 4px pill track, accent fill, white knob. */
 .noUi-target {
-    margin: 9px 9px 4px;
+    margin: 8px 7px 3px;
     height: 4px;
     border: none;
     border-radius: 999px;
@@ -17,10 +17,10 @@
 }
 
 .noUi-horizontal .noUi-handle {
-    width: 16px;
-    height: 16px;
-    top: -6px;
-    right: -8px;
+    width: 14px;
+    height: 14px;
+    top: -5px;
+    right: -7px;
     border: none;
     border-radius: 50%;
     background-color: var(--clickgui-slider-handle-color);
@@ -30,7 +30,7 @@
 }
 
 .noUi-horizontal .noUi-handle:active {
-    transform: scale(1.12);
+    transform: scale(1.15);
     cursor: grabbing;
 }
 

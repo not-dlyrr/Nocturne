@@ -1,5 +1,6 @@
 <script lang="ts">
     import {fly} from "svelte/transition";
+    import {cubicOut} from "svelte/easing";
     import {SortableList} from "@jhubbardsf/svelte-sortablejs";
     import "./menulist.scss";
     import {createEventDispatcher} from "svelte";
@@ -41,7 +42,7 @@
     }
 </script>
 
-<div class="menu-list" transition:fly|global={{duration: 700, x: 1000}}>
+<div class="menu-list nc-surface" in:fly|global={{duration: 350, y: 12, easing: cubicOut}}>
     {#key remountKey}
         {#if sortable && elementCount > -1}
             <SortableList class="menu-list-items" onSort={handleChange} forceFallback={true} animation={150}>
@@ -56,12 +57,12 @@
 </div>
 
 <style lang="scss">
-
   .menu-list {
-    background-color: var(--menu-button-container-background-color);
     flex: 1;
-    border-radius: 5px;
-    margin-bottom: 25px;
+    min-height: 0;
+    border-radius: var(--radius-md);
+    margin-bottom: 10px;
     position: relative;
+    overflow: hidden;
   }
 </style>

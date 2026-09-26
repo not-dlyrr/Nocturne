@@ -41,15 +41,26 @@
 <span contenteditable="true" class="value" bind:innerText={inputValue} on:input={handleInput} on:keydown={handleKeyDown} bind:this={inputElement}></span>
 
 <style lang="scss">
-
   .value {
-    font-variant-numeric: tabular-nums;
-    color: var(--accent-text);
-    font-weight: 600;
-    font-size: 13px;
-    background-color: transparent;
-    border: none;
-    min-width: 5px;
     display: inline-block;
+    min-width: 5px;
+    padding: 1px 5px;
+    border-radius: 6px;
+    font-variant-numeric: tabular-nums;
+    color: var(--label);
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 16px;
+    cursor: text;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: var(--fill-secondary);
+    }
+
+    &:focus {
+      outline: 1.5px solid var(--focus-ring);
+      background-color: var(--fill-secondary);
+    }
   }
 </style>

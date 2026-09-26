@@ -191,7 +191,7 @@
 {/if}
 
 <OptionBar>
-    <Search on:search={handleSearch}/>
+    <Search placeholder="Search Proxies" on:search={handleSearch}/>
     <SwitchSetting title="Favorites Only" bind:value={favoritesOnly}/>
     <MultiSelect title="Country" options={allCountries} bind:values={countries}/>
     <MultiSelect title="Type" options={["SOCKS5", "HTTP"]} bind:values={proxyTypes}/>

@@ -35,7 +35,9 @@
 
 <div class="setting">
     <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div class="head" class:expanded on:contextmenu|preventDefault={toggleExpanded}>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div class="head" class:expanded class:clickable={!hideExpandControl}
+         on:click={toggleExpanded} on:contextmenu|preventDefault={toggleExpanded}>
         <div class="title">{$spaceSeperatedNames ? convertToSpacedString(setting.name) : setting.name}</div>
         {#if !hideExpandControl}
             <ExpandArrow bind:expanded />
@@ -52,31 +54,38 @@
 </div>
 
 <style lang="scss">
-
   .setting {
-    padding: 8px 0;
-  }
-
-  .title {
-    color: var(--clickgui-text-color);
-    font-size: 13px;
-    font-weight: 500;
+    padding: 0;
   }
 
   .head {
+    min-height: 36px;
+    padding: 7px 0;
     display: flex;
-    justify-content: space-between;
-    transition: ease margin-bottom .2s;
-
-    &.expanded {
-      margin-bottom: 10px;
-    }
+    align-items: center;
   }
 
+  .head.clickable {
+    cursor: pointer;
+  }
+
+  .title {
+    flex: 1;
+    min-width: 0;
+    color: var(--label);
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* nested rows: indented under the group head, separated by hairlines that start at the indent */
   .nested-settings {
-    margin: 0 -4px 4px 0;
-    padding: 0 0 0 12px;
-    border-left: 2px solid var(--fill-secondary);
-    border-radius: 1px;
+    margin-left: 2px;
+    padding: 0 0 4px 14px;
+
+    > :global(div) {
+      box-shadow: inset 0 0.5px 0 var(--separator);
+    }
   }
 </style>

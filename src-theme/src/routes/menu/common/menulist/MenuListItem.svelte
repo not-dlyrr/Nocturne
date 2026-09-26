@@ -19,12 +19,10 @@
     <div class="image">
         {#if !previewImageLoaded}
             <div class="loader">
-                <RippleLoader />
+                <RippleLoader size={28}/>
             </div>
         {/if}
         <img class="preview" on:load={() => previewImageLoaded = true} src={image} alt="preview">
-        <span class="text" class:visible={imageText !== null && imageTextBackgroundColor !== null}
-              style="background-color: {imageTextBackgroundColor};">{imageText}</span>
         {#if favorite}
             <img class="favorite-mark" src="img/menu/icon-favorite-mark.svg" alt="fav">
         {/if}
@@ -41,42 +39,51 @@
             <slot name="active-visible"/>
         </div>
 
-        <slot name="always-visible"/>
+        {#if imageText !== null && imageTextBackgroundColor !== null}
+            <span class="ping"><span class="dot" style="background-color: {imageTextBackgroundColor};"></span>{imageText}</span>
+        {/if}
+
+        <div class="always">
+            <slot name="always-visible"/>
+        </div>
     </div>
 </div>
 
 <style lang="scss">
-
   .menu-list-item {
+    flex: none;
     display: grid;
     grid-template-areas:
         "a b c"
         "a d c";
-    grid-template-columns: max-content 1fr max-content;
-    background-color: var(--menu-list-item-background-color);
-    padding: 15px 25px;
-    column-gap: 15px;
-    border-radius: 5px;
-    transition: ease background-color .2s;
+    grid-template-columns: max-content minmax(0, 1fr) max-content;
+    min-height: 48px;
+    padding: 7px 8px;
+    column-gap: 10px;
+    row-gap: 1px;
+    border-radius: var(--radius-sm);
+    transition: background-color 0.2s ease;
     align-items: center;
     cursor: grab;
 
     &:hover {
-      background-color: var(--menu-list-item-hover-background-color);
-
-      .subtitle {
-        color: var(--menu-list-item-hover-subtitle-color);
-      }
+      background-color: var(--fill-tertiary);
 
       .buttons .active {
         opacity: 1;
       }
+    }
+
+    &:focus-within .buttons .active {
+      opacity: 1;
     }
   }
 
   .image {
     grid-area: a;
     position: relative;
+    width: 32px;
+    height: 32px;
 
     .loader {
       position: absolute;
@@ -86,63 +93,103 @@
     }
 
     .preview {
-      height: 68px;
-      width: 68px;
-      border-radius: 50%;
+      display: block;
+      height: 32px;
+      width: 32px;
+      object-fit: cover;
+      border-radius: var(--radius-xs);
       image-rendering: pixelated;
     }
 
     .favorite-mark {
       position: absolute;
-      top: 0;
-      right: 0;
-    }
-
-    .text {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      display: none;
-      color: var(--menu-text-color);
-      font-size: 12px;
-      padding: 3px 10px;
-      border-radius: 20px;
-
-      &.visible {
-        display: block;
-      }
+      top: -4px;
+      right: -4px;
+      width: 13px;
+      height: 13px;
     }
   }
 
   .title {
     grid-area: b;
-    align-self: flex-end;
+    align-self: end;
     display: flex;
     align-items: center;
+    gap: 6px;
+    min-width: 0;
 
     .text {
-      font-size: 20px;
-      color: var(--menu-text-color);
+      font-size: 13px;
       font-weight: 600;
+      letter-spacing: -0.08px;
+      color: var(--label);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
   .subtitle {
     grid-area: d;
-    font-size: 18px;
-    color: var(--menu-text-dimmed-color);
-    transition: ease color .2s;
-    align-self: flex-start;
+    align-self: start;
+    min-width: 0;
+    font-size: 11px;
+    line-height: 14px;
+    color: var(--label-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .buttons {
     grid-area: c;
     display: flex;
+    align-items: center;
+    gap: 2px;
 
     .active {
-      margin-right: 20px;
+      display: flex;
+      gap: 2px;
+      margin-right: 6px;
       opacity: 0;
-      transition: ease opacity .2s;
+      transition: opacity 0.2s ease;
+    }
+
+    .always {
+      display: flex;
+      gap: 2px;
+    }
+
+    /* the row's primary action (Join, Open, Login, Connect): an accent disc; the play glyph's own ring is its rim */
+    .always :global(.button) {
+      background-color: var(--accent);
+    }
+
+    .always :global(.button .icon) {
+      width: 28px;
+      height: 28px;
+    }
+
+    .always :global(.button:hover) {
+      background-color: color-mix(in srgb, var(--accent) 85%, white);
+    }
+  }
+
+  .ping {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-right: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--label-secondary);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
     }
   }
 </style>

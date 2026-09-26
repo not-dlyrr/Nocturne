@@ -73,7 +73,7 @@
     <div class="value">
         <ValueInput valueType="float" value={cSetting.value.from}
                     on:change={(e) => apiSlider.set([e.detail.value, cSetting.value.to])}/>
-        -
+        –
         <ValueInput valueType="float" value={cSetting.value.to}
                     on:change={(e) => apiSlider.set([cSetting.value.from, e.detail.value])}/>
     </div>
@@ -84,15 +84,17 @@
 </div>
 
 <style lang="scss">
-
   .setting {
-    padding: 8px 0 6px 0;
+    padding: 7px 0 6px;
     display: grid;
     grid-template-areas:
-            "a b"
-            "d d";
-    grid-template-columns: 1fr max-content;
-    column-gap: 5px;
+      "a b"
+      "d d";
+    grid-template-columns: minmax(0, 1fr) max-content;
+    align-items: center;
+    column-gap: 2px;
+    font-size: 13px;
+    color: var(--label);
 
     /* animation fix */
     min-height: 46px;
@@ -100,33 +102,34 @@
 
   .setting.has-suffix {
     grid-template-areas:
-            "a b c"
-            "d d d";
-    grid-template-columns: 1fr max-content max-content;
-  }
-
-  .suffix,
-  .setting {
-    color: var(--clickgui-text-color);
-    font-weight: 500;
-    font-size: 13px;
+      "a b c"
+      "d d d";
+    grid-template-columns: minmax(0, 1fr) max-content max-content;
   }
 
   .name {
     grid-area: a;
-    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .value {
     grid-area: b;
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    font-size: 12px;
+    color: var(--label-secondary);
   }
 
   .suffix {
     grid-area: c;
+    font-size: 12px;
+    color: var(--label-secondary);
   }
 
   .slider {
     grid-area: d;
-    padding-right: 10px;
   }
 </style>

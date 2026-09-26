@@ -24,8 +24,8 @@
   }
 
   .icon {
-    height: 48px;
-    width: 48px;
+    height: 36px;
+    width: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -34,8 +34,8 @@
     transition: background-color 0.2s ease, transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
 
     img {
-      width: 24px;
-      height: 24px;
+      width: 18px;
+      height: 18px;
     }
 
     &:hover {
@@ -43,7 +43,7 @@
     }
 
     &:active {
-      transform: scale(0.94);
+      transform: scale(0.96);
     }
   }
 </style>

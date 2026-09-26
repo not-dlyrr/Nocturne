@@ -1,20 +1,22 @@
 <script lang="ts">
     import {fly} from "svelte/transition";
+    import {cubicOut} from "svelte/easing";
 </script>
 
-<div class="option-bar" transition:fly|global={{duration: 700, x: 1000}}>
+<div class="option-bar nc-surface" in:fly|global={{duration: 350, y: 12, easing: cubicOut}}>
     <slot />
 </div>
 
 <style lang="scss">
-
     .option-bar {
-      background-color: var(--menu-button-container-background-color);
-      padding: 15px 30px;
+      position: relative;
+      z-index: 2;
+      padding: 8px;
       display: flex;
-      border-radius: 5px;
+      flex-wrap: wrap;
       align-items: center;
-      column-gap: 30px;
-      margin-bottom: 25px;
+      gap: 8px;
+      border-radius: var(--radius-md);
+      margin-bottom: 10px;
     }
 </style>

@@ -85,20 +85,24 @@
 </div>
 
 <style lang="scss">
-
     .setting {
         display: grid;
         grid-template-areas:
             "a b"
             "c c";
-        padding: 8px 0;
+        grid-template-columns: minmax(0, 1fr) max-content;
+        align-items: center;
+        padding: 7px 0;
+        min-height: 36px;
     }
 
     .name {
         grid-area: a;
-        font-weight: 500;
-        color: var(--clickgui-text-color);
+        color: var(--label);
         font-size: 13px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .hidden {
@@ -107,27 +111,33 @@
     }
 
     .value {
-        font-weight: 500;
-        color: var(--clickgui-text-color);
-        text-align: right;
-        font-size: 13px;
-        cursor: text;
-        text-transform: uppercase;
-        background-color: transparent;
+        width: 76px;
+        margin: 0 8px 0 auto;
+        padding: 1px 4px;
         border: none;
-        padding: 0;
-        margin: 0;
-        margin-right: 15px;
-        margin-left: auto;
-        width: 70px;
-        font-family: monospace;
+        border-radius: 6px;
+        background-color: transparent;
+        color: var(--label-secondary);
+        text-align: right;
+        font-family: var(--font-text);
+        font-size: 12px;
+        font-variant-numeric: tabular-nums;
+        text-transform: uppercase;
+        cursor: text;
+        outline: none;
+        transition: background-color 0.2s ease;
+
+        &:hover,
+        &:focus {
+            background-color: var(--fill-secondary);
+            color: var(--label);
+        }
     }
 
     .value-spot {
         grid-area: b;
         display: flex;
-
-        align-items: stretch;
+        align-items: center;
     }
 
     .color-picker {
@@ -135,14 +145,21 @@
     }
 
     .color-pickr-button {
-        margin-top: -2px;
-        margin-bottom: -2px;
-        width: 30px;
-        border-radius: 3px;
-        background-color: blue;
+        width: 22px;
+        height: 22px;
+        padding: 0;
+        border-radius: 6px;
         border-style: none;
+        cursor: pointer;
+        transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+
+        &:active {
+            transform: scale(0.96);
+        }
     }
-    .color-pickr-button:focus {
-        outline: 3px solid #ffffff;
+
+    .color-pickr-button:focus-visible {
+        outline: 2px solid var(--focus-ring);
+        outline-offset: 2px;
     }
 </style>

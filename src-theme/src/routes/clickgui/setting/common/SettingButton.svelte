@@ -2,24 +2,15 @@
     export let value: string;
 </script>
 
-<button class="setting-button" on:click>{value}</button>
+<button class="setting-button sg-btn sg-btn-tinted sg-btn-small" type="button" on:click>{value}</button>
 
 <style lang="scss">
   .setting-button {
-    font-family: var(--font-text);
-    font-weight: 500;
-    font-size: 13px;
-    color: var(--clickgui-text-color);
-    background-color: var(--clickgui-button-background-color);
-    border: none;
-    padding: 6px 10px;
-    border-radius: 3px;
     width: 100%;
-    cursor: pointer;
-    transition: ease background-color .2s;
-
-    &:hover {
-      background-color: var(--clickgui-button-hover-background-color);
-    }
+    min-height: 26px;
+    height: 26px;
+    padding: 0 12px;
+    font-size: 12px;
+    line-height: 16px;
   }
 </style>

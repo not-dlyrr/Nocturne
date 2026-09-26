@@ -16,14 +16,31 @@
   .removable-item {
     display: grid;
     grid-template-columns: 1fr max-content;
-    column-gap: 5px;
+    column-gap: 4px;
     align-items: center;
-    padding-right: 8px;
   }
 
   .button-remove {
-    background-color: transparent;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: none;
+    border-radius: 50%;
+    background-color: transparent;
     cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    img {
+      width: 9px;
+      height: 9px;
+      opacity: 0.7;
+    }
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--danger) 20%, transparent);
+    }
   }
 </style>

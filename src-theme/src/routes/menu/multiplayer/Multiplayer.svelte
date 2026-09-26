@@ -189,9 +189,9 @@
 <DirectConnectModal bind:visible={directConnectModalVisible}/>
 
 <OptionBar>
-    <Search on:search={handleSearch}/>
+    <Search placeholder="Search Servers" on:search={handleSearch}/>
 
-    <SwitchSetting title="Online only" bind:value={onlineOnly}/>
+    <SwitchSetting title="Online Only" bind:value={onlineOnly}/>
     <Divider/>
     <SwitchSetting title="Auto Config" bind:value={autoConfig} on:change={updateAutoConfigState}/>
     {#if spooferConfigurable}
@@ -200,9 +200,9 @@
     {#if clientInfo && clientInfo.viaFabricPlus}
         <SingleSelect title="Version" value={selectedProtocol.name} options={protocols.map(p => p.name)}
                       on:change={changeProtocolVersion}/>
-        <ButtonSetting title="ViaFabricPlus" on:click={() => openScreen("viafabricplus_protocol_selection")}/>
+        <ButtonSetting title="ViaFabricPlus" secondary={true} on:click={() => openScreen("viafabricplus_protocol_selection")}/>
     {:else}
-        <ButtonSetting title="Install ViaFabricPlus" on:click={() => browse("VIAFABRICPLUS")}/>
+        <ButtonSetting title="Install ViaFabricPlus" secondary={true} on:click={() => browse("VIAFABRICPLUS")}/>
     {/if}
 </OptionBar>
 
@@ -217,7 +217,7 @@
                       title={server.name}
                       on:dblclick={() => connectToServer(server.address)}>
             <TextComponent allowPreformatting={true} preFormattingMonospace={false} slot="subtitle"
-                           fontSize={18}
+                           fontSize={11}
                            textComponent={server.ping <= 0 ? "§CCan't connect to server" : server.label}/>
 
             <svelte:fragment slot="tag">

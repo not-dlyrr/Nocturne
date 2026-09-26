@@ -125,7 +125,7 @@
 <AddAccountModal bind:visible={addAccountModalVisible}/>
 
 <OptionBar>
-    <Search on:search={handleSearch}/>
+    <Search placeholder="Search Accounts" on:search={handleSearch}/>
     <SwitchSetting title="Premium Only" bind:value={premiumOnly}/>
     <SwitchSetting title="Favorites Only" bind:value={favoritesOnly}/>
     <MultiSelect title="Account Type" options={["Mojang", "TheAltening"]} bind:values={accountTypes}/>
@@ -176,6 +176,11 @@
 
 <style lang="scss">
   .uuid {
-    font-family: monospace;
+    margin: 0;
+    font-family: ui-monospace, "SF Mono", Consolas, monospace;
+    font-size: 11px;
+    line-height: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 </style>

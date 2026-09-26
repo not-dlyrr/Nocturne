@@ -102,7 +102,7 @@
 
   .anchor-zone {
     position: relative;
-    border: solid 1px var(--clickgui-hud-editor-anchor-zone-border-color);
+    border: solid 0.5px var(--clickgui-hud-editor-anchor-zone-border-color);
     background-color: var(--clickgui-hud-editor-anchor-zone-background-color);
 
     &.active {
@@ -114,7 +114,6 @@
         height: 14px;
         opacity: 1;
         background-color: var(--clickgui-hud-editor-anchor-point-active-color);
-        box-shadow: 0 0 10px var(--clickgui-hud-editor-anchor-point-active-shadow-color);
         z-index: 1000;
 
         &::after {
@@ -183,7 +182,6 @@
     z-index: 1;
     pointer-events: none;
     background-color: var(--clickgui-hud-editor-magnetic-guide-color);
-    box-shadow: 0 0 6px var(--clickgui-hud-editor-magnetic-guide-shadow-color);
 
     &.vertical {
       top: 0;

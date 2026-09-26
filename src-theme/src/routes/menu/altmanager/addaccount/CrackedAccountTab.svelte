@@ -22,6 +22,6 @@
     <IconTextInput icon="user" title="Username" bind:value={username} maxLength={16}>
         <IconButton icon="random" title="Random" on:click={generateRandomUsername}/>
     </IconTextInput>
-    <SwitchSetting title="Use online UUID" bind:value={online}/>
+    <SwitchSetting title="Use Online UUID" bind:value={online}/>
     <ButtonSetting title="Add Account" on:click={addAccount} listenForEnter={true} inset={true}/>
 </Tab>

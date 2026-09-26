@@ -52,7 +52,9 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="setting">
-    <div class="head" class:expanded on:contextmenu|preventDefault={toggleExpanded}>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div class="head" class:expanded on:click={toggleExpanded} on:contextmenu|preventDefault={toggleExpanded}>
         <div class="title">{$spaceSeperatedNames ? convertToSpacedString(cSetting.name) : cSetting.name}</div>
         <div class="amount">{cSetting.value.length}/{cSetting.choices.length}</div>
         <ExpandArrow bind:expanded/>
@@ -77,68 +79,74 @@
 </div>
 
 <style lang="scss">
-
   .setting {
-    padding: 8px 0;
-    color: var(--clickgui-text-color);
-  }
-
-  .title {
-    color: var(--clickgui-text-color);
-    font-size: 13px;
-    font-weight: 600;
-  }
-
-  .choice {
-    color: var(--clickgui-text-dimmed-color);
-    background-color: var(--clickgui-selection-chip-background-color);
-    border-radius: 3px;
-    padding: 3px 6px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: ease color 0.2s;
-    overflow-wrap: anywhere;
-
-    &:hover {
-      color: var(--clickgui-text-color);
-    }
-
-    &.error {
-      background-color: var(--clickgui-selection-chip-remove-background-color) !important;
-      color: var(--clickgui-selection-chip-remove-color) !important;
-    }
-
-    &.active {
-      background-color: var(--clickgui-selection-chip-selected-background-color);
-      color: var(--clickgui-selection-chip-selected-color);
-    }
-  }
-
-  .amount {
-    letter-spacing: 1px;
-    font-weight: 500;
-    font-size: 13px;
-    font-family: monospace;
+    padding: 0;
   }
 
   .head {
-    display: grid;
-    grid-template-columns: 1fr max-content max-content;
-    transition: ease margin-bottom .2s;
+    min-height: 36px;
+    padding: 7px 0;
+    display: flex;
     align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
 
-    &.expanded {
-      margin-bottom: 10px;
-    }
+  .title {
+    flex: 1;
+    min-width: 0;
+    color: var(--label);
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .amount {
+    font-size: 12px;
+    color: var(--label-secondary);
+    font-variant-numeric: tabular-nums;
   }
 
   .choices {
-    border-left: solid 2px var(--clickgui-setting-group-border-color);
-    color: var(--clickgui-text-color);
-    padding: 7px 7px;
+    margin-left: 2px;
+    padding: 2px 0 10px 14px;
     display: flex;
     flex-wrap: wrap;
-    gap: 7px;
-    font-size: 13px;
+    gap: 6px;
+  }
+
+  .choice {
+    height: 24px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    border-radius: var(--radius-pill);
+    background-color: var(--fill-secondary);
+    color: var(--label-secondary);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    overflow-wrap: anywhere;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+
+    &:hover {
+      color: var(--label);
+    }
+
+    &:active {
+      transform: scale(0.96);
+    }
+
+    &.active {
+      background-color: var(--accent-tint);
+      color: var(--accent-text);
+      font-weight: 600;
+    }
+
+    &.error {
+      background-color: color-mix(in srgb, var(--danger) 18%, transparent) !important;
+      color: var(--danger-text) !important;
+    }
   }
 </style>

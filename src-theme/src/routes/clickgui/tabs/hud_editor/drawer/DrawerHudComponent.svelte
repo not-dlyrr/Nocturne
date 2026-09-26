@@ -27,35 +27,37 @@
     display: block;
     box-sizing: border-box;
     width: 100%;
-    background-color: var(--clickgui-hud-editor-drawer-component-background-color);
-    border: solid 2px var(--clickgui-hud-editor-drawer-component-border-color);
-    padding: 10px;
-    border-radius: 5px;
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
+    transition: background-color 0.2s ease;
 
     &:disabled {
-      opacity: 0.5;
+      opacity: 0.4;
       cursor: default;
     }
 
     &:not(:disabled):hover {
-      background-color: var(--clickgui-hud-editor-drawer-component-hover-background-color);
-      border-color: var(--clickgui-hud-editor-drawer-component-hover-border-color);
+      background-color: var(--fill-tertiary);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: -2px;
     }
   }
 
   .name {
-    color: var(--clickgui-hud-editor-drawer-component-name-color);
-    font-weight: 600;
-    margin-bottom: 5px;
-    font-size: 14px;
     display: block;
+    color: var(--label);
+    font-weight: 600;
+    font-size: 13px;
   }
 
   .description {
-    color: var(--clickgui-hud-editor-drawer-component-description-color);
-    font-size: 14px;
-    font-weight: 500;
     display: block;
+    color: var(--label-secondary);
+    font-size: 11px;
+    line-height: 14px;
   }
 </style>

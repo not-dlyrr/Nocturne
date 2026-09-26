@@ -49,15 +49,19 @@
 </script>
 
 <div class="tabs">
-    <div class="available-tabs" bind:this={availableTabsElement}>
+    <div class="available-tabs sg-seg" role="radiogroup" aria-label="Account type" bind:this={availableTabsElement}
+         style="--n: {tabs.length}; --i: {activeTab};">
+        <span class="sg-seg-thumb"></span>
         {#each tabs as {title, icon}, index}
             <button
-                    class="tab-button"
-                    class:active={index === activeTab}
+                    class="tab-button sg-seg-item"
+                    class:is-on={index === activeTab}
+                    role="radio"
+                    aria-checked={index === activeTab}
                     onclick={() => setActiveTab(index)}
                     type="button"
             >
-                <img class="icon" src="img/menu/altmanager/{icon}" alt={title}>
+                <img class="icon" src="img/menu/altmanager/{icon}" alt="">
                 <span>{title}</span>
             </button>
         {/each}
@@ -65,11 +69,16 @@
 
     <div style="width: {availableTabsElement?.clientWidth}px">
         {#if Array.isArray(tabs[activeTab]?.content)}
-            <div class="available-sub-tabs">
-                {#each tabs[activeTab].content as subTab, index (subTab.title)}
+            {@const subTabs = tabs[activeTab].content as SubTab[]}
+            <div class="available-sub-tabs sg-seg" role="radiogroup" aria-label="Sign-in method"
+                 style="--n: {subTabs.length}; --i: {Math.min(activeSubTabs[activeTab] ?? 0, subTabs.length - 1)};">
+                <span class="sg-seg-thumb"></span>
+                {#each subTabs as subTab, index (subTab.title)}
                     <button
-                            class="sub-tab-button"
-                            class:active={index === (activeSubTabs[activeTab] ?? 0)}
+                            class="sub-tab-button sg-seg-item"
+                            class:is-on={index === (activeSubTabs[activeTab] ?? 0)}
+                            role="radio"
+                            aria-checked={index === (activeSubTabs[activeTab] ?? 0)}
                             onclick={() => setActiveSubTab(index)}
                             type="button"
                     >
@@ -88,63 +97,43 @@
 </div>
 
 <style lang="scss">
-
   .available-tabs {
-    display: flex;
-    column-gap: 10px;
+    display: grid;
+    width: 100%;
   }
 
   .tab-button {
-    font-family: var(--font-text);
-    background-color: var(--menu-modal-tab-background-color);
-    color: var(--menu-text-color);
-    padding: 10px;
-    border: solid 2px transparent;
-    border-radius: 5px;
-    flex-grow: 1;
+    min-width: 0;
+    height: 30px;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    row-gap: 10px;
-    cursor: pointer;
-    transition: ease border-color .2s;
-    font-weight: 500;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 8px;
+    font-size: 12px;
+    white-space: nowrap;
 
     .icon {
-      height: 30px;
-    }
-
-    &.active {
-      border-color: var(--menu-modal-tab-active-border-color);
+      width: 14px;
+      height: 14px;
+      object-fit: contain;
     }
   }
 
   .available-sub-tabs {
-    background-color: var(--menu-modal-sub-tab-background-color);
-    border-radius: 5px;
-    overflow: hidden;
-    margin-top: 15px;
-    display: flex;
+    display: grid;
+    width: 100%;
+    margin-top: 8px;
   }
 
   .sub-tab-button {
-    all: unset;
-    flex: 1;
-    color: var(--menu-text-color);
-    font-family: var(--font-text);
-    text-align: center;
-    padding: 10px;
-    border-bottom: solid 3px transparent;
-    cursor: pointer;
-    font-weight: 500;
-    font-size: 14px;
-
-    &.active {
-      border-color: var(--menu-modal-sub-tab-active-border-color);
-    }
+    min-width: 0;
+    height: 24px;
+    padding: 0 8px;
+    font-size: 11px;
   }
 
   .content {
-    margin-top: 40px;
+    margin-top: 14px;
   }
 </style>

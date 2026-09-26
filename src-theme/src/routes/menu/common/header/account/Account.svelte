@@ -11,14 +11,14 @@
     import {onMount} from "svelte";
     import {listen} from "../../../../../integration/ws";
     import {location} from "svelte-spa-router";
-    import {quintOut} from "svelte/easing";
-    import {fade, slide, fly} from "svelte/transition";
+    import {fade, fly} from "svelte/transition";
     import type {Account} from "../../../../../integration/types";
     import Avatar from "./Avatar.svelte";
     import {notification} from "../notification_store";
     import RippleLoader from "../../RippleLoader.svelte";
     import {isLoggingIn} from "../../../altmanager/altmanager_store";
     import {isAnniversary} from "../../../../../util/utils";
+    import Icon from "../../../../../components/sg/Icon.svelte";
 
     let username = "";
     let service = "";
@@ -107,10 +107,10 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="account" class:expanded bind:this={accountElement} on:click={handleSelectClick}>
-    <div class="header" bind:this={headerElement}>
+    <div class="header nc-surface" bind:this={headerElement}>
         {#if $isLoggingIn}
             <div class="avatar-wrapper" transition:fade={{ duration: 200 }}>
-                <RippleLoader size={68} />
+                <RippleLoader size={40} />
             </div>
         {:else}
             <div class="avatar-wrapper">
@@ -132,14 +132,14 @@
             {/if}
         </div>
         <div class="buttons">
-            <button class="icon-button" type="button" on:click={loginWithRandomUsername}>
-                <ToolTip text="Random username"/>
+            <button class="icon-button icon" type="button" aria-label="Random username" on:click={loginWithRandomUsername}>
+                <ToolTip text="Random Username"/>
 
                 <img class="icon" src="img/menu/account/icon-random.svg" alt="random username">
             </button>
-            <button class="icon-button" disabled={inAccountManager} type="button"
+            <button class="icon-button icon" disabled={inAccountManager} type="button" aria-label="Change account"
                     on:click={() => openScreen("altmanager")}>
-                <ToolTip text="Change account"/>
+                <ToolTip text="Change Account"/>
 
                 <img class="icon" src="img/menu/icon-pen.svg" alt="change account">
             </button>
@@ -147,16 +147,18 @@
     </div>
 
     {#if expanded}
-        <div class="quick-switcher" transition:fade|global={{ duration: 200, easing: quintOut }}>
-            <!-- svelte-ignore a11y_autofocus -->
-            <input type="text" autofocus class="account-search" placeholder="Search..." bind:value={searchQuery}>
+        <div class="quick-switcher" transition:fly={{ y: -4, duration: 150 }}>
+            <label class="account-search sg-search nc-field">
+                <Icon name="search" size={15} weight={2}/>
+                <!-- svelte-ignore a11y_autofocus -->
+                <input type="text" autofocus placeholder="Search Accounts" bind:value={searchQuery}>
+            </label>
 
             {#if accounts.length > 0}
                 {#if renderedAccounts.length > 0}
                     <div class="account-list">
                         {#each renderedAccounts as a}
                             <div on:click={() => login(a)} class="account-item"
-                                 transition:slide|global={{ duration: 200, easing: quintOut }}
                                  class:active={a.username === username}>
                                 <Avatar url={a.avatar}/>
                                 <div class="username">{a.username}</div>
@@ -168,104 +170,122 @@
                     <div class="placeholder">No results</div>
                 {/if}
             {:else}
-                <div class="placeholder">Account list is empty</div>
+                <div class="placeholder">No accounts yet</div>
             {/if}
         </div>
     {/if}
 </div>
 
 <style lang="scss">
-
   .account {
-    width: 488px;
+    width: 300px;
+    flex: none;
     position: relative;
-
-    &.expanded {
-      .header {
-        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-      }
-    }
   }
 
   .header {
-    background-color: var(--menu-account-header-background-color);
-    padding: 12px 16px 12px 12px;
-    border: 0.5px solid var(--glass-stroke);
-    box-shadow: var(--shadow-glass-edge);
-    border-radius: var(--radius-lg);
+    padding: 6px 8px 6px 6px;
+    border-radius: var(--radius-md);
     align-items: center;
     display: grid;
     grid-template-areas:
         "a b c"
         "a d c";
-    grid-template-columns: max-content 1fr max-content;
-    column-gap: 15px;
+    grid-template-columns: max-content minmax(0, 1fr) max-content;
+    column-gap: 10px;
     cursor: pointer;
-    transition: ease border-radius .2s;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--surface), white 4%);
+    }
 
     .avatar-wrapper {
       grid-area: a;
       position: relative;
+      width: 40px;
+      height: 40px;
 
       .avatar {
-        height: 52px;
-        width: 52px;
-        border-radius: 50%;
+        display: block;
+        height: 40px;
+        width: 40px;
+        border-radius: var(--radius-sm);
       }
 
       .party-hat {
         position: absolute;
-        height: 130px;
-        top: -70px;
-        left: -38px;
+        height: 76px;
+        top: -42px;
+        left: -22px;
         transform: rotate(-30deg);
       }
     }
 
     .username {
-      font-weight: 600;
-      color: var(--menu-text-color);
-      font-size: 17px;
-      letter-spacing: -0.43px;
       grid-area: b;
-      align-self: flex-end;
+      align-self: end;
+      font-weight: 600;
+      color: var(--label);
+      font-size: 15px;
+      letter-spacing: -0.23px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .account-type {
-      font-weight: 500;
-      font-size: 13px;
       grid-area: d;
-      align-self: flex-start;
+      align-self: start;
+      font-weight: 500;
+      font-size: 12px;
 
       .online {
-        color: var(--menu-account-premium-color);
+        color: var(--success-text);
       }
 
       .offline {
-        color: var(--menu-text-dimmed-color);
+        color: var(--label-secondary);
       }
     }
 
     .buttons {
       grid-area: c;
       display: flex;
-      column-gap: 20px;
+      column-gap: 2px;
       align-items: center;
     }
 
     .icon-button {
-      background-color: transparent;
-      border: none;
       position: relative;
-      height: max-content;
-      cursor: pointer;
+      width: 28px;
+      height: 28px;
+      padding: 0;
       display: flex;
       align-items: center;
-      transition: ease opacity .2s;
+      justify-content: center;
+      border: none;
+      border-radius: 50%;
+      background-color: transparent;
+      cursor: pointer;
+      transition: background-color 0.2s ease, opacity 0.2s ease, transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+
+      img {
+        width: 15px;
+        height: 15px;
+      }
+
+      &:hover {
+        background-color: var(--fill-secondary);
+      }
+
+      &:active {
+        transform: scale(0.96);
+      }
 
       &:disabled {
         pointer-events: none;
-        opacity: .5;
+        opacity: .4;
       }
     }
   }
@@ -273,69 +293,83 @@
   .quick-switcher {
     position: absolute;
     z-index: 1000;
+    top: calc(100% + 6px);
     width: 100%;
-    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-    overflow: hidden;
-    background-color: var(--menu-account-switcher-background-color);
+    padding: 6px;
+    border-radius: var(--radius-md);
+    background-color: var(--surface-elevated);
+    border: 0.5px solid var(--glass-stroke);
+    box-shadow: var(--shadow-solid);
 
     .placeholder {
-      font-weight: 500;
-      font-size: 20px;
-      color: var(--menu-text-dimmed-color);
-      padding: 15px 20px;
+      font-size: 13px;
+      color: var(--label-secondary);
+      padding: 14px 8px 10px;
+      text-align: center;
     }
 
     .account-search {
-      background-color: var(--menu-account-search-background-color);
-      border: none;
-      color: var(--menu-text-color);
-      font-family: var(--font-text);
-      padding: 15px 15px 15px 50px;
-      width: 100%;
-      font-size: 18px;
-      border-bottom: solid 4px var(--menu-account-search-border-color);
-      background-image: url("/img/menu/icon-search.svg");
-      background-repeat: no-repeat;
-      background-position: 18px center;
-      background-size: 18px 18px;
+      min-width: 0;
+      min-height: 32px;
+      padding: 0 12px;
+      gap: 6px;
+      margin-bottom: 4px;
+
+      input {
+        font-size: 13px;
+        line-height: 18px;
+        letter-spacing: -0.08px;
+      }
     }
 
     .account-list {
-      max-height: 350px;
+      max-height: 300px;
       overflow: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
     }
 
     .account-item {
-      color: var(--menu-text-dimmed-color);
-      font-size: 20px;
-      padding: 15px 20px;
-      transition: ease color .2s;
-      cursor: pointer;
       display: grid;
       grid-template-areas:
         "a b"
         "a c";
-      grid-template-columns: max-content 1fr;
-      column-gap: 15px;
+      grid-template-columns: max-content minmax(0, 1fr);
+      align-items: center;
+      column-gap: 10px;
+      padding: 5px 8px 5px 6px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background-color 0.2s ease;
 
       .username {
         grid-area: b;
+        align-self: end;
         font-weight: 600;
-        font-size: 20px;
-        transition: ease color .2s;
+        font-size: 13px;
+        color: var(--label);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .type {
         grid-area: c;
+        align-self: start;
+        font-size: 11px;
+        color: var(--label-secondary);
       }
 
       &:hover {
-        color: var(--menu-text-color);
+        background-color: var(--fill-tertiary);
       }
 
       &.active {
+        background-color: var(--glass-selection);
+
         .username {
-          color: var(--accent-color);
+          color: var(--accent-text);
         }
       }
     }

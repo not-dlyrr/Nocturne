@@ -1,6 +1,6 @@
 <script lang="ts">
-    import {quintOut} from "svelte/easing";
-    import {fade} from "svelte/transition";
+    import {fly} from "svelte/transition";
+    import Icon from "../../../../../components/sg/Icon.svelte";
 
     export let closeOnInternalClick: boolean;
 
@@ -36,53 +36,69 @@
         <span class="title">
             <slot name="title"/>
         </span>
-        <img src="img/menu/icon-select-arrow.svg" alt="expand">
+        <span class="chevron"><Icon name="chevron" size={12} weight={2.4}/></span>
     </div>
     {#if expanded}
-        <div class="options" transition:fade|global={{ duration: 200, easing: quintOut }}>
+        <div class="options" transition:fly={{ y: -4, duration: 150 }}>
             <slot name="options"></slot>
         </div>
     {/if}
 </div>
 
 <style lang="scss">
-
   .select {
     cursor: pointer;
-    min-width: 250px;
     position: relative;
-
-    &.expanded {
-      .header {
-        border-radius: 5px 5px 0 0;
-      }
-    }
+    flex: none;
   }
 
   .header {
-    background-color: var(--menu-select-header-background-color);
-    padding: 20px;
+    height: 30px;
+    padding: 0 10px 0 12px;
     display: flex;
-    column-gap: 20px;
+    gap: 6px;
     align-items: center;
     justify-content: space-between;
-    border-radius: 5px;
-    transition: ease border-radius .2s;
+    border-radius: var(--radius-pill);
+    background-color: var(--fill-tertiary);
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: var(--fill-secondary);
+    }
 
     .title {
-      color: var(--menu-text-color);
-      font-size: 20px;
+      color: var(--label);
+      font-size: 13px;
       font-weight: 500;
+      letter-spacing: -0.08px;
+      white-space: nowrap;
     }
+  }
+
+  .chevron {
+    display: flex;
+    color: var(--label-secondary);
+    transform: rotate(90deg);
+    transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+  }
+
+  .expanded .chevron {
+    transform: rotate(-90deg);
   }
 
   .options {
     position: absolute;
     z-index: 1000;
-    width: 100%;
-    border-radius: 0 0 5px 5px;
+    top: calc(100% + 4px);
+    left: 0;
+    min-width: max(100%, 160px);
     max-height: 250px;
     overflow: auto;
-    background-color: var(--menu-select-options-background-color);
+    padding: 4px;
+    border-radius: var(--radius-sm);
+    background-color: var(--surface-elevated);
+    border: 0.5px solid var(--glass-stroke);
+    box-shadow: var(--shadow-solid);
   }
 </style>

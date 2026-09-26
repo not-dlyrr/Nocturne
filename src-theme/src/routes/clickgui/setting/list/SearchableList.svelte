@@ -18,7 +18,7 @@
 </script>
 
 <div class="list-item-list">
-    <input type="text" placeholder="Search" class="search-input" bind:value={searchQuery} spellcheck="false">
+    <input type="text" placeholder="Search Items" class="search-input" bind:value={searchQuery} spellcheck="false">
     <div class="results">
         <VirtualList items={renderedItems} let:item>
             <slot item={item} />
@@ -38,13 +38,24 @@
 
   .search-input {
     width: 100%;
-    border: none;
-    border-bottom: solid 1px var(--accent-color);
+    height: 28px;
+    margin-bottom: 6px;
+    padding: 0 12px;
+    border: 0.5px solid var(--glass-stroke);
+    border-radius: var(--radius-pill);
+    background-color: var(--fill-tertiary);
+    color: var(--label);
     font-family: var(--font-text);
-    font-size: 13px;
-    padding: 5px;
-    color: var(--clickgui-text-color);
-    margin-bottom: 5px;
-    background-color: var(--clickgui-input-background-color);
+    font-size: 12px;
+    outline: none;
+
+    &:focus {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: -1px;
+    }
+
+    &::placeholder {
+      color: var(--label-secondary);
+    }
   }
 </style>

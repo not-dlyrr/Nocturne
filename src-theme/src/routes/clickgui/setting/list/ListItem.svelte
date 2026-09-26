@@ -44,16 +44,23 @@
 </div>
 
 <style lang="scss">
-
   .item {
     display: grid;
     grid-template-columns: 1fr;
     align-items: center;
-    column-gap: 5px;
-    margin: 2px 5px 2px 0;
+    column-gap: 8px;
+    min-height: 28px;
+    margin: 0 4px 1px 0;
+    padding: 2px 6px;
+    border-radius: var(--radius-xs);
+    transition: background-color 0.2s ease;
 
     &.pointer-cursor {
       cursor: pointer;
+
+      &:hover {
+        background-color: var(--fill-secondary);
+      }
     }
 
     &.has-icon:not(.has-enabled-state) {
@@ -70,8 +77,9 @@
   }
 
   .icon {
-    height: 25px;
-    width: 25px;
+    height: 20px;
+    width: 20px;
+    image-rendering: pixelated;
 
     &.fallback {
       filter: grayscale(1);
@@ -79,10 +87,19 @@
   }
 
   .name {
-    font-size: 13px;
-    color: var(--clickgui-text-color);
+    font-size: 12px;
+    color: var(--label);
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+  }
+
+  .tick {
+    display: flex;
+
+    img {
+      width: 14px;
+      height: 14px;
+    }
   }
 </style>

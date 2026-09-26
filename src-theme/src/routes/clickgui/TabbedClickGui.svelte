@@ -94,7 +94,12 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 2147483647;
-    box-shadow: var(--shadow-glass);
+    min-height: 30px;
+    height: 30px;
+    padding: 0 18px;
+    font-size: 13px;
+    line-height: 18px;
+    box-shadow: var(--shadow-solid);
 
     &:active {
       transform: translateX(-50%) scale(0.96);

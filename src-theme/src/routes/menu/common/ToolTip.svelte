@@ -59,33 +59,26 @@
 
 <div bind:this={element}>
     {#if shown}
-        <div transition:fly="{{ y: -10, duration: 200 }}" class="tooltip"
+        <div transition:fly="{{ y: 4, duration: 150 }}" class="tooltip"
              style="background-color: {color}; left: {x}px; top: {y}px;" use:portal>{text}</div>
     {/if}
 </div>
 
 <style lang="scss">
-
   .tooltip {
     color: var(--tooltip-text-color);
-    padding: 10px 15px;
-    border-radius: 20px;
-    font-size: 16px;
-    font-weight: 600;
+    padding: 4px 9px;
+    border-radius: var(--radius-xs);
+    border: 0.5px solid var(--glass-stroke);
+    box-shadow: var(--shadow-solid);
+    font-family: var(--font-text);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
     position: fixed;
     white-space: nowrap;
-    transform: translate(-50%, -50px);
+    transform: translate(-50%, calc(-100% - 6px));
+    pointer-events: none;
     z-index: 9999;
-
-    &::after {
-      content: "";
-      display: block;
-      height: 12px;
-      width: 12px;
-      background-color: inherit;
-      position: absolute;
-      left: 50%;
-      transform: translate(-50%, 2px) rotate(45deg);
-    }
   }
 </style>

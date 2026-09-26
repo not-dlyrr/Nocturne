@@ -12,5 +12,5 @@
 </script>
 
 <Tab>
-    <ButtonSetting title="Sign in with web view" on:click={addAccount} {loading}/>
+    <ButtonSetting title="Sign In with Web View" on:click={addAccount} {loading}/>
 </Tab>

@@ -1,5 +1,6 @@
 <script lang="ts">
-    import {fade, fly} from "svelte/transition";
+    import {fade, scale} from "svelte/transition";
+    import {backOut} from "svelte/easing";
     import {createEventDispatcher} from "svelte";
     import {portal} from "../../../../integration/util";
 
@@ -15,13 +16,14 @@
 </script>
 
 {#if visible}
-    <div class="modal-wrapper" transition:fade|global={{duration: 200}} use:portal>
-        <div class="modal" in:fly|global={{duration: 300, y: -100}} out:fly|global={{duration: 300, y: -100}}>
-            <button class="button-modal-close" on:click={handleClick}>
-                <img src="img/menu/icon-close.svg" alt="close">
-            </button>
-
-            <div class="title">{title}</div>
+    <div class="modal-wrapper" transition:fade={{duration: 150}} use:portal>
+        <div class="modal nc-surface" transition:scale={{duration: 250, start: 0.96, easing: backOut}}>
+            <div class="head">
+                <div class="title">{title}</div>
+                <button class="button-modal-close" type="button" aria-label="Close" on:click={handleClick}>
+                    <img src="img/menu/icon-close.svg" alt="close">
+                </button>
+            </div>
 
             <div class="content">
                 <slot />
@@ -31,106 +33,106 @@
 {/if}
 
 <style lang="scss">
-
   .modal-wrapper {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: var(--menu-modal-backdrop-color);
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background-color: rgba(0, 0, 0, 0.45);
     z-index: 999;
   }
 
   .modal {
-    background-color: var(--menu-modal-background-color);
-    min-width: 500px;
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    padding: 40px;
+    width: 420px;
+    max-width: 100%;
+    padding: 16px 20px 20px;
     display: flex;
     flex-direction: column;
-    border-radius: 5px;
-    box-shadow: 0 0 10px var(--menu-modal-shadow-color);
+    gap: 14px;
+    border-radius: var(--radius-lg);
+    font-family: var(--font-text);
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
   }
 
   .title {
-    color: var(--menu-text-color);
-    font-size: 34px;
-    position: relative;
-    width: max-content;
-    align-self: center;
-    margin-bottom: 80px;
-
-    &::after {
-      content: "";
-      position: absolute;
-      display: block;
-      height: 8px;
-      width: calc(90%);
-      background-color: var(--menu-modal-title-accent-color);
-      bottom: -25px;
-      left: 50%;
-      transform: translateX(-50%);
-      border-radius: 10px;
-    }
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--label);
   }
 
   .content {
     display: flex;
     flex-direction: column;
-    row-gap: 40px;
+    row-gap: 10px;
+
+    /* switch settings read as grouped rows in a sheet: label left, switch right */
+    :global(.switch-setting) {
+      flex-direction: row-reverse;
+      justify-content: space-between;
+      height: 36px;
+      padding: 0 8px 0 12px;
+      border-radius: var(--radius-sm);
+      background-color: var(--fill-tertiary);
+    }
+
+    /* the resource pack / proxy type dropdowns span the sheet */
+    :global(.select .header) {
+      height: 36px;
+      border-radius: var(--radius-sm);
+    }
+
+    :global(.select .options) {
+      width: 100%;
+    }
+
+    /* primary action gets a touch of room above it */
+    :global(.sg-btn-filled) {
+      margin-top: 4px;
+    }
   }
 
   .button-modal-close {
-    height: 40px;
-    width: 40px;
+    height: 26px;
+    width: 26px;
+    flex: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: transparent;
-    border: solid 2px var(--menu-modal-close-border-color);
+    padding: 0;
+    border: none;
     border-radius: 50%;
+    background-color: var(--fill-tertiary);
     cursor: pointer;
-    top: 20px;
-    right: 20px;
-    position: fixed;
-    transition: ease background-color .2s;
+    transition: background-color 0.2s ease, transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+
+    img {
+      width: 10px;
+      height: 10px;
+      opacity: 0.8;
+    }
 
     &:hover {
-      background-color: var(--menu-modal-close-hover-background-color);
+      background-color: var(--fill-secondary);
     }
-  }
 
-  @media screen and (max-width: 1366px) {
-    .modal {
-      zoom: 0.8;
-    }
-  }
-
-  @media screen and (max-width: 1200px) {
-    .modal {
-      zoom: 0.5;
-    }
-  }
-
-  @media screen and (max-height: 1100px) {
-    .modal {
-      zoom: 0.8;
-    }
-  }
-
-  @media screen and (max-height: 700px) {
-    .modal {
-      zoom: 0.5;
+    &:active {
+      transform: scale(0.96);
     }
   }
 
   @media screen and (max-height: 540px) {
     .modal {
-      zoom: 0.4;
+      zoom: 0.85;
     }
   }
 </style>

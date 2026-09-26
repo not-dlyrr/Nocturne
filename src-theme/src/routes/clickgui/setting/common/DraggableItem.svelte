@@ -12,9 +12,14 @@
   .draggable-item {
     display: grid;
     grid-template-columns: max-content 1fr;
-    column-gap: 10px;
+    column-gap: 6px;
     align-items: center;
-    cursor: pointer;
+    cursor: grab;
+
+    > img {
+      width: 12px;
+      opacity: 0.5;
+    }
 
     :global(img) {
       -webkit-user-drag: none;

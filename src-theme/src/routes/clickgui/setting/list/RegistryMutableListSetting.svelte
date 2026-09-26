@@ -112,12 +112,14 @@
 
 <div class="setting">
     <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div class="head" class:expanded on:contextmenu|preventDefault={() => expanded = !expanded}>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div class="head" class:expanded on:click={() => expanded = !expanded}
+         on:contextmenu|preventDefault={() => expanded = !expanded}>
         <div class="name">{$spaceSeperatedNames ? convertToSpacedString(cSetting.name) : cSetting.name}</div>
         <ExpandArrow bind:expanded/>
     </div>
     {#if expanded}
-        <div in:slide={{duration: 200, axis: "y"}} out:slide={{duration: 200, axis: "y"}}>
+        <div class="body" in:slide={{duration: 200, axis: "y"}} out:slide={{duration: 200, axis: "y"}}>
             <div class="selected-items">
                 {#key sortableRenderKey}
                     <SortableList class="" forceFallback={true} fallbackOnBody={true} animation={150} onEnd={handleSort}>
@@ -133,7 +135,7 @@
                 {/key}
             </div>
 
-            <SettingButton value={showChooser ? "Cancel" : "Add item"} on:click={() => showChooser = !showChooser}/>
+            <SettingButton value={showChooser ? "Cancel" : "Add Item"} on:click={() => showChooser = !showChooser}/>
 
             {#if showChooser}
                 <div class="list-item-list-wrapper">
@@ -149,32 +151,39 @@
 
 <style lang="scss">
   .setting {
-    padding: 8px 0;
+    padding: 0;
   }
 
   .head {
+    min-height: 36px;
+    padding: 7px 0;
     display: flex;
-    justify-content: space-between;
-    transition: ease margin-bottom .2s;
-
-    &.expanded {
-      margin-bottom: 10px;
-    }
+    align-items: center;
+    cursor: pointer;
 
     .name {
-      color: var(--clickgui-text-color);
+      flex: 1;
+      min-width: 0;
+      color: var(--label);
       font-size: 13px;
-      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
+  }
+
+  .body {
+    margin-left: 2px;
+    padding: 0 0 8px 14px;
   }
 
   .selected-items {
     max-height: 200px;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     overflow-y: auto;
   }
 
   .list-item-list-wrapper {
-    margin-top: 10px;
+    margin-top: 8px;
   }
 </style>

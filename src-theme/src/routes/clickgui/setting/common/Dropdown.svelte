@@ -1,6 +1,7 @@
 <script lang="ts">
     import {createEventDispatcher, tick} from "svelte";
     import {convertToSpacedString, spaceSeperatedNames} from "../../../../theme/theme_config";
+    import Icon from "../../../../components/sg/Icon.svelte";
 
     export let name: string | null;
     export let options: string[];
@@ -74,7 +75,10 @@
         {#if name !== null}
             <span class="label">{$spaceSeperatedNames ? convertToSpacedString(name) : name}</span>
         {/if}
-        <span class="text">{$spaceSeperatedNames ? convertToSpacedString(value) : value}</span>
+        <span class="text">
+            <span class="value">{$spaceSeperatedNames ? convertToSpacedString(value) : value}</span>
+            <span class="chevron"><Icon name="chevron" size={10} weight={2.6}/></span>
+        </span>
     </div>
 
     {#if expanded}
@@ -93,15 +97,8 @@
 </div>
 
 <style lang="scss">
-  @use "../../icon-settings-expand" as *;
-
   .dropdown {
     position: relative;
-
-    &.expanded .text::after {
-      transform: translateY(calc(-50% - 1px)) rotate(0);
-      opacity: 1;
-    }
   }
 
   .head {
@@ -122,44 +119,60 @@
     }
 
     .text {
-      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 6px;
       max-width: 60%;
-      padding: 5px 30px 5px 12px;
+      height: 24px;
+      padding: 0 8px 0 10px;
       border-radius: var(--radius-pill);
-      background-color: var(--clickgui-dropdown-trigger-background-color);
-      font-size: 13px;
-      font-weight: 600;
+      background-color: var(--fill-secondary);
+      font-size: 12px;
+      font-weight: 500;
       color: var(--label);
+      transition: background-color 0.2s ease;
+    }
+
+    .value {
+      min-width: 0;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      transition: background-color 0.2s ease;
     }
 
     &:not(.named) .text {
       max-width: none;
       flex: 1;
+      justify-content: space-between;
     }
 
     &:hover .text {
-      background-color: var(--fill-secondary);
+      background-color: color-mix(in srgb, var(--fill-secondary), white 8%);
     }
+  }
 
-    .text::after {
-      @include icon-settings-expand($right: 12px);
-    }
+  .chevron {
+    display: flex;
+    flex: none;
+    color: var(--label-secondary);
+    transform: rotate(90deg);
+    transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+  }
+
+  .expanded .chevron {
+    transform: rotate(-90deg);
   }
 
   .options {
     --dropdown-scale: 1;
-    margin-top: 6px;
+    margin-top: 4px;
     padding: 4px;
-    max-height: 280px;
+    max-height: 260px;
     overflow-y: auto;
-    background-color: var(--clickgui-dropdown-background-color);
-    border: 0.5px solid var(--clickgui-dropdown-border-color);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-glass);
+    background-color: var(--surface-elevated);
+    border: 0.5px solid var(--glass-stroke);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-solid);
     z-index: 999999;
     position: fixed;
     box-sizing: border-box;
@@ -168,21 +181,22 @@
     font-family: var(--font-text);
 
     .option {
-      color: var(--clickgui-dropdown-option-color);
+      min-height: 26px;
+      display: flex;
+      align-items: center;
+      color: var(--label);
       font-size: 13px;
-      font-weight: 500;
-      padding: 7px 10px;
-      border-radius: var(--radius-sm);
+      padding: 4px 8px;
+      border-radius: var(--radius-xs);
       cursor: pointer;
-      transition: background-color 0.2s ease, color 0.2s ease;
+      transition: background-color 0.2s ease;
 
       &:hover {
-        color: var(--clickgui-dropdown-option-hover-color);
         background-color: var(--fill-tertiary);
       }
 
       &.active {
-        color: var(--clickgui-dropdown-option-selected-color);
+        color: var(--accent-text);
         font-weight: 600;
       }
     }

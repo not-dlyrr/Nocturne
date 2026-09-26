@@ -80,53 +80,58 @@
 </script>
 
 <div class="setting">
+    <span class="name">{$spaceSeperatedNames ? convertToSpacedString(cSetting.name) : cSetting.name}</span>
     <button
-            class="change-bind"
+            class="change-bind sg-btn sg-btn-small"
+            class:sg-btn-tinted={!binding}
+            class:sg-btn-filled={binding}
+            type="button"
             on:click={toggleBinding}
             on:mouseenter={() => isHovered = true}
             on:mouseleave={() => isHovered = false}
     >
         {#if !binding}
-            <div class="name">{$spaceSeperatedNames ? convertToSpacedString(cSetting.name) : cSetting.name}:</div>
-
             {#if cSetting.value === UNKNOWN_KEY}
                 <span class="none">None</span>
             {:else}
                 <span>{printableKeyName}</span>
             {/if}
         {:else}
-            <span>Press any key</span>
+            <span>Press a Key</span>
         {/if}
     </button>
 </div>
 
 <style lang="scss">
-
   .setting {
-    padding: 8px 0;
+    padding: 7px 0;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .name {
+    flex: 1;
+    min-width: 0;
+    font-size: 13px;
+    color: var(--label);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .change-bind {
-    background-color: transparent;
-    border: solid 2px var(--accent-color);
-    border-radius: 3px;
-    cursor: pointer;
-    padding: 4px;
-    font-weight: 500;
-    color: var(--clickgui-text-color);
-    font-size: 13px;
-    font-family: var(--font-text);
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    column-gap: 5px;
-
-    .name {
-      font-weight: 500;
-    }
+    min-width: 56px;
+    min-height: 26px;
+    height: 26px;
+    padding: 0 12px;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 600;
 
     .none {
-      color: var(--clickgui-text-dimmed-color);
+      opacity: 0.8;
     }
   }
 </style>

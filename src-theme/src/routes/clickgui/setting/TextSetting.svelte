@@ -28,29 +28,37 @@
 </div>
 
 <style lang="scss">
-
   .setting {
-    padding: 8px 0;
+    padding: 7px 0 8px;
   }
 
   .name {
-    font-weight: 500;
-    color: var(--clickgui-text-color);
+    color: var(--label);
     font-size: 13px;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
   }
 
   .value {
     width: 100%;
-    background-color: var(--clickgui-input-background-color);
-    font-family: monospace;
-    font-size: 13px;
-    color: var(--clickgui-text-color);
-    border: none;
-    border-bottom: solid 2px var(--clickgui-input-border-color);
-    padding: 5px;
-    border-radius: 3px;
-    transition: ease border-color .2s;
+    height: 28px;
+    padding: 0 8px;
+    border: 0.5px solid var(--glass-stroke);
+    border-radius: var(--radius-xs);
+    background-color: var(--fill-tertiary);
+    color: var(--label);
+    font-family: var(--font-text);
+    font-size: 12px;
+    outline: none;
+    transition: background-color 0.2s ease;
+
+    &:focus {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: -1px;
+    }
+
+    &::placeholder {
+      color: var(--label-secondary);
+    }
 
     &::-webkit-scrollbar {
       background-color: transparent;

@@ -14,6 +14,7 @@
         toggleBasicMode
     } from "../../../integration/rest";
     import {fly} from "svelte/transition";
+    import {cubicOut} from "svelte/easing";
     import {onMount} from "svelte";
     import {notification} from "../common/header/notification_store";
     import {isAnniversary} from "../../../util/utils";
@@ -41,12 +42,12 @@
             clientButtonsShown = false;
             setTimeout(() => {
                 regularButtonsShown = true;
-            }, 750);
+            }, 400);
         } else {
             regularButtonsShown = false;
             setTimeout(() => {
                 clientButtonsShown = true;
-            }, 750);
+            }, 400);
         }
     }
 </script>
@@ -78,7 +79,7 @@
             {/if}
         </div>
 
-        <div class="additional-buttons" transition:fly|global={{duration: 700, y: 100}}>
+        <div class="additional-buttons" in:fly|global={{duration: 350, y: 12, easing: cubicOut}}>
             <ButtonContainer>
                 <IconTextButton icon="icon-exit.svg" title="Exit" on:click={exitClient}/>
                 <IconTextButton icon="icon-eye.svg" title="Basic Mode" on:click={toggleBasicMode}/>
@@ -86,7 +87,7 @@
             </ButtonContainer>
         </div>
 
-        <div class="social-buttons" transition:fly|global={{duration: 700, y: 100}}>
+        <div class="social-buttons" in:fly|global={{duration: 350, y: 12, easing: cubicOut}}>
             <ButtonContainer>
                 <IconButton title="Forum" icon="nodebb" on:click={() => browse("MAINTAINER_FORUM")}/>
                 <IconButton title="GitHub" icon="github" on:click={() => browse("MAINTAINER_GITHUB")}/>
@@ -122,7 +123,9 @@
     .main-buttons {
         display: flex;
         flex-direction: column;
-        row-gap: 25px;
+        row-gap: 8px;
+        justify-content: center;
+        padding-bottom: 40px;
         grid-area: a;
     }
 
@@ -132,5 +135,10 @@
 
     .social-buttons {
         grid-area: c;
+    }
+
+    .additional-buttons,
+    .social-buttons {
+        align-self: end;
     }
 </style>

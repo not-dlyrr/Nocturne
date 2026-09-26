@@ -1,6 +1,4 @@
 <script lang="ts">
-    import {slide} from "svelte/transition";
-    import {quintOut} from "svelte/easing";
     import {createEventDispatcher} from "svelte";
     import GenericSelect from "./GenericSelect.svelte";
 
@@ -25,31 +23,55 @@
 
     <svelte:fragment slot="options">
         {#each options as o}
-            <div on:click={() => handleOptionClick(o)} class="option" class:active={o === value}
-                 transition:slide|global={{ duration: 200, easing: quintOut }}>{o}</div>
+            <div on:click={() => handleOptionClick(o)} class="option" class:active={o === value}>
+                <span class="mark">{#if o === value}<span class="dot"></span>{/if}</span>{o}
+            </div>
         {/each}
     </svelte:fragment>
 </GenericSelect>
 
 <style lang="scss">
-
   .title {
-    font-weight: 600;
+    font-weight: 400;
+    color: var(--label-secondary);
   }
 
   .option {
-    font-weight: 500;
-    color: var(--menu-text-dimmed-color);
-    font-size: 20px;
-    padding: 15px 20px;
-    transition: ease color .2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 28px;
+    padding: 5px 10px 5px 8px;
+    border-radius: var(--radius-xs);
+    font-size: 13px;
+    line-height: 18px;
+    color: var(--label);
+    white-space: nowrap;
+    transition: background-color 0.2s ease;
 
     &:hover {
-      color: var(--menu-text-color);
+      background-color: var(--fill-tertiary);
     }
 
     &.active {
-      color: var(--accent-color);
+      color: var(--accent-text);
+      font-weight: 600;
     }
+  }
+
+  /* leading mark column; pointer-events off so clicks always land on .option (WrappedSetting checks that class) */
+  .mark {
+    width: 12px;
+    flex: none;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--accent-text);
   }
 </style>

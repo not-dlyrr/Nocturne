@@ -41,10 +41,7 @@
 </script>
 
 <div class="page">
-    <div class="heading">
-        <span class="title">Client Settings</span>
-        <span class="subtitle">Changes apply to the overlay right away.</span>
-    </div>
+    <p class="subtitle">Changes apply to the overlay right away.</p>
 
     <section>
         <span class="group-header">Layout</span>
@@ -54,7 +51,7 @@
                     <span>HUD Editor</span>
                     <span class="row-desc">Move, add and remove HUD elements</span>
                 </div>
-                <button class="sg-btn sg-btn-tinted sg-btn-small" type="button" onclick={onHudEditor}>Edit</button>
+                <button class="sg-btn sg-btn-tinted sg-btn-small edit" type="button" onclick={onHudEditor}>Edit</button>
             </div>
         </div>
     </section>
@@ -92,28 +89,18 @@
 
 <style lang="scss">
   .page {
-    max-width: 600px;
-    padding: 14px 16px;
+    max-width: 560px;
+    padding: 12px 14px 16px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
-  }
-
-  .heading {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .title {
-    font-family: var(--font-display);
-    font-size: 17px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
+    gap: 14px;
   }
 
   .subtitle {
+    margin: 0;
+    padding: 0 2px;
     font-size: 12px;
+    line-height: 16px;
     color: var(--label-secondary);
   }
 
@@ -138,7 +125,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    min-height: 42px;
+    min-height: 44px;
     padding: 6px 12px;
     font-size: 13px;
   }
@@ -147,12 +134,20 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 1px;
   }
 
   .row-desc {
     font-size: 11px;
     color: var(--label-secondary);
+  }
+
+  .edit {
+    min-height: 26px;
+    height: 26px;
+    padding: 0 12px;
+    font-size: 12px;
+    line-height: 16px;
   }
 
   .group {

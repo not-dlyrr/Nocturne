@@ -33,14 +33,14 @@
     listen("accountManagerLogin", reconnectToServer);
 </script>
 
-<div class="reconnect">
+<div class="reconnect nc-surface">
     <ButtonSetting title="Reconnect" on:click={reconnectToServer}
                    disabled={$isLoggingIn}/>
-    <ButtonSetting title="Restore initial session" on:click={restoreSession}
+    <ButtonSetting title="Restore Initial Session" secondary={true} on:click={restoreSession}
                    disabled={$isLoggingIn}/>
-    <ButtonSetting title="Reconnect with random account" on:click={reconnectWithRandomAccount}
+    <ButtonSetting title="Reconnect with Random Account" secondary={true} on:click={reconnectWithRandomAccount}
                    disabled={premiumAccounts.length === 0 || $isLoggingIn}/>
-    <ButtonSetting title="Reconnect with random username" on:click={reconnectWithRandomUsername}
+    <ButtonSetting title="Reconnect with Random Username" secondary={true} on:click={reconnectWithRandomUsername}
                    disabled={$isLoggingIn}/>
 </div>
 
@@ -48,10 +48,12 @@
   .reconnect {
     position: fixed;
     bottom: 20px;
-    left: 45px;
+    left: 20px;
+    width: 260px;
+    padding: 8px;
     display: flex;
     flex-direction: column;
-    row-gap: 10px;
-    align-items: flex-start;
+    row-gap: 6px;
+    border-radius: var(--radius-md);
   }
 </style>
