@@ -18,13 +18,14 @@
     import {setItem} from "../../../integration/persistent_storage";
     import {convertToSpacedString, spaceSeperatedNames} from "../../../theme/theme_config";
     import {scaleFactor} from "../clickgui_store";
-    import {UNKNOWN_KEY} from "../../../util/utils";
+    import {isClickGuiScreen, UNKNOWN_KEY} from "../../../util/utils";
     import Icon from "../../../components/sg/Icon.svelte";
     import Switch from "../../../components/sg/Switch.svelte";
     import SegmentedControl from "../../../components/sg/SegmentedControl.svelte";
     import GenericSetting from "../setting/common/GenericSetting.svelte";
     import ClientSettings from "./ClientSettings.svelte";
     import {categoryStyle} from "./categories";
+    import {sectionsFor} from "./moduleSections";
 
     let {onHudEditor}: { onHudEditor: () => void } = $props();
 
@@ -44,7 +45,6 @@
     let query = $state("");
     let onlyEnabled = $state(false);
     let clickGuiKey = UNKNOWN_KEY;
-    const openedAt = performance.now();
 
     let configurable = $state<ConfigurableSetting | null>(null);
 
@@ -65,21 +65,15 @@
         ? modules.filter(m => m.name.toLowerCase().includes(trimmedQuery)
             || m.aliases.some(a => a.toLowerCase().includes(trimmedQuery)))
         : categoryModules);
-    // Alphabetical by what the user reads; search results keep category order so their sections line up
-    // with the sidebar.
-    const shown = $derived((onlyEnabled ? listed.filter(m => m.enabled) : listed).slice().sort((a, b) =>
-        (trimmedQuery ? categories.indexOf(a.category) - categories.indexOf(b.category) : 0)
-        || name(a.name).localeCompare(name(b.name))));
+    const shown = $derived(onlyEnabled ? listed.filter(m => m.enabled) : listed);
 
-    // Sticky section headers: first letter in a category, the category itself in search results.
-    const sections = $derived.by(() => {
-        const grouped = new Map<string, Module[]>();
-        for (const module of shown) {
-            const key = trimmedQuery ? module.category : name(module.name).charAt(0).toUpperCase();
-            grouped.set(key, [...(grouped.get(key) ?? []), module]);
-        }
-        return [...grouped];
-    });
+    // Sticky sections from the hand-organized groups (moduleSections.ts). Search results are grouped by
+    // category, in sidebar order, each keeping its curated order.
+    const sections = $derived(trimmedQuery
+        ? categories
+            .map(c => [c, sectionsFor(c, shown.filter(m => m.category === c), name).flatMap(([, ms]) => ms)] as [string, Module[]])
+            .filter(([, ms]) => ms.length > 0)
+        : sectionsFor(category, shown, name));
     const selectedModule = $derived(modules.find(m => m.name === selected) ?? null);
     const showSettings = $derived(view === "settings" && !trimmedQuery);
 
@@ -115,7 +109,7 @@
         category = c;
         view = "modules";
         query = "";
-        const inCategory = modules.filter(m => m.category === c);
+        const inCategory = sectionsFor(c, modules.filter(m => m.category === c), name).flatMap(([, ms]) => ms);
         selectModule((inCategory.find(m => m.enabled) ?? inCategory[0])?.name ?? null);
     }
 
@@ -185,9 +179,11 @@
     }
 
     // The menu key closes the menu too (Minecraft only closes screens on Escape). Not while typing (Shift is
-    // for capitals), not while a keybind is being recorded, and not on the press that opened the menu.
+    // for capitals) and not while a keybind is being recorded. The page is preloaded and stays mounted, so
+    // the press that opens the menu also reaches here: e.screen is what was open when the key went down,
+    // which is only the ClickGUI for a press made while the menu was already up.
     listen("keyboardKey", (e: KeyboardKeyEvent) => {
-        if (e.action !== 1 || e.key !== clickGuiKey || performance.now() - openedAt < 300) return;
+        if (e.action !== 1 || e.key !== clickGuiKey || !isClickGuiScreen(e.screen)) return;
         const focused = document.activeElement as HTMLElement | null;
         if (focused?.matches("input, textarea, [contenteditable]") || document.querySelector(".change-bind.sg-btn-filled")) return;
         deleteScreen();
@@ -208,7 +204,7 @@
 
         if (!categories.includes(category)) category = categories[0] ?? category;
         if (!selected || !modules.some(m => m.name === selected)) {
-            const inCategory = modules.filter(m => m.category === category);
+            const inCategory = sectionsFor(category, modules.filter(m => m.category === category), name).flatMap(([, ms]) => ms);
             selected = (inCategory.find(m => m.enabled) ?? inCategory[0])?.name ?? null;
         }
         selectModule(selected);

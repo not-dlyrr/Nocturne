@@ -17,7 +17,7 @@
     import {listen} from "../../integration/ws";
     import type {HudComponent, Metadata} from "../../integration/types";
     import Taco from "./elements/taco/Taco.svelte";
-    import type {ComponentsUpdateEvent, ScaleFactorChangeEvent} from "../../integration/events";
+    import type {ClientPlayerDataEvent, ComponentsUpdateEvent, ScaleFactorChangeEvent} from "../../integration/events";
     import Keystrokes from "./elements/keystrokes/Keystrokes.svelte";
     import Effects from "./elements/Effects.svelte";
     import BlockCounter from "./elements/BlockCounter.svelte";
@@ -62,6 +62,18 @@
 
     listen("scaleFactorChange", (data: ScaleFactorChangeEvent) => {
         zoom = data.scaleFactor * 50;
+    });
+
+    // Liquid glass rim light (glass.css): the HUD has no pointer to follow, so the light is fixed in the
+    // world and the glint slides around every glass edge as the camera turns, brighter looking skywards.
+    // The angle is unwrapped so 359 -> 0 doesn't spin the glint the long way round.
+    let lightAngle = -45;
+    listen("clientPlayerData", (data: ClientPlayerDataEvent) => {
+        const target = -45 - data.playerData.yaw;
+        lightAngle += ((target - lightAngle) % 360 + 540) % 360 - 180;
+        const intensity = 0.6 + 0.35 * Math.max(-1, Math.min(1, -data.playerData.pitch / 90));
+        document.documentElement.style.setProperty("--lg-a", `${lightAngle.toFixed(1)}deg`);
+        document.documentElement.style.setProperty("--lg-i", intensity.toFixed(2));
     });
 
     listen("componentsUpdate", (event: ComponentsUpdateEvent) => {
