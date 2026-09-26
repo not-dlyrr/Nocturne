@@ -30,21 +30,13 @@
 }
 
 /*
- * HUD chrome: every non-empty overlay pixel is read by the native shader as part of a glass shape
- * (alpha is the mask), so solid HUD cards keep only an inset edge; a soft outer shadow would show up
- * as a faint refracting halo.
- */
-.nc-hud {
-  box-shadow: var(--shadow-glass-edge);
-}
-
-/*
- * HUD Liquid Glass (arraylist, target HUD, watermark), after santi.harbor's lq.css.
+ * HUD Liquid Glass (every HUD element), after santi.harbor's lq.css.
  *
  * The lens itself (edge refraction, centre magnification, RGB dispersion, saturation) is drawn by the
  * client in ui_blur_v.frag, which finds each glass shape's edges from this element's alpha. This class
  * only paints what the page can: a light tint the bent game shows through, and Harbor's hairline rim
- * whose glint sits top-left with a faint counter-glint opposite. No outer shadow (see .nc-hud).
+ * whose glint follows the camera with a faint counter-glint opposite. No outer shadow: every
+ * non-empty overlay pixel is read as part of a glass shape, so a soft shadow would refract as a halo.
  */
 .nc-glass {
   position: relative;

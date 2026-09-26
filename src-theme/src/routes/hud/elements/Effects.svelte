@@ -32,7 +32,7 @@
 </script>
 
 {#if effects.length > 0}
-    <div class="effects nc-surface nc-hud">
+    <div class="effects nc-glass">
         {#each effects as e}
             <div class="effect">
                 <img class="effect-icon" src={effectTextureUrl(e.effect)} alt={e.localizedName}/>

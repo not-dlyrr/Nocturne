@@ -28,7 +28,7 @@
 </script>
 
 {#if count !== undefined}
-    <div class="counter nc-surface nc-hud" style="color: {mapToColor(count)}; flex-direction: {FLEX_DIRECTION[cSettings.iconPosition]}" in:fly={{ y: -5, duration: 200 }}
+    <div class="counter nc-glass" style="color: {mapToColor(count)}; flex-direction: {FLEX_DIRECTION[cSettings.iconPosition]}" in:fly={{ y: -5, duration: 200 }}
          out:fly={{ y: -5, duration: 200 }}>
         {#if nextBlock && cSettings.iconPosition !== "None"}
             <img class="icon" src={itemTextureUrl(nextBlock)} alt={nextBlock}/>

@@ -39,7 +39,7 @@
 </script>
 
 {#if processedScoreboard}
-    <div class="scoreboard nc-surface nc-hud">
+    <div class="scoreboard nc-glass">
         {#if processedScoreboard.header && cSettings.show.includes('Header')}
             <div class="header">
                 <TextComponent fontSize={14} allowPreformatting={true} textComponent={processedScoreboard.header}/>

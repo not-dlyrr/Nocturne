@@ -17,7 +17,7 @@
     });
 </script>
 
-<div class="key nc-surface nc-hud" style="grid-area: {gridArea};" class:active>
+<div class="key nc-glass" style="grid-area: {gridArea};" class:active>
     {key?.key.localized ?? "???"}
 </div>
 

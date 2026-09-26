@@ -72,7 +72,7 @@
             </div>
         {/if}
         {#if showItemStackName && itemStackName !== null}
-            <div class="item-name nc-surface nc-hud" out:fade={{duration: 200}}>
+            <div class="item-name nc-glass" out:fade={{duration: 200}}>
                 <TextComponent fontSize={14} textComponent={itemStackName}/>
             </div>
         {/if}
@@ -144,7 +144,7 @@
 
         </div>
 
-        <div class="hotbar-elements nc-surface nc-hud">
+        <div class="hotbar-elements nc-glass">
             <div class="slider" style="left: {currentSlot * 45}px"></div>
             <div class="slots" bind:this={slotsElement}>
                 <div class="slot"></div>
@@ -160,7 +160,7 @@
         </div>
 
         {#if playerData?.offHandStack.identifier !== "minecraft:air"}
-            <div class="offhand-slot nc-surface nc-hud"></div>
+            <div class="offhand-slot nc-glass"></div>
         {/if}
     </div>
 {/if}

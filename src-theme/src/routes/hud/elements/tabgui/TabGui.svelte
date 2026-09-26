@@ -94,14 +94,14 @@
 </script>
 
 <div class="tabgui">
-    <div class="categories nc-surface nc-hud" bind:this={categoriesElement}>
+    <div class="categories nc-glass" bind:this={categoriesElement}>
         {#each categories as name, index}
             <Category {name} selected={index === selectedCategoryIndex} />
         {/each}
     </div>
 
     {#if renderedModules.length > 0}
-        <div class="modules nc-surface nc-hud" transition:fly={{ x: -10, duration: 200 }} style="height: {categoriesElement.offsetHeight}px">
+        <div class="modules nc-glass" transition:fly={{ x: -10, duration: 200 }} style="height: {categoriesElement.offsetHeight}px">
             {#each renderedModules as { name, enabled }, index}
                 <Module {name} {enabled} selected={selectedModuleIndex === index} />
             {/each}

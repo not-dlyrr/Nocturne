@@ -326,7 +326,8 @@ private sealed class TargetRenderAppearance<Ctx : Any>(name: String) : Mode(name
             World("GlowingCircle") {
             private val radius by float("Radius", 0.85f, 0.1f..2f)
 
-            private val heightMode = modes(owner, "HeightMode") {
+            // Defaults to Animated (index 4): the ring bobs up and down the target.
+            private val heightMode = modes(owner, "HeightMode", 4) {
                 arrayOf(
                     HeightMode.Feet(it),
                     HeightMode.Top(it),

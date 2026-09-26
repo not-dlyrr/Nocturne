@@ -27,7 +27,7 @@
     $: surfaced = backgroundColor !== "transparent";
 </script>
 
-<div class="inventory" class:nc-surface={surfaced} class:nc-hud={surfaced} style="
+<div class="inventory" class:nc-glass={surfaced} style="
     {surfaced ? "" : `background-color: ${backgroundColor};`}
     gap: {gap};
     --row-length: {rowLength};
@@ -44,7 +44,7 @@
     display: grid;
     grid-template-columns: repeat(var(--row-length), 1fr);
 
-    &.nc-surface {
+    &.nc-glass {
       padding: 8px;
     }
   }

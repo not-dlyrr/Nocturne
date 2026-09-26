@@ -26,7 +26,7 @@
     });
 </script>
 
-<div class="keybinds nc-surface nc-hud">
+<div class="keybinds nc-glass">
     <div class="header">
         <Icon name="sliders" size={14} weight={2}/>
         <span class="title">Keybinds</span>
