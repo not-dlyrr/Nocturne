@@ -149,7 +149,7 @@
 
 <style lang="scss">
   .setting {
-    padding: 7px 0;
+    padding: 11px 0;
   }
 
   .head {
@@ -163,7 +163,7 @@
 
     .name {
       color: var(--clickgui-text-color);
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 600;
     }
   }

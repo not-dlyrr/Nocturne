@@ -182,15 +182,17 @@
 
     &.expanded {
       .header {
-        border-radius: 5px 5px 0 0;
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
       }
     }
   }
 
   .header {
     background-color: var(--menu-account-header-background-color);
-    padding: 15px 18px;
-    border-radius: 5px;
+    padding: 12px 16px 12px 12px;
+    border: 0.5px solid var(--glass-stroke);
+    box-shadow: var(--shadow-glass-edge);
+    border-radius: var(--radius-lg);
     align-items: center;
     display: grid;
     grid-template-areas:
@@ -206,8 +208,8 @@
       position: relative;
 
       .avatar {
-        height: 68px;
-        width: 68px;
+        height: 52px;
+        width: 52px;
         border-radius: 50%;
       }
 
@@ -223,14 +225,15 @@
     .username {
       font-weight: 600;
       color: var(--menu-text-color);
-      font-size: 20px;
+      font-size: 17px;
+      letter-spacing: -0.43px;
       grid-area: b;
       align-self: flex-end;
     }
 
     .account-type {
       font-weight: 500;
-      font-size: 20px;
+      font-size: 13px;
       grid-area: d;
       align-self: flex-start;
 
@@ -271,7 +274,8 @@
     position: absolute;
     z-index: 1000;
     width: 100%;
-    border-radius: 0 0 5px 5px;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    overflow: hidden;
     background-color: var(--menu-account-switcher-background-color);
 
     .placeholder {
@@ -285,7 +289,7 @@
       background-color: var(--menu-account-search-background-color);
       border: none;
       color: var(--menu-text-color);
-      font-family: "Inter", sans-serif;
+      font-family: var(--font-text);
       padding: 15px 15px 15px 50px;
       width: 100%;
       font-size: 18px;

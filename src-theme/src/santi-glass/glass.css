@@ -1,0 +1,27 @@
+/*
+ * Nocturne: santi.glass Liquid Glass, tuned for the in-game overlay.
+ *
+ * The theme is drawn into a transparent offscreen browser that Minecraft composites over the
+ * game, so there is no HTML behind a panel for backdrop-filter (or the DS's SVG lens) to
+ * refract. In CEF those filters still allocate a render surface per element and re-run on
+ * every repaint, which is pure cost for an empty backdrop.
+ *
+ * Instead the frost comes from the client's native GPU blur (BlurEffectRenderer): it blurs
+ * the game wherever the overlay's alpha is non-zero, weighted by that alpha. Glass here is
+ * just the DS fill (its alpha drives the blur), the 0.5px rim and the top specular edge —
+ * all static paint that CEF rasterizes once and keeps as a layer.
+ */
+.sg-glass,
+.sg-glass-strong,
+.sg-tabbar {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/*
+ * HUD glass: the wide DS shadow has alpha, and alpha is the blur mask, so a 32px shadow would
+ * smear a blur halo around every HUD element. Keep the lift tight to the shape.
+ */
+.nc-hud-glass {
+  box-shadow: var(--shadow-glass-edge), 0 2px 8px rgba(0, 0, 0, 0.28);
+}

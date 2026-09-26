@@ -2,8 +2,19 @@
     import {flip} from "svelte/animate";
     import {listen} from "../../../../integration/ws";
     import {fly} from "svelte/transition";
+    import {backOut} from "svelte/easing";
     import Notification from "./Notification.svelte";
     import type {NotificationEvent, NotificationSeverity} from "../../../../integration/events";
+    import {getModules} from "../../../../integration/rest";
+    import {convertToSpacedString, spaceSeperatedNames} from "../../../../theme/theme_config";
+
+    const DURATION = 3000;
+
+    // Module name -> category, so toggle toasts can wear their category's icon square.
+    let moduleCategories: Record<string, string> = {};
+    getModules().then(modules => {
+        moduleCategories = Object.fromEntries(modules.map(m => [m.name, m.category]));
+    });
 
     interface TNotification {
         animationKey: number;
@@ -11,6 +22,7 @@
         title: string;
         severity: NotificationSeverity;
         message: string;
+        category: string | null;
     }
 
     export let settings: { [name: string]: any };
@@ -41,13 +53,16 @@
         }
 
         notifications = [
-            {animationKey, id, title, message, severity},
+            {
+                animationKey, id, title, message, severity,
+                category: moduleCategories[message] ?? null
+            },
             ...notifications,
         ];
         
         setTimeout(() => {
             notifications = notifications.filter((n) => n.id !== id);
-        }, 3000);
+        }, DURATION);
     }
 
     listen("notification", (e: NotificationEvent) => {
@@ -56,13 +71,21 @@
 </script>
 
 <div class="notifications">
-    {#each notifications as {title, message, severity, animationKey} (animationKey)}
+    {#each notifications as {id, title, message, severity, category, animationKey} (animationKey)}
         <div
-                animate:flip={{ duration: 200 }}
-                in:fly={{ x: 30, duration: 200 }}
-                out:fly={{ x: 30, duration: 200 }}
+                animate:flip={{ duration: 350 }}
+                in:fly={{ x: 352, duration: 450, easing: backOut }}
+                out:fly={{ x: 40, duration: 300 }}
         >
-            <Notification {title} {message} {severity}/>
+            <Notification {id} {title} {severity} {category} duration={DURATION}
+                          message={category && $spaceSeperatedNames ? convertToSpacedString(message) : message}/>
         </div>
     {/each}
 </div>
+
+<style lang="scss">
+  .notifications {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+</style>

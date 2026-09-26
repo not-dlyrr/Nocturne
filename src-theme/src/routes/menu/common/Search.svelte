@@ -17,7 +17,7 @@
     background-color: var(--menu-search-background-color);
     border: none;
     color: var(--menu-text-color);
-    font-family: "Inter", sans-serif;
+    font-family: var(--font-text);
     font-size: 20px;
     border-radius: 5px;
     border-bottom: solid 4px var(--menu-search-border-color);

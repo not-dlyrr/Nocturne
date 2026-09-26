@@ -18,45 +18,51 @@
 </button>
 
 <style lang="scss">
-
     .icon-text-button {
       display: flex;
-      border: none;
-
-      border-radius: 5px;
       align-items: center;
-      overflow: hidden;
-      background: linear-gradient(to left, var(--menu-icon-text-button-background-color) 50%, var(--menu-icon-text-button-accent-color) 50%);
-      background-size: 200% 100%;
-      background-position: right bottom;
-      will-change: background-position;
-      transition: ease opacity .2s, background-position .2s ease-out;
+      gap: 10px;
+      height: 48px;
+      padding: 0 20px 0 6px;
+      border: none;
+      border-radius: var(--radius-pill);
+      background: transparent;
+      font-family: var(--font-text);
+      transition: background-color 0.2s ease, opacity 0.2s ease, transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
 
       &:not([disabled]):hover {
-        &:hover {
-          background-position: left bottom;
-          cursor: pointer;
-        }
+        background-color: var(--fill-tertiary);
+        cursor: pointer;
+      }
+
+      &:not([disabled]):active {
+        transform: scale(0.96);
       }
 
       &[disabled] {
-        opacity: .6;
+        opacity: .4;
       }
     }
 
     .icon {
-      height: 58px;
-      width: 58px;
-      background-color: var(--menu-icon-text-button-icon-background-color);
+      height: 36px;
+      width: 36px;
+      border-radius: 50%;
+      background-color: var(--accent);
       display: flex;
       align-items: center;
       justify-content: center;
+
+      img {
+        width: 18px;
+        height: 18px;
+      }
     }
 
     .title {
-      font-size: 20px;
-      font-weight: 500;
-      color: var(--menu-text-color);
-      padding: 0 30px;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.43px;
+      color: var(--label);
     }
 </style>

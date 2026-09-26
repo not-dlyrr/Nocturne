@@ -1,3 +1,6 @@
+import "./santi-glass/tokens.css";
+import "./santi-glass/components.css";
+import "./santi-glass/glass.css";
 import "./app.scss";
 import App from "./App.svelte";
 import {mount} from "svelte";

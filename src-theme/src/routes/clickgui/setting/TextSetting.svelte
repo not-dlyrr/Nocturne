@@ -30,13 +30,13 @@
 <style lang="scss">
 
   .setting {
-    padding: 7px 0px;
+    padding: 11px 0;
   }
 
   .name {
     font-weight: 500;
     color: var(--clickgui-text-color);
-    font-size: 12px;
+    font-size: 14px;
     margin-bottom: 5px;
   }
 
@@ -44,7 +44,7 @@
     width: 100%;
     background-color: var(--clickgui-input-background-color);
     font-family: monospace;
-    font-size: 12px;
+    font-size: 14px;
     color: var(--clickgui-text-color);
     border: none;
     border-bottom: solid 2px var(--clickgui-input-border-color);

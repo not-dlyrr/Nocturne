@@ -36,7 +36,7 @@
     border: none;
     background-color: var(--menu-button-background-color);
     color: var(--menu-text-color);
-    font-family: "Inter", sans-serif;
+    font-family: var(--font-text);
     padding: 20px;
     border-radius: 5px;
     font-size: 20px;

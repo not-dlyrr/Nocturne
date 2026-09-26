@@ -1,3 +1,13 @@
+# Nocturne
+
+A LiquidBounce fork with a remade interface built on [santi.glass](https://github.com/not-dlyrr/santi.glass): a single-window click GUI (categories, modules, settings), glass HUD elements and a restyled menu.
+
+Liquid Glass in game is drawn by the client, not the browser. The theme page has nothing behind it for `backdrop-filter` to see, so glass surfaces are plain translucent fills and the native GUI blur frosts the game wherever their alpha lands. That blur now runs its horizontal pass at half resolution with bilinear sampling (see `BlurEffectRenderer`).
+
+The upstream README follows.
+
+---
+
 <div align="center">
 <p>
     <img width="200" src="https://raw.githubusercontent.com/CCBlueX/LiquidCloud/master/LiquidBounce/liquidbounceLogo.svg">

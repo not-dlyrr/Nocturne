@@ -77,8 +77,8 @@
 
     .chosen {
       font-weight: 500;
-      color: var(--clickgui-text-color);
-      font-size: 12px;
+      color: var(--label-secondary);
+      font-size: 13px;
       text-overflow: ellipsis;
       white-space: nowrap;
       grid-column: 1/1;

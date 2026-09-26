@@ -76,7 +76,7 @@
 <style lang="scss">
 
   .setting {
-    padding: 7px 0px;
+    padding: 11px 0;
   }
 
     .head {
@@ -95,7 +95,9 @@
   }
 
   .nested-settings {
-    border-left: solid 2px var(--clickgui-setting-group-border-color);
-    padding-left: 7px;
+    margin: 0 -4px 4px 0;
+    padding: 0 0 0 12px;
+    border-left: 2px solid var(--fill-secondary);
+    border-radius: 1px;
   }
 </style>

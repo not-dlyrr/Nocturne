@@ -15,7 +15,7 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="main-button" on:mouseenter={() => hovered = true} on:mouseleave={() => hovered = false} on:click={() => hovered = false}
+<div class="main-button sg-glass sg-glass-strong" on:mouseenter={() => hovered = true} on:mouseleave={() => hovered = false} on:click={() => hovered = false}
      on:click={() => dispatch("click")} out:fly|global={{duration: 400, x: -500, delay: index * 100, easing: backIn}}
      in:fly|global={{duration: 400, x: -500, delay: index * 100, easing: backOut}}>
     <div class="icon">
@@ -30,49 +30,43 @@
 </div>
 
 <style lang="scss">
-
+  /* santi.glass: a floating glass card with an icon square; press scales like DS buttons */
   .main-button {
-    background-color: var(--menu-main-button-background-color);
-    width: 590px;
-    padding: 25px 35px;
+    width: 460px;
+    padding: 14px 20px 14px 14px;
     display: grid;
     grid-template-columns: max-content 1fr max-content;
     align-items: center;
+    column-gap: 16px;
     cursor: pointer;
-    border-radius: 5px;
-    column-gap: 25px;
-
-    background: linear-gradient(to left, var(--menu-main-button-background-color) 50%, var(--menu-main-button-accent-color) 50%);
-    background-size: 200% 100%;
-    background-position: right bottom;
-    will-change: background-position;
-    transition: background-position .2s ease-out;
+    border-radius: var(--radius-lg);
+    transition: background-color 0.2s ease, transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
 
     &:hover {
-      background-position: left bottom;
+      background-color: color-mix(in srgb, var(--glass-fill-strong), white 6%);
+    }
 
-      .icon {
-        background-color: var(--menu-main-button-icon-hover-background-color);
-        color: var(--menu-main-button-icon-hover-foreground-color);
-      }
+    &:active {
+      transform: scale(0.98);
     }
   }
 
   .icon {
-    background-color: var(--menu-main-button-icon-background-color);
-    color: var(--menu-main-button-icon-foreground-color);
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    transition: ease background-color 0.2s, ease color 0.2s;
+    background-color: var(--accent);
+    color: var(--on-accent);
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   .title {
-    font-size: 26px;
-    color: var(--menu-main-button-text-color);
+    font-family: var(--font-display);
+    font-size: 22px;
     font-weight: 600;
+    letter-spacing: -0.3px;
+    color: var(--label);
   }
 </style>

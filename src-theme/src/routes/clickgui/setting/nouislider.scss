@@ -1,27 +1,40 @@
+/* noUiSlider dressed as the santi.glass Slider: 6px pill track, accent fill, white knob. */
+.noUi-target {
+    margin: 12px 11px 6px;
+    height: 6px;
+    border: none;
+    border-radius: 999px;
+    background-color: var(--clickgui-slider-track-color);
+    box-shadow: none;
+}
 
-.noUi-handle {
-    background-color: var(--clickgui-slider-handle-color);
-    box-shadow: unset;
+.noUi-connects {
+    border-radius: 999px;
+}
+
+.noUi-connect {
+    background-color: var(--clickgui-slider-fill-color);
+}
+
+.noUi-horizontal .noUi-handle {
+    width: 22px;
+    height: 22px;
+    top: -8px;
+    right: -11px;
     border: none;
     border-radius: 50%;
-    height: 12px !important;
-    width: 12px !important;
-    transform: translate(-5px, 1px);
+    background-color: var(--clickgui-slider-handle-color);
+    box-shadow: var(--shadow-knob);
+    cursor: grab;
+    transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.noUi-horizontal .noUi-handle:active {
+    transform: scale(1.12);
+    cursor: grabbing;
 }
 
 .noUi-handle::after,
 .noUi-handle::before {
     display: none;
-}
-
-.noUi-target {
-    margin: 10px 0;
-    height: 2px;
-    border: none;
-    background-color: var(--clickgui-slider-track-color);
-    box-shadow: unset;
-}
-
-.noUi-connect {
-    background-color: var(--clickgui-slider-fill-color);
 }

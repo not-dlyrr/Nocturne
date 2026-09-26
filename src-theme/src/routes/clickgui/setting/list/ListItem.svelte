@@ -79,7 +79,7 @@
   }
 
   .name {
-    font-size: 12px;
+    font-size: 14px;
     color: var(--clickgui-text-color);
     text-overflow: ellipsis;
     white-space: nowrap;

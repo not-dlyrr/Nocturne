@@ -43,10 +43,10 @@
 <style lang="scss">
 
   .value {
-    font-family: monospace;
-    color: var(--clickgui-text-color);
-    font-weight: 500;
-    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent-text);
+    font-weight: 600;
+    font-size: 14px;
     background-color: transparent;
     border: none;
     min-width: 5px;

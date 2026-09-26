@@ -1,7 +1,6 @@
 <script lang="ts">
-    import ClickGui from "./ClickGui.svelte";
-    import GlobalSettings from "./tabs/GlobalSettings.svelte";
-    import Tabs from "./tabs/Tabs.svelte";
+    import NocturneWindow from "./nocturne/NocturneWindow.svelte";
+    import ScaledClickGuiContent from "./ScaledClickGuiContent.svelte";
     import {gridSize, os, scaleFactor, snappingEnabled, darken} from "./clickgui_store";
     import type {ConfigurableSetting, TogglableSetting} from "../../integration/types";
     import {onMount} from "svelte";
@@ -16,13 +15,7 @@
     import type {ClickGuiValueChangeEvent, ScaleFactorChangeEvent} from "../../integration/events";
     import HudEditor from "./tabs/hud_editor/HudEditor.svelte";
 
-    const tabs = [
-        {title: "ClickGUI", content: ClickGui},
-        {title: "HUD Editor", content: HudEditor},
-        {title: "Settings", content: GlobalSettings},
-    ];
-
-    let activeTab = $state(0);
+    let hudEditor = $state(false);
     let minecraftScaleFactor = $state(2);
     let clickGuiScaleFactor = $state(1);
 
@@ -71,7 +64,16 @@
         class="tabbed-clickgui"
         class:darken={$darken}
 >
-    <Tabs {tabs} bind:activeTab/>
+    {#if hudEditor}
+        <HudEditor/>
+        <button class="done sg-btn sg-btn-filled sg-btn-small" type="button" onclick={() => (hudEditor = false)}>
+            Done
+        </button>
+    {:else}
+        <ScaledClickGuiContent>
+            <NocturneWindow onHudEditor={() => (hudEditor = true)}/>
+        </ScaledClickGuiContent>
+    {/if}
 </div>
 
 <style lang="scss">
@@ -83,6 +85,19 @@
 
     &.darken {
       background-color: var(--clickgui-overlay-background-color);
+    }
+  }
+
+  .done {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2147483647;
+    box-shadow: var(--shadow-glass);
+
+    &:active {
+      transform: translateX(-50%) scale(0.96);
     }
   }
 </style>

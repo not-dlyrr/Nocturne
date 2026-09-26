@@ -289,17 +289,6 @@
   --tooltip-background-color: var(--accent-color);
   --tooltip-text-color: var(--text-color);
 
-  --animated-logo-banner-start-color: var(--accent-color);
-  --animated-logo-banner-middle-color: var(--error-color);
-  --animated-logo-banner-end-color: var(--accent-color);
-  --animated-logo-text-start-color: #dbe6ff;
-  --animated-logo-text-middle-color: #ffd4cf;
-  --animated-logo-text-end-color: #dbe6ff;
-  --animated-logo-foreground-color: var(--text-color);
-  --animated-logo-divider-color: var(--text-color);
-  --animated-logo-anniversary-highlight-color: var(--warning-color);
-  --animated-logo-glow-primary-color: color-mix(in srgb, var(--accent-color) 22%, transparent);
-  --animated-logo-glow-secondary-color: color-mix(in srgb, var(--error-color) 12%, transparent);
 
   --confetti-color-1: #4677ff;
   --confetti-color-2: #fc4130;
@@ -309,4 +298,73 @@
   --confetti-color-6: #8ad9ff;
   --confetti-color-7: #ff8fab;
   --confetti-shadow-color: rgba(255, 255, 255, 0.12);
+
+  /* Nocturne: legacy LiquidBounce tokens mapped onto santi.glass (dark). Last declaration wins. */
+  --surface-color: #1c1c1e;
+  --text-color: var(--label);
+  --text-dimmed-color: var(--label-secondary);
+  --accent-color: var(--accent);
+  --accent-hover-color: color-mix(in srgb, var(--accent) 85%, black);
+  --accent-subtle-background-color: var(--accent-tint);
+  --success-color: var(--switch-on);
+  --error-color: var(--danger-text);
+  --warning-color: var(--warning-text);
+  --grid-color: var(--fill-tertiary);
+
+  --clickgui-overlay-background-color: rgba(0, 0, 0, 0.28);
+  --clickgui-panel-header-border-color: var(--separator);
+  --clickgui-module-settings-border-color: var(--separator);
+  --clickgui-tabs-background-color: var(--glass-fill-strong);
+  --clickgui-tab-hover-background-color: var(--fill-tertiary);
+  --clickgui-tab-active-background-color: var(--glass-selection);
+  --clickgui-tab-active-border-color: transparent;
+  --clickgui-window-background-color: var(--glass-fill);
+  --clickgui-window-header-background-color: transparent;
+  --clickgui-window-header-border-color: var(--separator);
+  --clickgui-global-settings-divider-color: var(--separator);
+  --clickgui-input-background-color: var(--fill-tertiary);
+  --clickgui-input-border-color: var(--separator);
+  --clickgui-button-background-color: var(--accent);
+  --clickgui-setting-group-border-color: var(--separator);
+  --clickgui-dropdown-trigger-background-color: var(--fill-tertiary);
+  --clickgui-dropdown-background-color: var(--surface-elevated);
+  --clickgui-dropdown-border-color: var(--glass-stroke);
+  --clickgui-dropdown-option-color: var(--label-secondary);
+  --clickgui-dropdown-option-hover-color: var(--label);
+  --clickgui-dropdown-option-selected-color: var(--accent-text);
+  --clickgui-selection-chip-background-color: var(--fill-tertiary);
+  --clickgui-selection-chip-color: var(--label-secondary);
+  --clickgui-selection-chip-selected-background-color: var(--accent-tint);
+  --clickgui-selection-chip-selected-color: var(--accent-text);
+  --clickgui-switch-track-color: var(--fill-secondary);
+  --clickgui-switch-thumb-color: var(--knob);
+  --clickgui-switch-track-active-color: var(--switch-on);
+  --clickgui-switch-thumb-active-color: var(--knob);
+  --clickgui-slider-track-color: var(--fill-secondary);
+  --clickgui-slider-handle-color: var(--knob);
+  --clickgui-slider-fill-color: var(--accent);
+  --clickgui-color-picker-border-color: var(--glass-stroke);
+  --clickgui-hud-editor-drawer-background-color: var(--glass-fill);
+  --clickgui-hud-editor-component-settings-background-color: var(--glass-fill);
+  --clickgui-hud-editor-drawer-component-background-color: var(--fill-tertiary);
+  --clickgui-hud-editor-drawer-component-border-color: transparent;
+
+  --menu-list-item-hover-background-color: var(--glass-selection);
+  --menu-account-header-background-color: var(--glass-fill-strong);
+  --menu-account-switcher-background-color: var(--surface-elevated);
+  --menu-account-search-background-color: var(--fill-tertiary);
+  --menu-account-premium-color: var(--success-text);
+  --menu-modal-backdrop-color: rgba(0, 0, 0, 0.45);
+  --menu-modal-background-color: var(--glass-fill-strong);
+  --menu-select-header-background-color: var(--fill-secondary);
+  --menu-switch-track-color: var(--fill-secondary);
+  --menu-switch-thumb-color: var(--knob);
+  --menu-switch-track-active-color: var(--switch-on);
+  --menu-switch-thumb-active-color: var(--knob);
+
+  --tooltip-background-color: var(--surface-elevated);
+  --tooltip-text-color: var(--label);
+  --hotbar-slot-border-color: var(--label);
+  --hotbar-health-color: var(--wall-pink);
+  --keystrokes-active-color: var(--accent);
 }

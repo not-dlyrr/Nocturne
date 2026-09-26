@@ -70,7 +70,12 @@
     }
 
     function applyAccentColor(color: number) {
-        setThemeColor("accent-color", themeColorToHex(color));
+        // santi.glass has one accent: the fill color and a lighter tone for text on dark glass.
+        const hex = themeColorToHex(color);
+        setThemeColor("accent", hex);
+        setThemeColor("accent-text", mixColors(hex, "white", 30));
+        setThemeColor("focus-ring", mixColors(hex, "white", 30));
+        setThemeColor("accent-tint", `color-mix(in srgb, ${hex} 20%, transparent)`);
     }
 
     function applyTintColor(defaultSurfaceColor: string, color: number) {

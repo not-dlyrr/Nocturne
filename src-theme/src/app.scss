@@ -39,7 +39,10 @@
 }
 
 body {
-    font-family: "Inter", sans-serif;
+    font-family: var(--font-text);
+    color: var(--label);
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.08px;
     user-select: none;
     overflow: hidden;
 }
@@ -50,10 +53,19 @@ body {
 }
 
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: var(--accent-color);
-    border-radius: 10px;
+    background-color: var(--fill-secondary);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+        animation-duration: 0s !important;
+    }
 }

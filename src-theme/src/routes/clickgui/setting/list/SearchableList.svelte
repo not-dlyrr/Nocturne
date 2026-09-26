@@ -40,8 +40,8 @@
     width: 100%;
     border: none;
     border-bottom: solid 1px var(--accent-color);
-    font-family: "Inter", sans-serif;
-    font-size: 12px;
+    font-family: var(--font-text);
+    font-size: 14px;
     padding: 5px;
     color: var(--clickgui-text-color);
     margin-bottom: 5px;

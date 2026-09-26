@@ -1,99 +1,125 @@
 <script lang="ts">
+    import Icon from "../../../../components/sg/Icon.svelte";
+    import {categoryStyle} from "../../../clickgui/nocturne/categories";
+
     export let title: string;
     export let message: string;
     export let severity: string;
+    /** Category of the toggled module, for ENABLED/DISABLED toasts. */
+    export let category: string | null = null;
+    export let duration: number;
+    /** Changes when a toast is replaced in place, restarting its countdown bar. */
+    export let id: number;
+
+    const SEVERITY_STYLE: Record<string, { icon: string; tone: string }> = {
+        INFO: {icon: "bell", tone: "var(--accent)"},
+        SUCCESS: {icon: "sun", tone: "var(--success-text)"},
+        ERROR: {icon: "bell", tone: "var(--danger)"},
+    };
+
+    $: toggle = severity === "ENABLED" || severity === "DISABLED";
+    $: style = toggle ? categoryStyle(category ?? "") : SEVERITY_STYLE[severity] ?? SEVERITY_STYLE.INFO;
+    $: tone = severity === "DISABLED" ? "var(--fill-secondary)" : style.tone;
 </script>
 
-<div class="notification">
-    <div class="icon {severity.toString().toLowerCase()}"></div>
-    <div class="title">{title}</div>
-    <div class="message">{message}</div>
+<div class="notification sg-glass sg-glass-strong nc-hud-glass">
+    <div class="icon-square" style="background: {tone};">
+        <Icon name={style.icon} size={18} weight={2}/>
+    </div>
+    <div class="text">
+        <span class="title">{toggle ? `Module ${title}` : title}</span>
+        <span class="message">{toggle ? `${message} is ${severity === "ENABLED" ? "on" : "off"}` : message}</span>
+    </div>
+    <span class="time">Now</span>
+    <div class="progress">
+        {#key id}
+            <div class="progress-fill" class:muted={severity === "DISABLED"} style="animation-duration: {duration}ms;"></div>
+        {/key}
+    </div>
 </div>
 
 <style lang="scss">
   .notification {
-    display: grid;
-    grid-template-areas:
-            "a b"
-            "a c";
-    grid-template-columns: max-content 1fr;
-    column-gap: 10px;
-    background: var(--notification-background-color);
-    border-radius: 5px;
-    width: 300px;
+    position: relative;
     overflow: hidden;
-    padding: 10px;
-    margin-bottom: 10px;
+    width: 320px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px 16px 12px;
+    margin-top: 10px;
+    border-radius: var(--radius-lg);
   }
 
-  .icon {
-    height: 40px;
-    width: 40px;
-    background-position: center;
-    background-repeat: no-repeat;
-    border-radius: 4px;
-    grid-area: a;
-    transition: background-color 0.2s;
-    position: relative;
-    background-image: url("/img/hud/notification/icon-toggle.svg");
+  .icon-square {
+    width: 29px;
+    height: 29px;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-xs);
+    color: #fff;
+    transition: background-color 0.2s ease;
+  }
 
-    &.success {
-      background-color: var(--notification-success-color);
-      background-image: url("/img/hud/notification/icon-success.svg");
-    }
-
-    &.error {
-      background-color: var(--notification-error-color);
-      background-image: url("/img/hud/notification/icon-error.svg");
-    }
-
-    &.info {
-      background-color: var(--notification-info-color);
-      background-image: url("/img/hud/notification/icon-info.svg");
-    }
-
-    &.disabled,
-    &.enabled {
-      &::after {
-        content: "";
-        position: absolute;
-        height: 10px;
-        width: 10px;
-        border-radius: 5px;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        background: var(--notification-toggle-knob-color);
-        transition: all 0.2s ease-out;
-      }
-    }
-
-    &.enabled {
-      background-color: var(--notification-success-color);
-
-      &::after {
-        left: 62%;
-      }
-    }
-
-    &.disabled {
-      background-color: var(--notification-error-color);
-
-      &::after {
-        left: 38%;
-      }
-    }
+  .text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
   }
 
   .title {
-    grid-area: b;
-    font-size: 14px;
-    color: var(--notification-title-color);
+    font-size: 15px;
     font-weight: 600;
+    color: var(--label);
   }
 
   .message {
-    grid-area: c;
+    font-size: 13px;
+    color: var(--label-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .time {
     font-size: 12px;
-    color: var(--notification-message-color);
+    color: var(--label-secondary);
+    align-self: flex-start;
+  }
+
+  .progress {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 6px;
+    height: 3px;
+    border-radius: 999px;
+    background: var(--fill-tertiary);
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: var(--accent);
+    transform-origin: left;
+    animation: nc-progress linear both;
+
+    &.muted {
+      background: var(--label-secondary);
+    }
+  }
+
+  @keyframes nc-progress {
+    from {
+      transform: scaleX(1);
+    }
+    to {
+      transform: scaleX(0);
+    }
   }
 </style>

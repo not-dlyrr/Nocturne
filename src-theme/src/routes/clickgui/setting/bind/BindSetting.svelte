@@ -144,76 +144,66 @@
 </script>
 
 <div class="setting" class:has-value={cSetting.value.boundKey !== UNKNOWN_KEY}>
+    <span class="name">
+        {cSetting.name === "Bind" ? "Keybind" : $spaceSeperatedNames ? convertToSpacedString(cSetting.name) : cSetting.name}
+    </span>
+
+    {#if cSetting.value.boundKey !== UNKNOWN_KEY && !binding}
+        <SwitchBindAction
+                choices={["Toggle", "Hold", "Smart"]}
+                bind:chosen={cSetting.value.action}
+                onchange={handleChange}
+        />
+    {/if}
+
+    <!-- santi.glass small button: tinted at rest, filled while listening -->
     <button
-            class="change-bind"
+            class="change-bind sg-btn sg-btn-small"
+            class:sg-btn-tinted={!binding}
+            class:sg-btn-filled={binding}
             on:click={toggleBinding}
             on:mouseenter={() => isHovered = true}
             on:mouseleave={() => isHovered = false}
     >
-        <span class="name">{$spaceSeperatedNames ? convertToSpacedString(cSetting.name) : cSetting.name}</span>
-
-        {#if cSetting.value.boundKey !== UNKNOWN_KEY}
-            <div class="action">
-                <SwitchBindAction
-                        choices={["Toggle", "Hold", "Smart"]}
-                        bind:chosen={cSetting.value.action}
-                        onchange={handleChange}
-                />
-            </div>
+        {#if !binding}
+            <BindDisplay
+                    bind:modifiers={cSetting.value.modifiers}
+                    bind:boundKey={cSetting.value.boundKey}
+            />
+        {:else if addedModifiers.size}
+            <BindDisplay
+                    bind:modifiers={addedModifiers}
+                    boundKey="..."
+                    literal={true}
+            />
+        {:else}
+            <span>Press a Key</span>
         {/if}
-
-        <span class="bind">
-            {#if !binding}
-                <BindDisplay
-                        bind:modifiers={cSetting.value.modifiers}
-                        bind:boundKey={cSetting.value.boundKey}
-                />
-            {:else if addedModifiers.size}
-                <BindDisplay
-                        bind:modifiers={addedModifiers}
-                        boundKey="..."
-                        literal={true}
-                />
-            {:else}
-                <span>Press any key...</span>
-            {/if}
-        </span>
     </button>
 </div>
 
 <style lang="scss">
+  .setting {
+    padding: 8px 0;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 
   .name {
-    text-align: center;
-    pointer-events: none;
-  }
-
-  .action {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-  }
-
-  .bind {
-    display: flex;
-    justify-content: center;
-  }
-
-  .setting {
-    padding: 7px 0;
+    flex: 1;
+    min-width: 0;
+    font-size: 14px;
+    color: var(--label);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .change-bind {
-    background-color: transparent;
-    border: solid 2px var(--accent-color);
-    border-radius: 3px;
-    cursor: pointer;
-    padding: 4px;
-    font-weight: 500;
-    color: var(--clickgui-text-color);
-    font-size: 12px;
-    font-family: "Inter", sans-serif;
-    width: 100%;
-    position: relative;
+    min-width: 64px;
+    font-size: 13px;
+    font-family: var(--font-text);
   }
 </style>

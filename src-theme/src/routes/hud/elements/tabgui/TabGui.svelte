@@ -23,7 +23,7 @@
         groupedModules = groupByCategory(modules);
         categories = Object.keys(groupedModules).sort(
             (a, b) =>
-                getTextWidth(b, "Inter 14px") - getTextWidth(a, "Inter 14px"),
+                getTextWidth(b, "14px 'SF Pro Text'") - getTextWidth(a, "14px 'SF Pro Text'"),
         );
     });
 

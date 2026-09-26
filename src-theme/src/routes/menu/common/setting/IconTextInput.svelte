@@ -40,7 +40,7 @@
 
   .input {
     color: var(--menu-text-color);
-    font-family: "Inter", sans-serif;
+    font-family: var(--font-text);
     font-size: 20px;
     background-color: var(--menu-input-background-color);
     border: none;

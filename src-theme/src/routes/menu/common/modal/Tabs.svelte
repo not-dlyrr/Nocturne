@@ -95,7 +95,7 @@
   }
 
   .tab-button {
-    font-family: "Inter", sans-serif;
+    font-family: var(--font-text);
     background-color: var(--menu-modal-tab-background-color);
     color: var(--menu-text-color);
     padding: 10px;
@@ -131,7 +131,7 @@
     all: unset;
     flex: 1;
     color: var(--menu-text-color);
-    font-family: "Inter", sans-serif;
+    font-family: var(--font-text);
     text-align: center;
     padding: 10px;
     border-bottom: solid 3px transparent;

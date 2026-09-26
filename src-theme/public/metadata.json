@@ -1,11 +1,11 @@
 {
   "id": "liquidbounce",
-  "name": "LiquidBounce",
+  "name": "Nocturne",
   "version": "0.1.0",
-  "authors": ["CCBlueX"],
+  "authors": ["CCBlueX", "dlyrr"],
   "colors": {
-    "Accent": "#4677ff",
-    "Tint": "#000000"
+    "Accent": "#0070e0",
+    "Tint": "#1c1c1e"
   },
   "screens": [
     "clickgui",

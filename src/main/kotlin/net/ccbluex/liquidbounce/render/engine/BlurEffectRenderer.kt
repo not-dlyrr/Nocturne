@@ -37,6 +37,7 @@ import net.ccbluex.liquidbounce.utils.math.Easing
 import net.minecraft.client.gui.screens.ChatScreen
 import kotlin.math.ceil
 import kotlin.math.exp
+import kotlin.math.max
 
 object BlurEffectRenderer : MinecraftShortcuts, EventListener {
 
@@ -53,6 +54,18 @@ object BlurEffectRenderer : MinecraftShortcuts, EventListener {
     )
 
     private val overlaySampler = RenderSystem.getSamplerCache().getClampToEdge(FilterMode.NEAREST)
+
+    /**
+     * Bilinear sampler for the blur passes. Sampling the full-res frame at half-res texel centers averages a 2x2
+     * block for free (the downsample), and sampling the half-res intermediate from full-res pixels upsamples it.
+     */
+    private val blurSampler = RenderSystem.getSamplerCache().getClampToEdge(FilterMode.LINEAR)
+
+    /**
+     * The horizontal pass renders at 1/[DOWNSAMPLE] resolution; the kernel is expressed in those texels.
+     * Must match `DOWNSAMPLE` in `ui_blur_h.frag`.
+     */
+    private const val DOWNSAMPLE = 2
 
     private val lastTimeScreenOpened = Chronometer()
     private var wasScreenOpen = false
@@ -82,7 +95,8 @@ object BlurEffectRenderer : MinecraftShortcuts, EventListener {
         }
         isDrawingHudFramebuffer = false
 
-        val sigma = getSigma()
+        // A blur this wide hides the half-res detail loss; the kernel shrinks with the resolution.
+        val sigma = (getSigma() / DOWNSAMPLE).coerceAtLeast(0.5F)
         val alphaBlendRange = ModuleHud.Blur.alphaBlendRange
         val kernelRadius = calculateKernelRadius(sigma)
         val blendUniform = blurBlendUniform.get(
@@ -94,21 +108,26 @@ object BlurEffectRenderer : MinecraftShortcuts, EventListener {
         val mainTexture = mainTarget.colorTextureView
         val overlayTexture = overlayRenderTargetHolder.get()!!.colorTextureView
 
-        // Pass 1: Horizontal Gaussian blur into intermediate target
-        val intermediate = intermediateTarget.initAndGet()
+        // Pass 1: Downsample + horizontal Gaussian blur into the half-res intermediate target.
+        // A quarter of the fragments and about half the taps of a full-res pass.
+        val intermediate = intermediateTarget.initAndGet(
+            max(1, mainTarget.width / DOWNSAMPLE),
+            max(1, mainTarget.height / DOWNSAMPLE),
+        )
         intermediate.createRenderPass({ "GUI blur H pass" })
             .use { pass ->
                 pass.setPipeline(ClientRenderPipelines.GuiBlurH)
-                pass.setUniform("texture0", mainTexture, overlaySampler)
+                pass.setUniform("texture0", mainTexture, blurSampler)
                 pass.setUniform(ClientUniformDefine.GUI_BLUR_KERNEL.uboName, kernelUniform)
                 pass.draw(3, 1, 0, 0)
             }
 
-        // Pass 2: Vertical Gaussian blur + overlay composite into main target
+        // Pass 2: Vertical Gaussian blur at full res (bilinear upsample) + overlay composite into main target.
+        // Stays full-res so the overlay-alpha mask keeps crisp edges; it early-outs where the overlay is empty.
         mainTarget.createRenderPass({ "GUI blur V pass" })
             .use { pass ->
                 pass.setPipeline(ClientRenderPipelines.GuiBlurV)
-                pass.setUniform("texture0", intermediate.colorTextureView, overlaySampler)
+                pass.setUniform("texture0", intermediate.colorTextureView, blurSampler)
                 pass.setUniform("overlay", overlayTexture, overlaySampler)
                 pass.setUniform(ClientUniformDefine.GUI_BLUR.uboName, blendUniform)
                 pass.setUniform(ClientUniformDefine.GUI_BLUR_KERNEL.uboName, kernelUniform)

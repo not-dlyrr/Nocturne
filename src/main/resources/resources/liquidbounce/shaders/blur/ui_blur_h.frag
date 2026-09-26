@@ -4,6 +4,10 @@
 layout(location = 0) in vec2 texCoord;
 layout(location = 0) out vec4 fragColor;
 
+// Rendered at 1/DOWNSAMPLE resolution with a bilinear sampler: each tap lands between source texels and
+// averages a 2x2 block, so this pass downsamples and blurs at once. Must match BlurEffectRenderer.DOWNSAMPLE.
+const float DOWNSAMPLE = 2.0;
+
 uniform sampler2D texture0;
 layout(std140) uniform BlurKernelData {
     vec4 weightVecs[23];
@@ -20,7 +24,8 @@ float getWeight(int idx) {
 }
 
 void main() {
-    vec2 texelSize = vec2(1.0) / textureSize(texture0, 0).xy;
+    // One kernel step is one texel of the half-res target, i.e. DOWNSAMPLE texels of the source.
+    vec2 texelSize = vec2(DOWNSAMPLE) / textureSize(texture0, 0).xy;
 
     vec4 result = vec4(0.0);
 

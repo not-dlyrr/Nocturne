@@ -67,7 +67,7 @@
                     <ChildButton title="Realms" icon="realms" {parentHovered}
                                  on:click={() => openScreen("multiplayer_realms")}/>
                 </MainButton>
-                <MainButton title="LiquidBounce" icon="liquidbounce" on:click={toggleButtons} index={2}/>
+                <MainButton title="Nocturne" icon="nocturne" on:click={toggleButtons} index={2}/>
                 <MainButton title="Options" icon="options" on:click={() => openScreen("options")} index={3}/>
             {:else if clientButtonsShown}
                 <MainButton title="Proxy Manager" icon="proxymanager" on:click={() => openScreen("proxymanager")}

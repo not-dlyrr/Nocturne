@@ -2,24 +2,24 @@
     export let vertical = false;
 </script>
 
-<div class="button-container" class:vertical>
+<div class="button-container sg-glass sg-glass-strong" class:vertical>
     <slot />
 </div>
 
 <style lang="scss">
-
+    /* santi.glass pill toolbar */
     .button-container {
-      background-color: var(--menu-button-container-background-color);
-      padding: 15px 30px;
+      padding: 6px;
       width: max-content;
-      border-radius: 5px;
+      border-radius: var(--radius-pill);
       display: flex;
-      column-gap: 20px;
+      align-items: center;
+      column-gap: 4px;
 
       &.vertical {
         flex-direction: column;
-        row-gap: 20px;
-        padding: 30px 15px;
+        row-gap: 4px;
+        padding: 6px;
       }
     }
 </style>

@@ -23,41 +23,38 @@
 </div>
 
 <style lang="scss">
-
     .child-button {
       position: relative;
       display: flex;
       align-items: center;
-      border-radius: 5px;
-      background-color: var(--menu-child-button-background-color);
-      transition: ease background-color .2s;
-      padding: 15px;
+      gap: 8px;
+      padding: 8px 14px 8px 10px;
+      border-radius: var(--radius-pill);
+      background-color: var(--accent-tint);
+      transition: background-color 0.2s ease;
 
-      &.parent-hovered {
-        background-color: var(--menu-child-button-hover-background-color);
+      &.parent-hovered,
+      &:hover {
+        background-color: var(--accent);
 
-        .icon {
-          color: var(--menu-child-button-icon-hover-color);
-        }
-
+        .icon,
         .title {
-          color: var(--menu-child-button-hover-text-color);
+          color: var(--on-accent);
         }
       }
     }
 
     .title {
-      color: var(--menu-text-color);
+      color: var(--accent-text);
       font-weight: 600;
-      font-size: 16px;
-      transition: ease color 0.2s;
-      margin-left: 10px;
+      font-size: 15px;
+      transition: color 0.2s ease;
     }
 
     .icon { /* necessary because svelte's transition system sucks */
-      color: var(--menu-child-button-icon-color);
-      width: 28px;
-      height: 28px;
-      transition: ease color 0.2s;
+      color: var(--accent-text);
+      width: 22px;
+      height: 22px;
+      transition: color 0.2s ease;
     }
 </style>

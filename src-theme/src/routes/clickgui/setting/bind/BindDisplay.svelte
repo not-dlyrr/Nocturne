@@ -71,7 +71,7 @@
   }
 
   .dimmed {
-    color: var(--clickgui-text-dimmed-color);
+    opacity: 0.8;
   }
 
   .modifier:after {
@@ -84,6 +84,6 @@
   }
 
   .boundKey {
-    font-weight: bold;
+    font-weight: 600;
   }
 </style>

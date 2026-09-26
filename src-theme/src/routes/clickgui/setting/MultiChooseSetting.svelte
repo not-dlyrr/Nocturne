@@ -79,13 +79,13 @@
 <style lang="scss">
 
   .setting {
-    padding: 7px 0;
+    padding: 11px 0;
     color: var(--clickgui-text-color);
   }
 
   .title {
     color: var(--clickgui-text-color);
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
   }
 
@@ -117,7 +117,7 @@
   .amount {
     letter-spacing: 1px;
     font-weight: 500;
-    font-size: 12px;
+    font-size: 14px;
     font-family: monospace;
   }
 
@@ -139,6 +139,6 @@
     display: flex;
     flex-wrap: wrap;
     gap: 7px;
-    font-size: 12px;
+    font-size: 14px;
   }
 </style>

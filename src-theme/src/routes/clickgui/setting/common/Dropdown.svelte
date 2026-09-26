@@ -70,13 +70,11 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="dropdown" class:expanded>
-    <div class="head" bind:this={dropdownHead} on:click={toggleExpanded}>
+    <div class="head" class:named={name !== null} bind:this={dropdownHead} on:click={toggleExpanded}>
         {#if name !== null}
-            <span class="text">{$spaceSeperatedNames ? convertToSpacedString(name) : name}
-                &bull; {$spaceSeperatedNames ? convertToSpacedString(value) : value}</span>
-        {:else}
-            <span class="text">{$spaceSeperatedNames ? convertToSpacedString(value) : value}</span>
+            <span class="label">{$spaceSeperatedNames ? convertToSpacedString(name) : name}</span>
         {/if}
+        <span class="text">{$spaceSeperatedNames ? convertToSpacedString(value) : value}</span>
     </div>
 
     {#if expanded}
@@ -100,72 +98,92 @@
   .dropdown {
     position: relative;
 
-    &.expanded {
-      .text::after {
-        transform: translateY(-50%) rotate(0);
-        opacity: 1;
-      }
-
-      .head {
-        border-radius: 3px 3px 0 0;
-      }
+    &.expanded .text::after {
+      transform: translateY(calc(-50% - 1px)) rotate(0);
+      opacity: 1;
     }
   }
 
   .head {
-    background-color: var(--clickgui-dropdown-trigger-background-color);
-    padding: 6px 10px;
-    cursor: pointer;
     display: flex;
     align-items: center;
-    position: relative;
-    border-radius: 3px;
-    transition: ease border-radius .2s;
+    justify-content: space-between;
+    gap: 12px;
+    cursor: pointer;
 
-    .text {
-      font-weight: 500;
-      color: var(--clickgui-text-color);
-      font-size: 12px;
+    .label {
+      flex: 1;
+      min-width: 0;
+      font-size: 14px;
+      color: var(--label);
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    .text {
+      position: relative;
+      max-width: 60%;
+      padding: 5px 30px 5px 12px;
+      border-radius: var(--radius-pill);
+      background-color: var(--clickgui-dropdown-trigger-background-color);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--label);
       white-space: nowrap;
-      margin-right: 20px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: background-color 0.2s ease;
+    }
+
+    &:not(.named) .text {
+      max-width: none;
+      flex: 1;
+    }
+
+    &:hover .text {
+      background-color: var(--fill-secondary);
     }
 
     .text::after {
-      @include icon-settings-expand();
+      @include icon-settings-expand($right: 12px);
     }
   }
 
   .options {
     --dropdown-scale: 1;
-
-    padding: 6px 10px;
+    margin-top: 6px;
+    padding: 4px;
+    max-height: 280px;
+    overflow-y: auto;
     background-color: var(--clickgui-dropdown-background-color);
-    border: solid 1px var(--clickgui-dropdown-border-color);
-    border-top: none;
-    border-radius: 0 0 3px 3px;
+    border: 0.5px solid var(--clickgui-dropdown-border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-glass);
     z-index: 999999;
     position: fixed;
     box-sizing: border-box;
     transform: scale(var(--dropdown-scale));
     transform-origin: top left;
+    font-family: var(--font-text);
 
     .option {
       color: var(--clickgui-dropdown-option-color);
+      font-size: 13px;
       font-weight: 500;
-      font-size: 12px;
-      padding: 5px 0;
+      padding: 7px 10px;
+      border-radius: var(--radius-sm);
       cursor: pointer;
-      text-align: center;
-      transition: ease color 0.2s;
+      transition: background-color 0.2s ease, color 0.2s ease;
 
       &:hover {
         color: var(--clickgui-dropdown-option-hover-color);
+        background-color: var(--fill-tertiary);
       }
 
       &.active {
         color: var(--clickgui-dropdown-option-selected-color);
+        font-weight: 600;
       }
     }
   }

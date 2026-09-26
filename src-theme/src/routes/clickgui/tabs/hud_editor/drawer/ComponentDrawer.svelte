@@ -92,7 +92,7 @@
 
   .input-search {
     all: unset;
-    font-family: "Inter", sans-serif;
+    font-family: var(--font-text);
     color: var(--text-color);
     font-size: 16px;
     background-color: transparent;
@@ -142,7 +142,7 @@
     background-color: var(--clickgui-hud-editor-drawer-toggle-button-background-color);
     color: var(--clickgui-hud-editor-drawer-toggle-button-color);
     border: none;
-    font-family: "Inter", sans-serif;
+    font-family: var(--font-text);
     font-size: 16px;
     cursor: pointer;
     font-weight: 500;
