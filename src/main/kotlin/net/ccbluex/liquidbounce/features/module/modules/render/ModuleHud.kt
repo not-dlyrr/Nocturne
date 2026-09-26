@@ -98,7 +98,8 @@ object ModuleHud : ClientModule("HUD", ModuleCategories.RENDER, state = true, hi
         /**
          * Gaussian sigma controlling blur strength. Higher values produce stronger blur.
          */
-        val sigma by float("Sigma", 8.0F, 1.0F..15.0F)
+        // Light frost: HUD glass is a refracting lens (ui_blur_v.frag), so the game should stay readable through it.
+        val sigma by float("Sigma", 4.0F, 1.0F..15.0F)
 
         /**
          * The range in which the blending from not-blurred to blurred occurs.

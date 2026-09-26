@@ -30,7 +30,7 @@
     });
 </script>
 
-<div class="watermark nc-surface nc-hud">
+<div class="watermark nc-glass">
     <span class="wordmark">nocturne</span>
     <div class="stats">
         <span>{fps} <span class="unit">FPS</span></span>

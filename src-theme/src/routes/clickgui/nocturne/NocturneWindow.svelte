@@ -2,7 +2,7 @@
     import {onMount, tick} from "svelte";
     import {fly} from "svelte/transition";
     import type {ConfigurableSetting, Module} from "../../../integration/types";
-    import type {ModuleToggleEvent} from "../../../integration/events";
+    import type {KeyboardKeyEvent, ModuleToggleEvent} from "../../../integration/events";
     import {
         deleteScreen,
         getCategories,
@@ -21,6 +21,7 @@
     import {UNKNOWN_KEY} from "../../../util/utils";
     import Icon from "../../../components/sg/Icon.svelte";
     import Switch from "../../../components/sg/Switch.svelte";
+    import SegmentedControl from "../../../components/sg/SegmentedControl.svelte";
     import GenericSetting from "../setting/common/GenericSetting.svelte";
     import ClientSettings from "./ClientSettings.svelte";
     import {categoryStyle} from "./categories";
@@ -41,6 +42,9 @@
     let category = $state(saved.category ?? "Combat");
     let selected = $state<string | null>(saved.selected ?? null);
     let query = $state("");
+    let onlyEnabled = $state(false);
+    let clickGuiKey = UNKNOWN_KEY;
+    const openedAt = performance.now();
 
     let configurable = $state<ConfigurableSetting | null>(null);
 
@@ -61,11 +65,26 @@
         ? modules.filter(m => m.name.toLowerCase().includes(trimmedQuery)
             || m.aliases.some(a => a.toLowerCase().includes(trimmedQuery)))
         : categoryModules);
+    // Alphabetical by what the user reads; search results keep category order so their sections line up
+    // with the sidebar.
+    const shown = $derived((onlyEnabled ? listed.filter(m => m.enabled) : listed).slice().sort((a, b) =>
+        (trimmedQuery ? categories.indexOf(a.category) - categories.indexOf(b.category) : 0)
+        || name(a.name).localeCompare(name(b.name))));
+
+    // Sticky section headers: first letter in a category, the category itself in search results.
+    const sections = $derived.by(() => {
+        const grouped = new Map<string, Module[]>();
+        for (const module of shown) {
+            const key = trimmedQuery ? module.category : name(module.name).charAt(0).toUpperCase();
+            grouped.set(key, [...(grouped.get(key) ?? []), module]);
+        }
+        return [...grouped];
+    });
     const selectedModule = $derived(modules.find(m => m.name === selected) ?? null);
     const showSettings = $derived(view === "settings" && !trimmedQuery);
 
-    // The sidebar selection pill slides to the active category; it fades out on Settings and search.
-    const pillY = $derived(sidebarItems[category]?.offsetTop ?? 0);
+    // The sidebar selection pill slides to the active row (a category or Settings); it fades out while searching.
+    const pillY = $derived(sidebarItems[showSettings ? "__settings" : category]?.offsetTop ?? 0);
 
     const settingsWithoutBind = $derived(configurable?.value.filter(s => s.valueType !== "BIND") ?? []);
     const bindIndex = $derived(configurable?.value.findIndex(s => s.valueType === "BIND") ?? -1);
@@ -100,8 +119,8 @@
         selectModule((inCategory.find(m => m.enabled) ?? inCategory[0])?.name ?? null);
     }
 
-    function toggleSettings() {
-        view = showSettings ? "modules" : "settings";
+    function openSettings() {
+        view = "settings";
         query = "";
         persist();
     }
@@ -165,6 +184,15 @@
         }
     }
 
+    // The menu key closes the menu too (Minecraft only closes screens on Escape). Not while typing (Shift is
+    // for capitals), not while a keybind is being recorded, and not on the press that opened the menu.
+    listen("keyboardKey", (e: KeyboardKeyEvent) => {
+        if (e.action !== 1 || e.key !== clickGuiKey || performance.now() - openedAt < 300) return;
+        const focused = document.activeElement as HTMLElement | null;
+        if (focused?.matches("input, textarea, [contenteditable]") || document.querySelector(".change-bind.sg-btn-filled")) return;
+        deleteScreen();
+    });
+
     listen("moduleToggle", (e: ModuleToggleEvent) => {
         const module = modules.find(m => m.name === e.moduleName);
         if (module) module.enabled = e.enabled;
@@ -193,6 +221,7 @@
         }
 
         const boundKey = loadedModules.find(m => m.name === "ClickGUI")?.keyBind.boundKey;
+        clickGuiKey = boundKey ?? UNKNOWN_KEY;
         if (boundKey && boundKey !== UNKNOWN_KEY) {
             menuKey = (await getPrintableKeyName(boundKey)).localized;
         }
@@ -215,17 +244,13 @@
                    onkeydown={e => { if (e.key === "Escape") { query = ""; searchInput.blur(); } }}/>
         </label>
         <div class="spacer"></div>
-        <button class="icon-btn" class:active={showSettings} type="button" aria-label="Client Settings"
-                aria-pressed={showSettings} onclick={toggleSettings}>
-            <Icon name="sliders" size={20} weight={2}/>
-        </button>
         <button class="sg-btn sg-btn-plain sg-btn-small" type="button" onclick={() => deleteScreen()}>Hide</button>
     </header>
     <div class="hairline"></div>
 
     <div class="body">
         <nav class="sidebar" class:dimmed={!!trimmedQuery}>
-            <div class="pill" style="transform: translateY({pillY}px); opacity: {trimmedQuery || showSettings ? 0 : 1};"></div>
+            <div class="pill" style="transform: translateY({pillY}px); opacity: {trimmedQuery ? 0 : 1};"></div>
             {#each categories as c (c)}
                 {@const style = categoryStyle(c)}
                 {@const inCategory = modules.filter(m => m.category === c)}
@@ -236,6 +261,11 @@
                     <span class="count">{enabledCount(inCategory)}/{inCategory.length}</span>
                 </button>
             {/each}
+            <button type="button" class="side-row" class:active={showSettings && !trimmedQuery}
+                    bind:this={sidebarItems.__settings} onclick={openSettings}>
+                <span class="icon-square settings-square"><Icon name="sliders" size={18} weight={2}/></span>
+                <span class="side-label">Settings</span>
+            </button>
         </nav>
         <div class="vline"></div>
 
@@ -246,14 +276,22 @@
         {:else}
             <section class="list">
                 <div class="list-head">
-                    <span class="list-title">{trimmedQuery ? "Results" : category}</span>
-                    <span class="meta">
-                        {trimmedQuery ? `${listed.length} found` : `${enabledCount(categoryModules)} of ${categoryModules.length} on`}
-                    </span>
+                    <div class="list-heading">
+                        <span class="list-title">{trimmedQuery ? "Results" : category}</span>
+                        <span class="meta">
+                            {trimmedQuery ? `${listed.length} found` : `${enabledCount(categoryModules)} of ${categoryModules.length} on`}
+                        </span>
+                    </div>
+                    <div class="filter">
+                        <SegmentedControl options={["All", "On"]} value={onlyEnabled ? "On" : "All"} label="Show"
+                                          onchange={v => (onlyEnabled = v === "On")}/>
+                    </div>
                 </div>
-                {#key trimmedQuery ? "results" : category}
+                {#key `${trimmedQuery ? "results" : category}:${onlyEnabled}`}
                     <div class="rows" in:fly={{y: 8, duration: 250}}>
-                        {#each listed as module (module.name)}
+                        {#each sections as [heading, sectionModules] (heading)}
+                        <div class="section-head">{heading}</div>
+                        {#each sectionModules as module (module.name)}
                             <!-- svelte-ignore a11y_click_events_have_key_events -->
                             <!-- svelte-ignore a11y_no_static_element_interactions -->
                             <div class="row" class:selected={module.name === selected}
@@ -267,8 +305,11 @@
                                 <Switch checked={module.enabled} label={module.name} onchange={v => toggle(module, v)}/>
                             </div>
                         {/each}
-                        {#if trimmedQuery && listed.length === 0}
-                            <div class="empty">No modules match “{query.trim()}”.</div>
+                        {/each}
+                        {#if shown.length === 0}
+                            <div class="empty">
+                                {trimmedQuery ? `No modules match “${query.trim()}”.` : `No ${category} modules are on.`}
+                            </div>
                         {/if}
                     </div>
                 {/key}
@@ -488,36 +529,6 @@
     font-variant-numeric: tabular-nums;
   }
 
-  .icon-btn {
-    all: unset;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    color: var(--accent-text);
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
-
-    &:hover {
-      background: var(--fill-tertiary);
-    }
-
-    &.active {
-      background: var(--accent-tint);
-    }
-
-    &:active {
-      transform: scale(0.94);
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--focus-ring);
-      outline-offset: 2px;
-    }
-  }
-
   .icon-square {
     width: 29px;
     height: 29px;
@@ -538,12 +549,43 @@
   }
 
   .list-head {
-    height: 56px;
+    height: 64px;
     flex: none;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
+    gap: 12px;
+    padding: 0 12px 0 20px;
+  }
+
+  .list-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .filter :global(.sg-seg-item) {
+    min-width: 48px;
+    height: 28px;
+    font-size: 12px;
+  }
+
+  .section-head {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    flex: none;
+    padding: 8px 12px 4px;
+    background: var(--surface);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--label-secondary);
+    letter-spacing: 0.2px;
+  }
+
+  .settings-square {
+    background: var(--fill-secondary);
   }
 
   .list-title {
@@ -569,7 +611,7 @@
   }
 
   .row {
-    min-height: 56px;
+    min-height: 52px;
     flex: none;
     display: flex;
     align-items: center;

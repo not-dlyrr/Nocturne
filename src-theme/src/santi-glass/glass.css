@@ -30,24 +30,40 @@
 }
 
 /*
- * HUD chrome: shadows have alpha, and alpha is the blur mask, so a 32px shadow would
- * smear a blur halo around the element. Keep the lift tight to the shape.
+ * HUD chrome: every non-empty overlay pixel is read by the native shader as part of a glass shape
+ * (alpha is the mask), so solid HUD cards keep only an inset edge; a soft outer shadow would show up
+ * as a faint refracting halo.
  */
 .nc-hud {
-  box-shadow: var(--shadow-glass-edge), 0 2px 8px rgba(0, 0, 0, 0.28);
+  box-shadow: var(--shadow-glass-edge);
 }
 
 /*
- * HUD Liquid Glass (arraylist, target HUD). A light tint so the frosted game reads through it, a
- * specular sheen on the upper half, a bright rim and a top-edge highlight. The tint alpha sits inside
- * ModuleHud's blur blend range, so the native blur behind it is at full strength.
+ * HUD Liquid Glass (arraylist, target HUD, watermark), after santi.harbor's lq.css.
+ *
+ * The lens itself (edge refraction, centre magnification, RGB dispersion, saturation) is drawn by the
+ * client in ui_blur_v.frag, which finds each glass shape's edges from this element's alpha. This class
+ * only paints what the page can: a light tint the bent game shows through, and Harbor's hairline rim
+ * whose glint sits top-left with a faint counter-glint opposite. No outer shadow (see .nc-hud).
  */
 .nc-glass {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.02) 55%, rgba(255, 255, 255, 0)),
-    rgba(26, 26, 30, 0.30);
-  border: 0.5px solid rgba(255, 255, 255, 0.24);
-  /* no outer shadow: its soft alpha would pull a blur halo around the element */
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.30), inset 0 -1px 0 rgba(0, 0, 0, 0.16);
+  position: relative;
+  background: rgba(26, 26, 30, 0.30);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+
+.nc-glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background: conic-gradient(from -85deg,
+    transparent 0%, rgba(255, 255, 255, 0.55) 11%, transparent 22%,
+    transparent 50%, rgba(255, 255, 255, 0.18) 61%, transparent 72%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
 }
