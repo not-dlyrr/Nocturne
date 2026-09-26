@@ -11,6 +11,8 @@
         {module: "ClickGUI", label: "Menu", footer: "Opens and hides this menu in game."}
     ];
 
+    let {onHudEditor}: { onHudEditor: () => void } = $props();
+
     let moduleSettings = $state<Record<string, ConfigurableSetting>>({});
     let globalSettings = $state<ConfigurableSetting | null>(null);
 
@@ -43,6 +45,19 @@
         <span class="title">Client Settings</span>
         <span class="subtitle">Changes apply to the overlay right away.</span>
     </div>
+
+    <section>
+        <span class="group-header">Layout</span>
+        <div class="group">
+            <div class="row">
+                <div class="row-text">
+                    <span>HUD Editor</span>
+                    <span class="row-desc">Move, add and remove HUD elements</span>
+                </div>
+                <button class="sg-btn sg-btn-tinted sg-btn-small" type="button" onclick={onHudEditor}>Edit</button>
+            </div>
+        </div>
+    </section>
 
     {#each MODULE_GROUPS as g (g.module)}
         {#if moduleSettings[g.module]}
@@ -117,6 +132,27 @@
 
   .group-footer {
     font-size: 12px;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 56px;
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .row-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .row-desc {
+    font-size: 12px;
+    color: var(--label-secondary);
   }
 
   .group {

@@ -28,8 +28,10 @@ float getWeight(int idx) {
 void main() {
     vec4 overlayColor = texture(overlay, texCoord);
 
-    // Almost transparent -> skip blur
-    if (overlayColor.a <= 0.01) {
+    // Almost transparent -> skip blur.
+    // Opaque -> the overlay blit covers this pixel completely, so the blur would never be seen
+    // (Nocturne's HUD chrome is solid; only glass elements are translucent).
+    if (overlayColor.a <= 0.01 || overlayColor.a >= 0.99) {
         fragColor = vec4(0.0);
         return;
     }

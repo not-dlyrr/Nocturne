@@ -2,9 +2,10 @@
     import {onDestroy, onMount} from "svelte";
     import {listen} from "../../../integration/ws";
     import {getClientInfo} from "../../../integration/rest";
-    import type {FpsChangeEvent} from "../../../integration/events";
+    import type {ClientPlayerDataEvent, FpsChangeEvent} from "../../../integration/events";
 
     let fps = 0;
+    let ping: number | null = null;
     let clock = "";
 
     function updateClock() {
@@ -23,12 +24,20 @@
     listen("fps", (e: FpsChangeEvent) => {
         fps = e.fps;
     });
+
+    listen("clientPlayerData", (e: ClientPlayerDataEvent) => {
+        ping = e.playerData.ping;
+    });
 </script>
 
-<div class="watermark sg-glass sg-glass-strong nc-hud-glass">
+<div class="watermark nc-surface nc-hud">
     <span class="wordmark">nocturne</span>
     <div class="stats">
         <span>{fps} <span class="unit">FPS</span></span>
+        {#if ping !== null}
+            <span class="divider"></span>
+            <span>{ping} <span class="unit">ms</span></span>
+        {/if}
         <span class="divider"></span>
         <span>{clock}</span>
     </div>

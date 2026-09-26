@@ -38,7 +38,7 @@
 </script>
 
 {#if visible && target != null}
-    <div class="targethud sg-glass sg-glass-strong nc-hud-glass" transition:fly={{ y: 8, duration: 250 }}>
+    <div class="targethud sg-glass sg-glass-strong nc-hud" transition:fly={{ y: 8, duration: 250 }}>
         <div class="avatar">
             <img src="{REST_BASE}/api/v1/client/resource/skin?uuid={target.uuid}" alt="" />
         </div>

@@ -15,7 +15,7 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="main-button sg-glass sg-glass-strong" on:mouseenter={() => hovered = true} on:mouseleave={() => hovered = false} on:click={() => hovered = false}
+<div class="main-button nc-surface" on:mouseenter={() => hovered = true} on:mouseleave={() => hovered = false} on:click={() => hovered = false}
      on:click={() => dispatch("click")} out:fly|global={{duration: 400, x: -500, delay: index * 100, easing: backIn}}
      in:fly|global={{duration: 400, x: -500, delay: index * 100, easing: backOut}}>
     <div class="icon">
@@ -30,7 +30,7 @@
 </div>
 
 <style lang="scss">
-  /* santi.glass: a floating glass card with an icon square; press scales like DS buttons */
+  /* santi.glass solid card with an icon square; press scales like DS buttons */
   .main-button {
     width: 460px;
     padding: 14px 20px 14px 14px;
@@ -43,7 +43,7 @@
     transition: background-color 0.2s ease, transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
 
     &:hover {
-      background-color: color-mix(in srgb, var(--glass-fill-strong), white 6%);
+      background-color: color-mix(in srgb, var(--surface), white 6%);
     }
 
     &:active {

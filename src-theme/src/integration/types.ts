@@ -236,6 +236,7 @@ export interface PlayerData {
     maxAir: number;
     experienceLevel: number;
     experienceProgress: number;
+    ping: number;
     effects: StatusEffect[];
     mainHandStack: ItemStack;
     offHandStack: ItemStack;

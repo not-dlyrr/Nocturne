@@ -2,12 +2,12 @@
     export let vertical = false;
 </script>
 
-<div class="button-container sg-glass sg-glass-strong" class:vertical>
+<div class="button-container nc-surface" class:vertical>
     <slot />
 </div>
 
 <style lang="scss">
-    /* santi.glass pill toolbar */
+    /* santi.glass pill toolbar, solid */
     .button-container {
       padding: 6px;
       width: max-content;

@@ -314,11 +314,11 @@
   --clickgui-overlay-background-color: rgba(0, 0, 0, 0.28);
   --clickgui-panel-header-border-color: var(--separator);
   --clickgui-module-settings-border-color: var(--separator);
-  --clickgui-tabs-background-color: var(--glass-fill-strong);
+  --clickgui-tabs-background-color: var(--surface);
   --clickgui-tab-hover-background-color: var(--fill-tertiary);
   --clickgui-tab-active-background-color: var(--glass-selection);
   --clickgui-tab-active-border-color: transparent;
-  --clickgui-window-background-color: var(--glass-fill);
+  --clickgui-window-background-color: var(--surface);
   --clickgui-window-header-background-color: transparent;
   --clickgui-window-header-border-color: var(--separator);
   --clickgui-global-settings-divider-color: var(--separator);
@@ -344,18 +344,18 @@
   --clickgui-slider-handle-color: var(--knob);
   --clickgui-slider-fill-color: var(--accent);
   --clickgui-color-picker-border-color: var(--glass-stroke);
-  --clickgui-hud-editor-drawer-background-color: var(--glass-fill);
-  --clickgui-hud-editor-component-settings-background-color: var(--glass-fill);
+  --clickgui-hud-editor-drawer-background-color: var(--surface);
+  --clickgui-hud-editor-component-settings-background-color: var(--surface);
   --clickgui-hud-editor-drawer-component-background-color: var(--fill-tertiary);
   --clickgui-hud-editor-drawer-component-border-color: transparent;
 
   --menu-list-item-hover-background-color: var(--glass-selection);
-  --menu-account-header-background-color: var(--glass-fill-strong);
+  --menu-account-header-background-color: var(--surface);
   --menu-account-switcher-background-color: var(--surface-elevated);
   --menu-account-search-background-color: var(--fill-tertiary);
   --menu-account-premium-color: var(--success-text);
   --menu-modal-backdrop-color: rgba(0, 0, 0, 0.45);
-  --menu-modal-background-color: var(--glass-fill-strong);
+  --menu-modal-background-color: var(--surface);
   --menu-select-header-background-color: var(--fill-secondary);
   --menu-switch-track-color: var(--fill-secondary);
   --menu-switch-thumb-color: var(--knob);

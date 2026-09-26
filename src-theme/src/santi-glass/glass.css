@@ -1,16 +1,27 @@
 /*
- * Nocturne: santi.glass Liquid Glass, tuned for the in-game overlay.
+ * Nocturne surfaces.
  *
- * The theme is drawn into a transparent offscreen browser that Minecraft composites over the
- * game, so there is no HTML behind a panel for backdrop-filter (or the DS's SVG lens) to
- * refract. In CEF those filters still allocate a render surface per element and re-run on
- * every repaint, which is pure cost for an empty backdrop.
+ * Most chrome is solid: santi.glass's "Liquid Glass off" treatment (opaque surface, 0.5px rim,
+ * solid shadow). Opaque pixels also let the native GUI blur skip them entirely (see ui_blur_v.frag).
  *
- * Instead the frost comes from the client's native GPU blur (BlurEffectRenderer): it blurs
- * the game wherever the overlay's alpha is non-zero, weighted by that alpha. Glass here is
- * just the DS fill (its alpha drives the blur), the 0.5px rim and the top specular edge —
- * all static paint that CEF rasterizes once and keeps as a layer.
+ * Only the target HUD and the arraylist are glass. The theme is drawn into a transparent offscreen
+ * browser composited over the game, so there is no HTML behind a panel for backdrop-filter (or the
+ * DS's SVG lens) to refract; in CEF those filters just allocate a render surface per element and
+ * re-run on every repaint. Glass here is the DS fill + rim + top edge, and the client's native blur
+ * frosts the game wherever that fill's alpha lands.
  */
+.nc-surface {
+  background: var(--surface);
+  border: 0.5px solid var(--glass-stroke);
+  box-shadow: var(--shadow-glass-edge), var(--shadow-solid);
+}
+
+/* inset control well on a surface: search fields and the like */
+.nc-field {
+  background: var(--fill-tertiary);
+  border: 0.5px solid var(--glass-stroke);
+}
+
 .sg-glass,
 .sg-glass-strong,
 .sg-tabbar {
@@ -19,9 +30,9 @@
 }
 
 /*
- * HUD glass: the wide DS shadow has alpha, and alpha is the blur mask, so a 32px shadow would
- * smear a blur halo around every HUD element. Keep the lift tight to the shape.
+ * HUD chrome: shadows have alpha, and alpha is the blur mask, so a 32px shadow would
+ * smear a blur halo around the element. Keep the lift tight to the shape.
  */
-.nc-hud-glass {
+.nc-hud {
   box-shadow: var(--shadow-glass-edge), 0 2px 8px rgba(0, 0, 0, 0.28);
 }

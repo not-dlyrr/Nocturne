@@ -22,7 +22,7 @@
     $: tone = severity === "DISABLED" ? "var(--fill-secondary)" : style.tone;
 </script>
 
-<div class="notification sg-glass sg-glass-strong nc-hud-glass">
+<div class="notification nc-surface nc-hud">
     <div class="icon-square" style="background: {tone};">
         <Icon name={style.icon} size={18} weight={2}/>
     </div>

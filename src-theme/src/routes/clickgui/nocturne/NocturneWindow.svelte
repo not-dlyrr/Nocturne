@@ -63,9 +63,8 @@
     const selectedModule = $derived(modules.find(m => m.name === selected) ?? null);
     const showSettings = $derived(view === "settings" && !trimmedQuery);
 
-    // The sidebar selection pill slides to whichever row is active.
-    const activeSidebarKey = $derived(showSettings ? "__settings" : category);
-    const pillY = $derived(sidebarItems[activeSidebarKey]?.offsetTop ?? 0);
+    // The sidebar selection pill slides to the active category; it fades out on Settings and search.
+    const pillY = $derived(sidebarItems[category]?.offsetTop ?? 0);
 
     const settingsWithoutBind = $derived(configurable?.value.filter(s => s.valueType !== "BIND") ?? []);
     const bindIndex = $derived(configurable?.value.findIndex(s => s.valueType === "BIND") ?? -1);
@@ -100,8 +99,8 @@
         selectModule((inCategory.find(m => m.enabled) ?? inCategory[0])?.name ?? null);
     }
 
-    function openSettings() {
-        view = "settings";
+    function toggleSettings() {
+        view = showSettings ? "modules" : "settings";
         query = "";
         persist();
     }
@@ -196,27 +195,31 @@
 
 <svelte:window onkeydown={handleWindowKeyDown}/>
 
-<div class="window sg-glass" bind:this={windowElement} class:dragging style="left: {x}px; top: {y}px;">
+<div class="window nc-surface" bind:this={windowElement} class:dragging style="left: {x}px; top: {y}px;">
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <header onmousedown={startDrag}>
         <div class="brand">
             <span class="wordmark">nocturne</span>
             <span class="version">{version}</span>
         </div>
-        <label class="sg-search sg-glass sg-glass-strong search">
+        <label class="sg-search nc-field search">
             <Icon name="search" size={18} weight={2}/>
             <input type="search" placeholder="Search Modules" spellcheck="false" bind:value={query} bind:this={searchInput}
                    onfocusin={() => setTyping(true)} onfocusout={() => setTyping(false)}
                    onkeydown={e => { if (e.key === "Escape") { query = ""; searchInput.blur(); } }}/>
         </label>
         <div class="spacer"></div>
+        <button class="icon-btn" class:active={showSettings} type="button" aria-label="Client Settings"
+                aria-pressed={showSettings} onclick={toggleSettings}>
+            <Icon name="sliders" size={20} weight={2}/>
+        </button>
         <button class="sg-btn sg-btn-plain sg-btn-small" type="button" onclick={() => deleteScreen()}>Hide</button>
     </header>
     <div class="hairline"></div>
 
     <div class="body">
         <nav class="sidebar" class:dimmed={!!trimmedQuery}>
-            <div class="pill" style="transform: translateY({pillY}px); opacity: {trimmedQuery ? 0 : 1};"></div>
+            <div class="pill" style="transform: translateY({pillY}px); opacity: {trimmedQuery || showSettings ? 0 : 1};"></div>
             {#each categories as c (c)}
                 {@const style = categoryStyle(c)}
                 {@const inCategory = modules.filter(m => m.category === c)}
@@ -227,22 +230,12 @@
                     <span class="count">{enabledCount(inCategory)}/{inCategory.length}</span>
                 </button>
             {/each}
-            <div class="side-divider"><div></div></div>
-            <button type="button" class="side-row" onclick={onHudEditor}>
-                <span class="icon-square" style="background: var(--wall-indigo);"><Icon name="moon" size={18} weight={2}/></span>
-                <span class="side-label">HUD Editor</span>
-            </button>
-            <button type="button" class="side-row" class:active={showSettings} bind:this={sidebarItems.__settings}
-                    onclick={openSettings}>
-                <span class="icon-square" style="background: var(--accent);"><Icon name="sliders" size={18} weight={2}/></span>
-                <span class="side-label">Settings</span>
-            </button>
         </nav>
         <div class="vline"></div>
 
         {#if showSettings}
             <div class="client-settings" in:fly={{y: 8, duration: 250}}>
-                <ClientSettings/>
+                <ClientSettings {onHudEditor}/>
             </div>
         {:else}
             <section class="list">
@@ -328,7 +321,7 @@
     </div>
 </div>
 
-<div class="hint sg-glass sg-glass-strong">
+<div class="hint nc-surface">
     <span class="key">{menuKey}</span>
     <span>Hides the menu</span>
 </div>
@@ -392,7 +385,6 @@
     min-height: 40px;
     min-width: 0;
     cursor: text;
-    box-shadow: var(--shadow-glass-edge);
 
     input {
       font-size: 15px;
@@ -490,17 +482,33 @@
     font-variant-numeric: tabular-nums;
   }
 
-  .side-divider {
-    height: 13px;
-    flex: none;
+  .icon-btn {
+    all: unset;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
-    padding: 0 8px;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--accent-text);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
 
-    div {
-      flex: 1;
-      height: 0.5px;
-      background: var(--separator);
+    &:hover {
+      background: var(--fill-tertiary);
+    }
+
+    &.active {
+      background: var(--accent-tint);
+    }
+
+    &:active {
+      transform: scale(0.94);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 2px;
     }
   }
 
