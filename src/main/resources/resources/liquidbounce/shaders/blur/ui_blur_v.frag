@@ -22,11 +22,11 @@ layout(std140) uniform BlurKernelData {
 const float ALPHA_EMPTY = 0.01;
 const float SEARCH_STEP = 4.0;      // px, coarse march before a 1px refine
 const float SEARCH_MAX = 160.0;     // px, how far the centre (magnify) term can see
-const float BEVEL_MAX = 16.0;       // px, width of the bent rim
-const float LENS_STRENGTH = 18.0;   // px, displacement at full bend
-const float MAGNIFY = 0.12;         // pull towards the centre across the body (~6% magnification)
-const vec3 DISPERSION = vec3(1.0, 1.08, 1.16); // red bends least, blue most
-const float SATURATION = 1.35;
+const float BEVEL_MAX = 26.0;       // px, width of the bent rim
+const float LENS_STRENGTH = 40.0;   // px, displacement at full bend
+const float MAGNIFY = 0.22;         // pull towards the centre across the body (~11% magnification)
+const vec3 DISPERSION = vec3(1.0, 1.12, 1.26); // red bends least, blue most
+const float SATURATION = 1.4;
 
 vec2 overlayTexel;
 
@@ -133,7 +133,7 @@ void main() {
     );
 
     // Sample inwards at the rim and towards the centre across the body. Small shapes get a gentler lens.
-    float strength = min(LENS_STRENGTH, bevel * 1.4);
+    float strength = min(LENS_STRENGTH, bevel * 2.4);
     vec2 displacement = clamp(-normal * bend - rel * MAGNIFY, -1.0, 1.0) * strength * overlayTexel;
 
     vec3 refracted = vec3(
