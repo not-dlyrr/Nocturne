@@ -67,7 +67,7 @@
 <style lang="scss">
 
     .setting {
-        padding: 11px 0 8px 0;
+        padding: 8px 0 6px 0;
         display: grid;
         grid-template-areas:
             "a b"
@@ -90,7 +90,7 @@
     .setting {
         color: var(--clickgui-text-color);
         font-weight: 500;
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .name {

@@ -30,6 +30,6 @@
 
 <style lang="scss">
     .setting {
-        padding: 11px 0;
+        padding: 8px 0;
     }
 </style>

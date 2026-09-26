@@ -46,7 +46,7 @@
     font-variant-numeric: tabular-nums;
     color: var(--accent-text);
     font-weight: 600;
-    font-size: 14px;
+    font-size: 13px;
     background-color: transparent;
     border: none;
     min-width: 5px;

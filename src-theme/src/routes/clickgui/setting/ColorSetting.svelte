@@ -91,14 +91,14 @@
         grid-template-areas:
             "a b"
             "c c";
-        padding: 11px 0;
+        padding: 8px 0;
     }
 
     .name {
         grid-area: a;
         font-weight: 500;
         color: var(--clickgui-text-color);
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .hidden {
@@ -110,7 +110,7 @@
         font-weight: 500;
         color: var(--clickgui-text-color);
         text-align: right;
-        font-size: 14px;
+        font-size: 13px;
         cursor: text;
         text-transform: uppercase;
         background-color: transparent;

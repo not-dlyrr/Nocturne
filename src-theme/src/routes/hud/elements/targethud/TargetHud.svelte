@@ -39,9 +39,13 @@
 
 {#if visible && target != null}
     <div class="targethud nc-glass" transition:fly={{ y: 8, duration: 250 }}>
-        <div class="avatar">
-            <img src="{REST_BASE}/api/v1/client/resource/skin?uuid={target.uuid}" alt="" />
-        </div>
+        {#if target.isPlayer !== false}
+            <div class="avatar">
+                <img src="{REST_BASE}/api/v1/client/resource/skin?uuid={target.uuid}" alt="" />
+            </div>
+        {:else}
+            <div class="avatar mob" aria-hidden="true">{target.username.charAt(0).toUpperCase()}</div>
+        {/if}
         <div class="info">
             <div class="top">
                 <span class="name">{target.username}</span>
@@ -75,6 +79,18 @@
     overflow: hidden;
     image-rendering: pixelated;
     background: var(--fill-secondary) url("/img/steve.png") no-repeat center / cover;
+
+    &.mob {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--fill-secondary);
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--label);
+      image-rendering: auto;
+    }
 
     img {
       position: absolute;

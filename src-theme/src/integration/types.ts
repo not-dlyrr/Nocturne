@@ -242,6 +242,8 @@ export interface PlayerData {
     offHandStack: ItemStack;
     armorItems: ItemStack[];
     scoreboard: Scoreboard;
+    /** False for mobs (no skin; player-only fields are placeholders). */
+    isPlayer?: boolean;
 }
 
 export interface StatusEffect {

@@ -28,7 +28,6 @@ import net.ccbluex.liquidbounce.features.addon.AddonApi
 import net.ccbluex.liquidbounce.features.module.modules.combat.killaura.ModuleKillAura
 import net.ccbluex.liquidbounce.integration.interop.protocol.rest.v1.game.PlayerData
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.player.Player
 
 /**
  * A rotation manager
@@ -93,9 +92,8 @@ object CombatManager : EventListener {
         if (entity is LivingEntity && entity.shouldBeAttacked()) {
             duringCombat = PAUSE_COMBAT
 
-            if (entity is Player) {
-                EventManager.callEvent(TargetChangeEvent(PlayerData.fromPlayer(entity)))
-            }
+            // Players and mobs alike, so the target HUD shows whatever you're fighting.
+            EventManager.callEvent(TargetChangeEvent(PlayerData.fromLivingEntity(entity)))
         }
     }
 

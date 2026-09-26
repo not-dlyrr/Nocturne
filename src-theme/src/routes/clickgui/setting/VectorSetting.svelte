@@ -56,13 +56,13 @@
 <style lang="scss">
 
   .setting {
-    padding: 11px 0;
+    padding: 8px 0;
   }
 
   .name {
     font-weight: 500;
     color: var(--clickgui-text-color);
-    font-size: 14px;
+    font-size: 13px;
     margin-bottom: 5px;
   }
 
@@ -74,7 +74,7 @@
       width: 100%;
       background-color: var(--clickgui-input-background-color);
       font-family: monospace;
-      font-size: 14px;
+      font-size: 13px;
       color: var(--clickgui-text-color);
       border: none;
       border-bottom: solid 2px var(--clickgui-input-border-color);
@@ -101,7 +101,7 @@
       border: none;
       cursor: pointer;
       color: var(--clickgui-text-color);
-      font-size: 14px;
+      font-size: 13px;
       text-align: right;
     }
   }

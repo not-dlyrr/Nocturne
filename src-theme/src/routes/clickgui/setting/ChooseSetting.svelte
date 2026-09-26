@@ -41,7 +41,7 @@
 
 <style lang="scss">
     .setting {
-        padding: 11px 0;
+        padding: 8px 0;
     }
 
     .segmented-row {
@@ -53,7 +53,7 @@
         .name {
             flex: 1;
             min-width: 0;
-            font-size: 14px;
+            font-size: 13px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;

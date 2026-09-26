@@ -234,7 +234,7 @@
             <span class="version">{version}</span>
         </div>
         <label class="sg-search nc-field search">
-            <Icon name="search" size={18} weight={2}/>
+            <Icon name="search" size={15} weight={2}/>
             <input type="search" placeholder="Search Modules" spellcheck="false" bind:value={query} bind:this={searchInput}
                    onfocusin={() => setTyping(true)} onfocusout={() => setTyping(false)}
                    onkeydown={e => { if (e.key === "Escape") { query = ""; searchInput.blur(); } }}/>
@@ -252,14 +252,14 @@
                 {@const inCategory = modules.filter(m => m.category === c)}
                 <button type="button" class="side-row" class:active={c === category && !showSettings && !trimmedQuery}
                         bind:this={sidebarItems[c]} onclick={() => selectCategory(c)}>
-                    <span class="icon-square" style="background: {style.tone};"><Icon name={style.icon} size={18} weight={2}/></span>
+                    <span class="icon-square" style="background: {style.tone};"><Icon name={style.icon} size={14} weight={2.2}/></span>
                     <span class="side-label">{c}</span>
                     <span class="count">{enabledCount(inCategory)}/{inCategory.length}</span>
                 </button>
             {/each}
             <button type="button" class="side-row" class:active={showSettings && !trimmedQuery}
                     bind:this={sidebarItems.__settings} onclick={openSettings}>
-                <span class="icon-square settings-square"><Icon name="sliders" size={18} weight={2}/></span>
+                <span class="icon-square settings-square"><Icon name="sliders" size={14} weight={2.2}/></span>
                 <span class="side-label">Settings</span>
             </button>
         </nav>
@@ -318,7 +318,7 @@
                     {#key selectedModule.name}
                         <div class="pane-inner" in:fly={{y: 6, duration: 220}}>
                             <div class="pane-head">
-                                <span class="icon-square" style="background: {style.tone};"><Icon name={style.icon} size={18} weight={2}/></span>
+                                <span class="icon-square" style="background: {style.tone};"><Icon name={style.icon} size={14} weight={2.2}/></span>
                                 <div class="pane-title">
                                     <div class="title-line">
                                         <span class="pane-name">{name(selectedModule.name)}</span>
@@ -372,12 +372,12 @@
 <style lang="scss">
   .window {
     position: absolute;
-    width: min(1000px, calc(100% - 32px));
-    height: min(640px, calc(100% - 32px));
+    width: min(860px, calc(100% - 32px));
+    height: min(560px, calc(100% - 32px));
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     animation: nc-window-in 0.4s cubic-bezier(0.3, 1.4, 0.5, 1) both;
     transform-origin: 24px 24px;
   }
@@ -390,12 +390,12 @@
   }
 
   header {
-    height: 64px;
+    height: 52px;
     flex: none;
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding: 0 12px 0 24px;
+    gap: 12px;
+    padding: 0 10px 0 18px;
     cursor: grab;
   }
 
@@ -404,34 +404,37 @@
   }
 
   .brand {
-    width: 176px;
+    width: 150px;
     display: flex;
     align-items: baseline;
-    gap: 8px;
+    gap: 6px;
   }
 
   .wordmark {
     font-family: var(--font-display);
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 700;
     letter-spacing: -0.3px;
   }
 
   .version {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--label-secondary);
     white-space: nowrap;
   }
 
   .search {
-    width: 360px;
-    min-height: 40px;
+    width: 300px;
+    min-height: 32px;
     min-width: 0;
     cursor: text;
 
+    padding: 0 12px;
+    gap: 6px;
+
     input {
-      font-size: 15px;
-      letter-spacing: -0.23px;
+      font-size: 13px;
+      letter-spacing: -0.08px;
     }
 
     input::-webkit-search-cancel-button {
@@ -463,12 +466,12 @@
 
   .sidebar {
     position: relative;
-    width: 208px;
+    width: 176px;
     flex: none;
-    padding: 12px;
+    padding: 8px;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 1px;
     overflow-y: auto;
     transition: opacity 0.2s ease;
 
@@ -482,8 +485,8 @@
     left: 12px;
     right: 12px;
     top: 0;
-    height: 44px;
-    border-radius: var(--radius-md);
+    height: 34px;
+    border-radius: var(--radius-sm);
     background: var(--glass-selection);
     transition: transform 0.45s cubic-bezier(0.3, 1.3, 0.5, 1), opacity 0.2s ease;
     pointer-events: none;
@@ -492,18 +495,17 @@
   .side-row {
     all: unset;
     position: relative;
-    height: 44px;
+    height: 34px;
     flex: none;
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 0 12px 0 8px;
-    border-radius: var(--radius-md);
+    gap: 10px;
+    padding: 0 10px 0 6px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
 
-    &:focus-visible {
-      outline: 2px solid var(--focus-ring);
-      outline-offset: -2px;
+    &:focus {
+      outline: none;
     }
 
     &.active .side-label {
@@ -514,30 +516,30 @@
 
   .side-label {
     flex: 1;
-    font-size: 15px;
+    font-size: 13px;
     color: var(--label);
     transition: color 0.2s ease;
   }
 
   .count {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--label-secondary);
     font-variant-numeric: tabular-nums;
   }
 
   .icon-square {
-    width: 29px;
-    height: 29px;
+    width: 22px;
+    height: 22px;
     flex: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--radius-xs);
+    border-radius: 6px;
     color: #fff;
   }
 
   .list {
-    width: 340px;
+    width: 290px;
     flex: none;
     display: flex;
     flex-direction: column;
@@ -545,13 +547,13 @@
   }
 
   .list-head {
-    height: 64px;
+    height: 52px;
     flex: none;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 0 12px 0 20px;
+    padding: 0 10px 0 16px;
   }
 
   .list-heading {
@@ -562,9 +564,10 @@
   }
 
   .filter :global(.sg-seg-item) {
-    min-width: 48px;
-    height: 28px;
-    font-size: 12px;
+    min-width: 40px;
+    height: 24px;
+    padding: 0 8px;
+    font-size: 11px;
   }
 
   .section-head {
@@ -572,9 +575,9 @@
     top: 0;
     z-index: 1;
     flex: none;
-    padding: 8px 12px 4px;
+    padding: 8px 10px 3px;
     background: var(--surface);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     color: var(--label-secondary);
     letter-spacing: 0.2px;
@@ -586,13 +589,13 @@
 
   .list-title {
     font-family: var(--font-display);
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 600;
     letter-spacing: -0.2px;
   }
 
   .meta {
-    font-size: 13px;
+    font-size: 11px;
     color: var(--label-secondary);
   }
 
@@ -600,20 +603,20 @@
     flex: 1;
     min-height: 0;
     overflow-y: auto;
-    padding: 0 8px 12px;
+    padding: 0 6px 10px;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 1px;
   }
 
   .row {
-    min-height: 52px;
+    min-height: 42px;
     flex: none;
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 8px 12px;
-    border-radius: var(--radius-md);
+    gap: 10px;
+    padding: 5px 10px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
     transition: background-color 0.2s ease;
 
@@ -631,11 +634,11 @@
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 1px;
   }
 
   .row-name {
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 500;
     color: var(--label-secondary);
     transition: color 0.2s ease;
@@ -646,7 +649,7 @@
   }
 
   .row-desc {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--label-secondary);
     white-space: nowrap;
     overflow: hidden;
@@ -667,16 +670,16 @@
   }
 
   .pane-inner {
-    padding: 20px 20px 16px;
+    padding: 14px 16px 14px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 14px;
   }
 
   .pane-head {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
+    gap: 10px;
 
     .icon-square {
       margin-top: 2px;
@@ -687,7 +690,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
   }
 
   .title-line {
@@ -698,13 +701,13 @@
 
   .pane-name {
     font-family: var(--font-display);
-    font-size: 22px;
+    font-size: 17px;
     font-weight: 700;
     letter-spacing: -0.3px;
   }
 
   .status {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     color: var(--label-secondary);
     transition: color 0.2s ease;
@@ -715,7 +718,7 @@
   }
 
   .pane-desc {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--label-secondary);
     text-wrap: pretty;
   }
@@ -724,11 +727,11 @@
   .group {
     display: flex;
     flex-direction: column;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     background: var(--fill-tertiary);
 
     > :global(div) {
-      padding: 0 16px;
+      padding: 0 12px;
     }
 
     > :global(div + div) {
@@ -737,10 +740,35 @@
   }
 
   .footer {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--label-secondary);
-    padding: 0 16px;
+    padding: 0 12px;
     margin-top: -12px;
+  }
+
+  /* Compact segmented controls inside setting rows (the list filter has its own, smaller size). */
+  .pane :global(.sg-seg-item) {
+    min-width: 48px;
+    height: 24px;
+    padding: 0 8px;
+    font-size: 11px;
+  }
+
+  /* Compact santi.glass switches: the DS size (51x31) is built for touch, not a dense desktop panel. */
+  .window :global(.sg-switch-track) {
+    width: 36px;
+    height: 22px;
+  }
+
+  .window :global(.sg-switch-knob) {
+    top: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .window :global(.sg-switch input:checked + .sg-switch-track .sg-switch-knob) {
+    transform: translateX(14px);
   }
 
   .client-settings {

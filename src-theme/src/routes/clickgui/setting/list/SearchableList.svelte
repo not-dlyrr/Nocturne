@@ -41,7 +41,7 @@
     border: none;
     border-bottom: solid 1px var(--accent-color);
     font-family: var(--font-text);
-    font-size: 14px;
+    font-size: 13px;
     padding: 5px;
     color: var(--clickgui-text-color);
     margin-bottom: 5px;

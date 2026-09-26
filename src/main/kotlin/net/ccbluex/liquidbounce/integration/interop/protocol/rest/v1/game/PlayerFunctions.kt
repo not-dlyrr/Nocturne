@@ -42,6 +42,7 @@ import net.minecraft.network.chat.numbers.NumberFormat
 import net.minecraft.network.chat.numbers.StyledFormat
 import net.minecraft.resources.Identifier
 import net.minecraft.world.effect.MobEffectInstance
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.GameType
@@ -111,9 +112,51 @@ data class PlayerData(
     val offHandStack: ItemStack,
     val armorItems: List<ItemStack> = emptyList(),
     val scoreboard: ScoreboardData? = null,
+    /** False for mobs: there is no skin to show, and player-only fields are placeholders. */
+    val isPlayer: Boolean = true,
 ) {
 
     companion object {
+
+        /**
+         * Target info for any living entity (the target HUD shows mobs too). Players get the full
+         * [fromPlayer] data; for other entities the player-only fields are neutral placeholders.
+         */
+        @JvmStatic
+        fun fromLivingEntity(entity: LivingEntity): PlayerData = if (entity is Player) {
+            fromPlayer(entity)
+        } else {
+            PlayerData(
+                entity.name.string,
+                entity.stringUUID,
+                entity.level().dimension().identifier(),
+                entity.position(),
+                entity.netherPosition,
+                entity.blockPosition(),
+                entity.deltaMovement,
+                0,
+                GameType.DEFAULT_MODE,
+                entity.health.fixNaN(),
+                entity.getActualHealth().fixNaN(),
+                entity.maxHealth.fixNaN(),
+                entity.absorptionAmount.fixNaN(),
+                entity.yRot.fixNaN(),
+                entity.xRot.fixNaN(),
+                entity.armorValue.coerceAtMost(20),
+                20,
+                entity.airSupply,
+                entity.maxAirSupply,
+                0,
+                0f,
+                0,
+                entity.activeEffects.toList(),
+                entity.mainHandItem,
+                entity.offhandItem,
+                entity.armorItems.toList(),
+                null,
+                isPlayer = false,
+            )
+        }
 
         @JvmStatic
         fun fromPlayer(player: Player) = PlayerData(

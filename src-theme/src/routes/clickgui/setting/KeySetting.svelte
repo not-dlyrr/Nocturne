@@ -103,7 +103,7 @@
 <style lang="scss">
 
   .setting {
-    padding: 11px 0;
+    padding: 8px 0;
   }
 
   .change-bind {
@@ -114,7 +114,7 @@
     padding: 4px;
     font-weight: 500;
     color: var(--clickgui-text-color);
-    font-size: 14px;
+    font-size: 13px;
     font-family: var(--font-text);
     width: 100%;
     display: flex;

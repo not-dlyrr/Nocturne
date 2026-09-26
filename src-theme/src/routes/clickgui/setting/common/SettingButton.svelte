@@ -8,7 +8,7 @@
   .setting-button {
     font-family: var(--font-text);
     font-weight: 500;
-    font-size: 14px;
+    font-size: 13px;
     color: var(--clickgui-text-color);
     background-color: var(--clickgui-button-background-color);
     border: none;

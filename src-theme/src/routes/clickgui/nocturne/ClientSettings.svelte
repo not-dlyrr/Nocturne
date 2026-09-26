@@ -92,11 +92,11 @@
 
 <style lang="scss">
   .page {
-    max-width: 680px;
-    padding: 20px 24px;
+    max-width: 600px;
+    padding: 14px 16px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 16px;
   }
 
   .heading {
@@ -107,40 +107,40 @@
 
   .title {
     font-family: var(--font-display);
-    font-size: 22px;
+    font-size: 17px;
     font-weight: 700;
     letter-spacing: -0.3px;
   }
 
   .subtitle {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--label-secondary);
   }
 
   section {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
   }
 
   .group-header,
   .group-footer {
-    font-size: 13px;
+    font-size: 11px;
     color: var(--label-secondary);
-    padding: 0 16px;
+    padding: 0 12px;
   }
 
-  .group-footer {
-    font-size: 12px;
+  .group-header {
+    font-weight: 600;
   }
 
   .row {
     display: flex;
     align-items: center;
     gap: 12px;
-    min-height: 56px;
-    padding: 8px 16px;
-    font-size: 14px;
+    min-height: 42px;
+    padding: 6px 12px;
+    font-size: 13px;
   }
 
   .row-text {
@@ -151,18 +151,18 @@
   }
 
   .row-desc {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--label-secondary);
   }
 
   .group {
     display: flex;
     flex-direction: column;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     background: var(--fill-tertiary);
 
     > :global(div) {
-      padding: 0 16px;
+      padding: 0 12px;
     }
 
     > :global(div + div) {

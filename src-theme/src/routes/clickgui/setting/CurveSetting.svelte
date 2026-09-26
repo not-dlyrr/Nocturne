@@ -331,7 +331,7 @@
 <style lang="scss">
 
   .setting {
-    padding: 11px 0;
+    padding: 8px 0;
     position: relative;
   }
 
@@ -350,7 +350,7 @@
 
   .title {
     color: var(--clickgui-text-color);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
   }
 

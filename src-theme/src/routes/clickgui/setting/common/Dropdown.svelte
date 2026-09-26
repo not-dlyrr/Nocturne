@@ -114,7 +114,7 @@
     .label {
       flex: 1;
       min-width: 0;
-      font-size: 14px;
+      font-size: 13px;
       color: var(--label);
       white-space: nowrap;
       overflow: hidden;
